@@ -1,0 +1,537 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>Path Steering in CCNx and NDN </title>
+
+  
+<style type="text/css">/*<![CDATA[*/
+
+body {
+  font: 16px "Helvetica Neue","Open Sans",Helvetica,Calibri,sans-serif;
+  color: #333;
+  font-size-adjust: 0.5;
+  line-height: 24px;
+  margin: 75px auto;
+  max-width: 624px;
+  padding: 0 5px;
+}
+
+.title, .filename, h1, h2, h3, h4, h5 {
+  font: 16px "Roboto Condensed","Helvetica Neue","Open Sans",Helvetica,Calibri,sans-serif;
+  font-size-adjust: 0.5;
+  font-weight: bold;
+  color: #333;
+  line-height: 100%;
+  margin: 1.2em 0 0.3em;
+}
+.title, #rfc\.title h1 { font-size: 32px; }
+h1, section h1, h2, section h2, section h3, nav h2 { font-size: 20px; }
+h3, section h4, h4, section h5 { font-size: 16px; }
+h1 a[href], h2 a[href], h3 a[href], h4 a[href] {
+  color: #333;
+}
+
+table {
+  margin-left: 0em;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+tr:nth-child(2n+1) > td,
+tr:nth-child(2n+1) > th {
+  background-color: #f9f9f9;
+}
+td.reference {
+  max-width: 200px;
+  border-top: none;
+  padding-right: 1em;
+}
+.right {
+  text-align: right;
+}
+
+
+table.header, table#rfc\.headerblock {
+  width: 100%;
+}
+table.header td, table#rfc\.headerblock td {
+  border: none;
+  background-color: transparent;
+  color: black;
+  padding: 0;
+}
+.filename {
+  display: block;
+  color: rgb(119, 119, 119);
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 100%;
+  margin: 10px 0 32px;
+}
+#rfc\.abstract+p, #rfc\.abstract+p code, #rfc\.abstract+p samp, #rfc\.abstract+p tt {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+samp, tt, code, pre, span.tt {
+  font-size: 13.5px;
+  font-family: Consolas, monospace;
+  font-size-adjust: none;
+}
+pre {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+  padding: 5px;
+  margin: 5px;
+}
+.figure, caption {
+  font-style: italic;
+  margin: 0 1.5em;
+  text-align: left;
+}
+
+address {
+  margin: 16px 2px;
+  line-height: 20px;
+}
+.vcard {
+  font-style: normal;
+}
+.vcardline {
+  display: block;
+}
+.vcardline .fn, address b {
+  font-weight: normal;
+}
+.vcardline .hidden {
+  display: none;
+}
+
+dl {
+  margin-left: 1em;
+}
+dl.dl-horizontal: {
+  margin-left: 0;
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.nohang > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .5em;
+}
+dl.compact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+ul.empty {
+  list-style-type: none;
+}
+ul.empty li {
+  margin-top: .5em;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+hr.noprint {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #2a6496;
+}
+a[href]:hover {
+  background-color: #eee;
+}
+
+p, ol, ul, li {
+  padding: 0;
+}
+p {
+  margin: 0.5em 0;
+}
+ol, ul {
+  margin: 0.2em 0 0.2em 2em;
+}
+li {
+  margin: 0.2em 0;
+}
+address {
+  font-style: normal;
+}
+
+ul.toc ul {
+  margin: 0 0 0 2em;
+}
+ul.toc li {
+  list-style: none;
+  margin: 0;
+}
+
+@media screen and (min-width: 924px) {
+  body {
+    padding-right: 350px;
+  }
+  body>ul.toc, body>#rfc\.toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 500px);
+    width: 300px;
+    z-index: 1;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  body>#rfc\.toc {
+    top: 55px;
+  }
+  body>ul.toc {
+    top: 100px;
+  }
+
+  ul.toc {
+    margin: 0 0 0 4px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  ul.toc ul {
+    margin-left: 1.2em;
+  }
+}
+
+.github-fork-ribbon-wrapper {
+  display: none;
+}
+@media screen and (min-width: 800px) {
+  /* "Fork me on GitHub" CSS ribbon based on
+   * https://github.com/simonwhitaker/github-fork-ribbon-css
+   */
+  .github-fork-ribbon {
+    position: absolute;
+    padding: 2px 0;
+    background-color: #a00;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+    font: 700 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    pointer-events: auto;
+
+    top: 38px;
+    right: -45px;
+
+    transform: rotate(45deg);
+  }
+
+  .github-fork-ribbon a[href],
+  .github-fork-ribbon a[href]:hover {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+    text-align: center;
+
+    width: 190px;
+    line-height: 18px;
+
+    display: inline-block;
+    padding: 2px 0;
+
+    border: 1.5px dotted #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .github-fork-ribbon-wrapper {
+    display: block;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    overflow: hidden;
+    top: 0; right: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .github-fork-ribbon-wrapper {
+    position: fixed;
+  }
+/*]]>*/</style>
+<meta name="viewport" content="initial-scale=1.0">
+
+
+  <link href="#rfc.toc" rel="Contents"/>
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Mapping to CCNx and NDN packet encodings"/>
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Packet encoding for CCNx"/>
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Packet encoding for NDN"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 IANA Considerations"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
+<link href="#rfc.references" rel="Chapter" title="5 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="5.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="5.2 Informative References"/>
+<link href="#rfc.authors" rel="Chapter"/>
+
+
+  <meta name="generator" content="xml2rfc version 2.5.2 - http://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="I. Moiseenko, , D. Oran, , and S. Mastorakis" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-oran-icnrg-pathsteering-00" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-9-24" />
+  <meta name="dct.abstract" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management." />
+  <meta name="description" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management." />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+  <td class="left">ICNRG</td>
+  <td class="right">I. Moiseenko</td>
+</tr>
+<tr>
+  <td class="left">Internet-Draft</td>
+  <td class="right">Apple Computer</td>
+</tr>
+<tr>
+  <td class="left">Intended status: Experimental</td>
+  <td class="right">D. Oran</td>
+</tr>
+<tr>
+  <td class="left">Expires: March 27, 2020</td>
+  <td class="right">Network Systems Research and Design</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">S. Mastorakis</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">University of Nebraska at Omaha</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">September 24, 2019</td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">Path Steering in CCNx and NDN <br />
+  <span class="filename">draft-oran-icnrg-pathsteering-00</span></p>
+  
+  <h1 id="rfc.abstract">
+  <a href="#rfc.abstract">Abstract</a>
+</h1>
+<p>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management.</p>
+<h1 id="rfc.status">
+  <a href="#rfc.status">Status of This Memo</a>
+</h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on March 27, 2020.</p>
+<h1 id="rfc.copyrightnotice">
+  <a href="#rfc.copyrightnotice">Copyright Notice</a>
+</h1>
+<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a></li>
+</ul><li>2.   <a href="#rfc.section.2">Mapping to CCNx and NDN packet encodings</a></li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Packet encoding for CCNx</a></li>
+<li>2.2.   <a href="#rfc.section.2.2">Packet encoding for NDN</a></li>
+</ul><li>3.   <a href="#rfc.section.3">IANA Considerations</a></li>
+<li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
+<li>5.   <a href="#rfc.references">References</a></li>
+<ul><li>5.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>5.2.   <a href="#rfc.references.2">Informative References</a></li>
+</ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
+<p id="rfc.section.1.p.1">Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management.  </p>
+<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
+<p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#encoding" id="encoding">Mapping to CCNx and NDN packet encodings</a></h1>
+<p id="rfc.section.2.p.1">TBD</p>
+<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#CCNx-encoding" id="CCNx-encoding">Packet encoding for CCNx</a></h1>
+<p id="rfc.section.2.1.p.1">TBD</p>
+<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#NDN-encoding" id="NDN-encoding">Packet encoding for NDN</a></h1>
+<p id="rfc.section.2.2.p.1">TBD based on <a href="#NDNTLV">[NDNTLV]</a>. Suggestions from the NDN team greatly appreciated.</p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
+<p id="rfc.section.3.p.1">TBD</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
+<p id="rfc.section.4.p.1">TBD</p>
+<h1 id="rfc.references"><a href="#rfc.references">5.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">5.1.</a> Normative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="Moiseenko2017">[Moiseenko2017]</b>
+      </td>
+      <td class="top"><a>Moiseenko, I.</a> and <a>D. Oran</a>, "<a href="https://conferences.sigcomm.org/acm-icn/2017/proceedings/icn17-2.pdf">Path Switching in Content Centric and Named Data Networks, in 4th ACM Conference on Information-Centric Networking (ICN 2017)</a>", DOI 10.1145/3125719.3125721, September 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC2119">[RFC2119]</b>
+      </td>
+      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC8569">[RFC8569]</b>
+      </td>
+      <td class="top"><a>Mosko, M.</a>, <a>Solis, I.</a> and <a>C. Wood</a>, "<a href="http://tools.ietf.org/html/rfc8569">Content-Centric Networking (CCNx) Semantics</a>", RFC 8569, DOI 10.17487/RFC8569, July 2019.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC8609">[RFC8609]</b>
+      </td>
+      <td class="top"><a>Mosko, M.</a>, <a>Solis, I.</a> and <a>C. Wood</a>, "<a href="http://tools.ietf.org/html/rfc8609">Content-Centric Networking (CCNx) Messages in TLV Format</a>", RFC 8609, DOI 10.17487/RFC8609, July 2019.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">5.2.</a> Informative References</h1>
+<table>
+  <tbody>
+    <tr>
+      <td class="reference">
+        <b id="I-D.mastorakis-icnrg-icntraceroute">[I-D.mastorakis-icnrg-icntraceroute]</b>
+      </td>
+      <td class="top"><a>Mastorakis, S.</a>, <a>Gibson, J.</a>, <a>Moiseenko, I.</a>, <a>Droms, R.</a> and <a>D. Oran</a>, "<a href="http://tools.ietf.org/html/draft-mastorakis-icnrg-icntraceroute-05">ICN Traceroute Protocol Specification</a>", Internet-Draft draft-mastorakis-icnrg-icntraceroute-05, August 2019.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="Mahdian2016">[Mahdian2016]</b>
+      </td>
+      <td class="top"><a>Mahdian, M.</a>, <a>Arianfar, S.</a>, <a>Gibson, J.</a> and <a>D. Oran</a>, "<a href="http://conferences2.sigcomm.org/acm-icn/2016/proceedings/p1-mahdian.pdf">MIRCC: Multipath-aware ICN Rate-based Congestion Control, in Proceedings of the 3rd ACM Conference on Information-Centric Networking</a>", DOI 10.1145/2984356.2984365, 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="NDN">[NDN]</b>
+      </td>
+      <td class="top"><a>NDN team, </a>, "<a href="https://named-data.net/project/execsummary/">Named Data Networking</a>", various.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="NDNTLV">[NDNTLV]</b>
+      </td>
+      <td class="top"><a>NDN Project Team, </a>, "<a href="http://named-data.net/doc/ndn-tlv/">NDN Packet Format Specification.</a>", 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="Song2018">[Song2018]</b>
+      </td>
+      <td class="top"><a>Song, J.</a>, <a>Lee, M.</a> and <a>T. Kwon</a>, "<a href="https://conferences.sigcomm.org/acm-icn/2018/proceedings/icn18-final62.pdf">SMIC: Subflow-level Multi-path Interest Control for Information Centric Networking, in 5th ACM Conference on Information-Centric Networking</a>", DOI 10.1145/3267955.3267971, 2018.</td>
+    </tr>
+  </tbody>
+</table>
+<h1 id="rfc.authors">
+  <a href="#rfc.authors">Authors' Addresses</a>
+</h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Ilya Moiseenko</span> 
+	  <span class="n hidden">
+		<span class="family-name">I. Moiseenko</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Apple Computer</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality">Cupertino</span>,  
+		<span class="region">CA</span> 
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:imoiseenko@apple.com">imoiseenko@apple.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Dave Oran</span> 
+	  <span class="n hidden">
+		<span class="family-name">D. Oran</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Network Systems Research and Design</span>
+	<span class="adr">
+	  <span class="vcardline">4 Shady Hill Square</span>
+
+	  <span class="vcardline">
+		<span class="locality">Cambridge</span>,  
+		<span class="region">MA</span> 
+		<span class="code">02138</span>
+	  </span>
+	  <span class="country-name vcardline">USA</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:daveoran@orandom.net">daveoran@orandom.net</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Spyridon Mastorakis</span> 
+	  <span class="n hidden">
+		<span class="family-name">Mastorakis</span>
+	  </span>
+	</span>
+	<span class="org vcardline">University of Nebraska at Omaha</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality">Omaha</span>,  
+		<span class="region">NB</span> 
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline">US</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:smastorakis@unomaha.edu">smastorakis@unomaha.edu</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>
+
