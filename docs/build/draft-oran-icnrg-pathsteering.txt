@@ -5,10 +5,10 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                            Apple Computer
 Intended status: Experimental                                    D. Oran
-Expires: March 27, 2020              Network Systems Research and Design
+Expires: March 28, 2020              Network Systems Research and Design
                                                            S. Mastorakis
                                          University of Nebraska at Omaha
-                                                      September 24, 2019
+                                                      September 25, 2019
 
 
                      Path Steering in CCNx and NDN
@@ -20,7 +20,12 @@ Abstract
    ICN content objects and steer subsequent Interest messages along a
    previously discovered path.  It has various uses, including the
    operation of state-of-the-art multipath congestion control algorithms
-   and for network measurement and management.
+   and for network measurement and management.  This specification
+   derives directly from the design published in [Moiseenko2017] and
+   therefore does not recapitulate the design motivations,
+   implementation details, or evaluation of the scheme.  Some technical
+   details are different however, and where there are differences, the
+   design documented here is to be considered definitive.
 
 Status of This Memo
 
@@ -37,12 +42,21 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 27, 2020.
+   This Internet-Draft will expire on March 28, 2020.
 
 Copyright Notice
 
    Copyright (c) 2019 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
+
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 1]
+
+Internet-Draft              ICN Path Steering             September 2019
+
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
@@ -50,14 +64,6 @@ Copyright Notice
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
-
-
-
-I. Moiseenko, et al.     Expires March 27, 2020                 [Page 1]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
@@ -65,16 +71,22 @@ Internet-Draft              ICN Path Steering             September 2019
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   2
-   2.  Mapping to CCNx and NDN packet encodings  . . . . . . . . . .   2
-     2.1.  Packet encoding for CCNx  . . . . . . . . . . . . . . . .   2
-     2.2.  Packet encoding for NDN . . . . . . . . . . . . . . . . .   2
-   3.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   3
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   3
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   3
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   3
-     5.2.  Informative References  . . . . . . . . . . . . . . . . .   3
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   4
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   3
+   2.  Essential elements of ICN path discovery and path steering  .   4
+     2.1.  Path Discovery  . . . . . . . . . . . . . . . . . . . . .   4
+     2.2.  Path Steering . . . . . . . . . . . . . . . . . . . . . .   4
+     2.3.  Handling Path Steering errors . . . . . . . . . . . . . .   5
+     2.4.  How to represent the Path Label . . . . . . . . . . . . .   5
+   3.  Mapping to CCNx and NDN packet encodings  . . . . . . . . . .   6
+     3.1.  Packet encoding for CCNx  . . . . . . . . . . . . . . . .   6
+     3.2.  Packet encoding for NDN . . . . . . . . . . . . . . . . .   6
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+     5.1.  Cryptographic protection of a path label  . . . . . . . .   8
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
@@ -82,7 +94,66 @@ Table of Contents
    ICN content objects and steer subsequent Interest messages along a
    previously discovered path.  It has various uses, including the
    operation of state-of-the-art multipath congestion control algorithms
-   and for network measurement and management.
+   and for network measurement and management.  This specification
+   derives directly from the design published in [Moiseenko2017] and
+   therefore does not recapitulate the design motivations,
+   implementation details, or evaluation of the scheme.  That
+   publication should be considered a normative reference as it is not
+   likely a reader will be able to understand all elements of this
+   design without first having read the reference.  Some technical
+   details are different however, and where there are differences, the
+   design documented here is to be considered definitive.
+
+
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 2]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
+   There are a number of important use cases to justify extending ICN
+   architectures such as CCNx [RFC8569] or NDN [NDN] to provide these
+   capabilities.  These are summarized as follows:
+
+   o  Support the discovery, monitoring and troubleshooting of multi-
+      path network connectivity based on names and name prefixes.
+      Analogous functions have been shown to be a crucial operational
+      capability in multicast and multi-path topologies for IP.  The
+      canonical tools are the well-known _traceroute_ and _ping_ For
+      point-to-multipoint MPLS the more recent tree trace [RFC8029]
+      protocol is used.  Equivalent diagnostic functions have been
+      defined for CCNx through the ICN Ping
+      [I-D.mastorakis-icnrg-icnping] and ICN Traceroute
+      [I-D.mastorakis-icnrg-icntraceroute] specifications, both of which
+      are capable of exploiting path steering if available.
+
+   o  Perform accurate online measurement of network performance, which
+      generally requires multiple consecutive packets follow the same
+      path under control of an application.
+
+   o  Improve the performance and flexibility of multi-path congestion
+      control algorithms.  Congestion control schemes such as
+      [Mahdian2016] and [Song2018] depend on the ability of a consumer
+      to explicitly steer packets onto individual paths in a multi-path
+      and/or multi-destination topology.
+
+   o  A consumer endpoint can mitigate content poisoning attacks by
+      directing its Interests onto the network paths that bypass
+      poisoned caches.
+
+   Path discovery and subsequent path steering in ICN networks is
+   facilitated by the symmetry of forward and reverse paths in the CCNx
+   and NDN architectures.  Path discovery is achieved by a consumer
+   endpoint transmitting an ordinary Interest message and receiving a
+   Content (Data) message containing an end-to-end path label
+   constructed on the reverse path by the forwarding plane.  Path
+   steering is achieved by a consumer endpoint including a path label in
+   the Interest message, which is forwarded to each nexthop through the
+   corresponding egress interfaces in conjunction with longest name
+   prefix match (LNPM) FIB lookup.
 
 1.1.  Requirements Language
 
@@ -90,41 +161,298 @@ Table of Contents
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in RFC 2119 [RFC2119].
 
-2.  Mapping to CCNx and NDN packet encodings
-
-   TBD
-
-2.1.  Packet encoding for CCNx
-
-   TBD
-
-2.2.  Packet encoding for NDN
-
-   TBD based on [NDNTLV].  Suggestions from the NDN team greatly
-   appreciated.
 
 
 
 
-
-
-
-I. Moiseenko, et al.     Expires March 27, 2020                 [Page 2]
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 3]
 
 Internet-Draft              ICN Path Steering             September 2019
 
 
-3.  IANA Considerations
+2.  Essential elements of ICN path discovery and path steering
+
+   We elucidate the design using CCNx semantics [RFC8569] and extend its
+   Packet Encoding [RFC8609] as defined in Section 3.1.  While the
+   terminology is slightly different, this design can be applied also to
+   NDN, by extending its bespoke packet encodings [NDNTLV] (See
+   Section 3.2).
+
+2.1.  Path Discovery
+
+   _End-to-end Path Discovery_ for CCNx is achieved by creating a _path
+   label_ and placing it as a hop-by-hop TLV in a CCNx Content (Data)
+   message.  The path label is constructed hop-by-hop as the message
+   traverses the reverse path of transit CCNx forwarders (Figure TBD).
+   The path label is updated by adding to the existing path label the
+   nexthop label of the interface at which the Content(Data) message has
+   arrived.  Eventually, when the Content(Data) message arrives at the
+   consumer, the path label identifies the complete path the
+   Content(Data) message took to reach the consumer.
+
+   *Issue:* _how to indicate in an Interest message that the consumer
+   wants to do path discovery?  Flag in the fixed header?  Empty Path
+   Steering TLV (with index set to zero?).  If we do the former, would
+   need some way to indicate how big the producer should make it since
+   it doesn't know how many hops there are on the reverse path.  That's
+   not a problem if we do the latter, but that makes the Interest
+   message bigger even though it doesn't have a path yet.  Making the
+   path steering TLV the maximum size (i.e. based on what hop limit is
+   set to) wastes a lot of space since most paths are likely to be way
+   shorter than what the hop limit is set to by the consumer.  Doing so
+   does make transforming the Interest message into a Content Object
+   message a bit easier though, since the hop-by-hop headers are likely
+   already sized right.  Another option is to define a new TLV to carry
+   the unmodified hop limit by the consumer.  Then the producer then
+   just does a subtraction to get the traversed path length._
+
+2.2.  Path Steering
+
+   Due to the symmetry of forward and reverse paths in CCNx, a consumer
+   application can reuse a discovered path label to fetch the same or
+   similar (e.g. next chunk, or next Application Data Unit, or next
+   pointer in a Manifest [I-D.icnrg-flic]) Content (Data) message over
+   the discovered network path.  This _Path Steering_ is achieved by
+   processing the Interest message's path label at each transit ICN
+   forwarder and forwarding the Interest through the specified nexthop
+   among those identified as feasible by LNPM FIB lookup (Figure TBD).
+
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 4]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
+2.3.  Handling Path Steering errors
+
+   Over time, the state of interfaces and the FIB on forwarders may
+   change such that, at any particular forwarder, a given nexthop is no
+   longer valid for a given prefix.  In this case, the path label will
+   point to a now-invalid nexthop.  This is detected by failure to find
+   a match between the decoded nexthop ID and the nexthops of the FIB
+   entry after LNPM FIB lookup.
+
+   On detecting an invalid path label, the forwarder SHOULD respond to
+   the Interest with an Interest-Return.  We therefor define a new
+   _Invalid path label_ response code for the Interest Return message
+   and include the current path label as a hop-by-hop header.  Each
+   transit forwarder processing the Interest-Return message updates the
+   path label in the same manner as Content (Data) messages, so that the
+   consumer receiving the Interest-Return (NACK) can easily identify
+   which path label is no longer valid.
+
+   *Issue:* _should we provide an option to the consumer to forward the
+   interest rather than returning the error?  This is briefly discussed
+   in the paper, but specific machinery isn't suggested.  I think this
+   would potentially be useful for diagnosis.  If so, we need to re-
+   jigger the description a bit and include the following paragraph_
+
+   A consumer may alternatively request that a forwarder detecting the
+   inconsistency forward the Interest by means of normal LNPM FIB lookup
+   rather than returning an error.  The consumer endpoint, if it cares,
+   can keep enough information about outstanding Interests to determine
+   if the path label sent with the Interest fails to match the path
+   label in the corresponding returned Content (Data), and use that
+   information to replace stale path labels.  It does so by setting the
+   (TBD mechanism) in its Interest message.
+
+2.4.  How to represent the Path Label
+
+   [Moiseenko2017] presents various options for how to represent a path
+   label, with different tradeoffs in flexibility, performance and space
+   efficiency.  For this specification, we choose the _Polynomial
+   encoding_ which achieves reasonable space efficiency at the cost of
+   establishing a hard limit on the length of paths that can be
+   represented.
+
+   The polynomial encoding utilizes a fixed-size bit array.  Each
+   transit ICN forwarder is allocated a fixed sized portion of the bit
+   array.  This design allocates 12 bits (i.e. 4095 as a _generator
+   polynomial_) to each intermediate ICN forwarder.  This should match
+   the scalability of today's commercial routers that support up to 4096
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 5]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
+   physical and logical interfaces and usually do not have more than a
+   few hundred active ones.
+
+   A forwarder that receives a Content (Data) message encodes the
+   nexthop label in the next available slot and increments label
+   (Figure fig:poly).  Conversely, a forwarder that receives an Interest
+   message reads the current nexthop label and decrements label index.
+   Therefore, the extra computation required at each hop to forward
+   either an interest or Content Object message with a path label is
+   minimized and constitutes a fairly trivial additional overhead
+   compared to FIB lookup and other required operations.
+
+   This approach results in individual path label TLV instances being of
+   fixed pre-computed size.  While this places a hard upper bound on the
+   maximum number of network hops that can be repreented, this is not a
+   significant a practical problem in CCNx, since the size can be pre-
+   set during Interest message encoding based on the consumer specified
+   value of the hop-limit.  Even long paths of 24 hops will fit in a
+   path steering TLV of 36 bytes.
+
+3.  Mapping to CCNx and NDN packet encodings
+
+   TBD.Need definitions for:
+
+   1.  Path Steering hop-by-hop header TLV
+
+   2.  Interest Return error code for _Invalid Path Label_
+
+   3.  Way to indicate whether to throw error or continue to forward on
+       encountering invalid path label
+
+   4.  Way to tell producer the traversed hop count if we don't put a
+       full-sized path Steering TLV in an interest message
+
+3.1.  Packet encoding for CCNx
 
    TBD
 
-4.  Security Considerations
+3.2.  Packet encoding for NDN
 
-   TBD
+   TBD based on [NDNTLV].  Suggestions from the NDN team greatly
+   appreciated.
 
-5.  References
+4.  IANA Considerations
 
-5.1.  Normative References
+   TBD.  Need definitions for:
+
+   1.  Path Steering hop-by-hop header TLV
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 6]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
+   2.  Interest Return error code for _Invalid Path Label_
+
+   3.  Way to indicate whether to throw error or continue to forward on
+       invalid path label
+
+   4.  Way to tell producer the traversed hop count if we don't put a
+       full-sized path Steering TLV in an interest message
+
+5.  Security Considerations
+
+   A path is invalidated by renumbering nexthop label(s).  A malicious
+   consumer can attempt to mount an attack by transmitting Interests
+   with path labels which differ only in a single now-invalid nexthop
+   label in order to _brute force_ a valid nexthop label.  If such an
+   attack succeeds, a malicious consumer would be capable of steering
+   Interests over a network path that may not match the paths computed
+   by the routing algorithm or learned adaptively by the forwarders.
+
+   When a label lookup fails, by default an _Invalid path label_
+   Interest-Return (NACK) message is returned to the consumer.  This
+   contains a path label identical to the one included in the
+   corresponding Interest message.  A malicious consumer can therefore
+   analyze the message's Hop Count field to infer which specific nexthop
+   label had failed and direct an attack to influence path steering at
+   that hop.  This threat can be mitigated by the following
+   countermeasures:
+
+   o  A nexthop label of larger size is harder to crack.  If nexthop
+      labels are not allocated in a predictable fashion by the routers,
+      brute forcing a 32-bit nexthop label requires on average O(2^31)
+      Interests.  However, this specification uses nexthop labels with
+      much less entropy (12 bits), so depending on computational
+      hardness is not workable.
+
+   o  An ICN forwarder can periodically update nexthop labels to limit
+      the maximum lifetime of paths.  It is RECOMMENDED that forwarders
+      update path labels at least every few minutes.
+
+   o  A void Hop Count field in an _Invalid path label_ Interest-Return
+      (NACK) message would not give out the information on which
+      specific nexthop label had failed.  An attacker might need to
+      brute force all nexthop labels in all combinations.  However, some
+      useful diagnostic capability is lost by obscuring the hop count.
+      For example the locus of routing churn is harder to pin down
+      through analysis of path-steered pings or traceroutes.  A
+      forwarder MAY choose to invalidate the hop count in addition to
+      changing nexthop labels periodically as above.
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 7]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
+   ICN protocols can be susceptible to a variety of cache poisoning
+   attacks, where a colluding consumer and producer arrange for bogus
+   content (with either invalid or inappropriate signatures) to populate
+   forwarder caches.  These are generally confined to on-path attacks.
+   It is also theoretically possible to launch a similar attack without
+   a cooperating producer such that the caches of on-path routers become
+   poisoned with the content from off-path routers (i.e. physical
+   connectivity, but no route in a FIB for a given prefix).  We estimate
+   that without any prior knowledge of the network topology, the
+   complexity of this type of attack is in the ballpark of Breadth-
+   First-Search and Depth-First-Search algorithms with the additional
+   burden of transmitting 2^31 Interests in order to crack a nexthop
+   label on each hop.  Relatively short periodic update of nexthop
+   labels and anti- _label scan_ heuristics implemented in the ICN
+   forwarder may successfully mitigate this type of attack.
+
+5.1.  Cryptographic protection of a path label
+
+   If the countermeasures listed above do not provide sufficient
+   protection against malicious mis-steering of Interests, the path
+   label can be made opaque to the consumer endpoint via hop-by-hop
+   symmetric cryptography applied to the path labels (Figure TBD).  This
+   method is viable due to the symmetry of forward and reverse paths in
+   CCNx and NDN architectures combined with ICN path steering requiring
+   only reads/writes of the topmost nexthop label (i.e. active nexthop
+   label) in the path label.  This way a path steering capable ICN
+   forwarder receiving a Data (Content) message encrypts the current
+   path label with its own non-shared symmetric key prior to adding a
+   new nexthop label to the path label.  The Data (Content) message is
+   forwarded downstream with unencrypted topmost (i.e active) nexthop
+   label and encrypted remaining content of the path label.  As a
+   result, a consumer endpoint receives a Data (Content) message with a
+   unique path label exposing only the topmost nexthop label as
+   cleartext.  A path steering forwarder receiving an Interest message
+   performs label lookup using the topmost nexthop label, decrypts the
+   path label with its own non-shared symmetric key, and forwards the
+   message upstream.
+
+   Cryptographic protection of a path label does not require any key
+   negotiation among ICN forwarders, and is no more expensive than
+   MACsec or IPsec.  It is also quite possible that strict hop-by-hop
+   path label encryption is not necessary and path label encryption only
+   on the border routers of the trusted administrative or routing
+   domains may suffice.
+
+
+
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 8]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
+6.  References
+
+6.1.  Normative References
 
    [Moiseenko2017]
               Moiseenko, I. and D. Oran, "Path Switching in Content
@@ -149,7 +477,18 @@ Internet-Draft              ICN Path Steering             September 2019
               DOI 10.17487/RFC8609, July 2019, <https://www.rfc-
               editor.org/info/rfc8609>.
 
-5.2.  Informative References
+6.2.  Informative References
+
+   [I-D.icnrg-flic]
+              Tschudin, C. and C. Wood, "File-Like ICN Collection
+              (FLIC)", draft-icnrg-flic-00 (work in progress), June
+              2017.
+
+   [I-D.mastorakis-icnrg-icnping]
+              Mastorakis, S., Gibson, J., Moiseenko, I., Droms, R., and
+              D. Oran, "ICN Ping Protocol Specification", draft-
+              mastorakis-icnrg-icnping-05 (work in progress), August
+              2019.
 
    [I-D.mastorakis-icnrg-icntraceroute]
               Mastorakis, S., Gibson, J., Moiseenko, I., Droms, R., and
@@ -162,10 +501,7 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-
-
-
-I. Moiseenko, et al.     Expires March 27, 2020                 [Page 3]
+I. Moiseenko, et al.     Expires March 28, 2020                 [Page 9]
 
 Internet-Draft              ICN Path Steering             September 2019
 
@@ -183,6 +519,12 @@ Internet-Draft              ICN Path Steering             September 2019
 
    [NDNTLV]   NDN Project Team, , "NDN Packet Format Specification.",
               2016, <http://named-data.net/doc/ndn-tlv/>.
+
+   [RFC8029]  Kompella, K., Swallow, G., Pignataro, C., Ed., Kumar, N.,
+              Aldrin, S., and M. Chen, "Detecting Multiprotocol Label
+              Switched (MPLS) Data-Plane Failures", RFC 8029,
+              DOI 10.17487/RFC8029, March 2017, <https://www.rfc-
+              editor.org/info/rfc8029>.
 
    [Song2018]
               Song, J., Lee, M., and T. Kwon, "SMIC: Subflow-level
@@ -211,6 +553,15 @@ Authors' Addresses
    Email: daveoran@orandom.net
 
 
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                [Page 10]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
    Spyridon Mastorakis
    University of Nebraska at Omaha
    Omaha, NB
@@ -221,4 +572,45 @@ Authors' Addresses
 
 
 
-I. Moiseenko, et al.     Expires March 27, 2020                 [Page 4]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+I. Moiseenko, et al.     Expires March 28, 2020                [Page 11]

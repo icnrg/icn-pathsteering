@@ -284,14 +284,20 @@ ul.toc li {
   <link href="#rfc.toc" rel="Contents"/>
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Requirements Language"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 Mapping to CCNx and NDN packet encodings"/>
-<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Packet encoding for CCNx"/>
-<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Packet encoding for NDN"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 IANA Considerations"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
-<link href="#rfc.references" rel="Chapter" title="5 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="5.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="5.2 Informative References"/>
+<link href="#rfc.section.2" rel="Chapter" title="2 Essential elements of ICN path discovery and path steering"/>
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Path Discovery"/>
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Path Steering"/>
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Handling Path Steering errors"/>
+<link href="#rfc.section.2.4" rel="Chapter" title="2.4 How to represent the Path Label"/>
+<link href="#rfc.section.3" rel="Chapter" title="3 Mapping to CCNx and NDN packet encodings"/>
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Packet encoding for CCNx"/>
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Packet encoding for NDN"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 IANA Considerations"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations"/>
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Cryptographic protection of a path label"/>
+<link href="#rfc.references" rel="Chapter" title="6 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="6.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="6.2 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
@@ -300,9 +306,9 @@ ul.toc li {
 
   <meta name="dct.creator" content="I. Moiseenko, , D. Oran, , and S. Mastorakis" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-oran-icnrg-pathsteering-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-9-24" />
-  <meta name="dct.abstract" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management." />
-  <meta name="description" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management." />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-9-25" />
+  <meta name="dct.abstract" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in " />
+  <meta name="description" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in " />
 
 </head>
 
@@ -324,7 +330,7 @@ ul.toc li {
   <td class="right">D. Oran</td>
 </tr>
 <tr>
-  <td class="left">Expires: March 27, 2020</td>
+  <td class="left">Expires: March 28, 2020</td>
   <td class="right">Network Systems Research and Design</td>
 </tr>
 <tr>
@@ -337,7 +343,7 @@ ul.toc li {
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">September 24, 2019</td>
+  <td class="right">September 25, 2019</td>
 </tr>
 
     	
@@ -350,14 +356,14 @@ ul.toc li {
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management.</p>
+<p>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <a href="#Moiseenko2017">[Moiseenko2017]</a> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on March 27, 2020.</p>
+<p>This Internet-Draft will expire on March 28, 2020.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -371,35 +377,95 @@ ul.toc li {
 
   	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
 <ul><li>1.1.   <a href="#rfc.section.1.1">Requirements Language</a></li>
-</ul><li>2.   <a href="#rfc.section.2">Mapping to CCNx and NDN packet encodings</a></li>
-<ul><li>2.1.   <a href="#rfc.section.2.1">Packet encoding for CCNx</a></li>
-<li>2.2.   <a href="#rfc.section.2.2">Packet encoding for NDN</a></li>
-</ul><li>3.   <a href="#rfc.section.3">IANA Considerations</a></li>
-<li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
-<li>5.   <a href="#rfc.references">References</a></li>
-<ul><li>5.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>5.2.   <a href="#rfc.references.2">Informative References</a></li>
+</ul><li>2.   <a href="#rfc.section.2">Essential elements of ICN path discovery and path steering</a></li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Path Discovery</a></li>
+<li>2.2.   <a href="#rfc.section.2.2">Path Steering</a></li>
+<li>2.3.   <a href="#rfc.section.2.3">Handling Path Steering errors</a></li>
+<li>2.4.   <a href="#rfc.section.2.4">How to represent the Path Label</a></li>
+</ul><li>3.   <a href="#rfc.section.3">Mapping to CCNx and NDN packet encodings</a></li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Packet encoding for CCNx</a></li>
+<li>3.2.   <a href="#rfc.section.3.2">Packet encoding for NDN</a></li>
+</ul><li>4.   <a href="#rfc.section.4">IANA Considerations</a></li>
+<li>5.   <a href="#rfc.section.5">Security Considerations</a></li>
+<ul><li>5.1.   <a href="#rfc.section.5.1">Cryptographic protection of a path label</a></li>
+</ul><li>6.   <a href="#rfc.references">References</a></li>
+<ul><li>6.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>6.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
 
 
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#intro" id="intro">Introduction</a></h1>
-<p id="rfc.section.1.p.1">Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management.  </p>
+<p id="rfc.section.1.p.1">Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <a href="#Moiseenko2017">[Moiseenko2017]</a> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. That publication should be considered a normative reference as it is not likely a reader will be able to understand all elements of this design without first having read the reference. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.  </p>
+<p id="rfc.section.1.p.2">There are a number of important use cases to justify extending ICN architectures such as <a href="#RFC8569">CCNx</a> <cite title="NONE">[RFC8569]</cite> or <a href="#NDN">NDN</a> <cite title="NONE">[NDN]</cite> to provide these capabilities. These are summarized as follows: </p>
+
+<ul>
+  <li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em> For point-to-multipoint MPLS the more recent <a href="#RFC8029">tree trace</a> <cite title="NONE">[RFC8029]</cite> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <a href="#I-D.mastorakis-icnrg-icnping">ICN Ping</a> <cite title="NONE">[I-D.mastorakis-icnrg-icnping]</cite> and <a href="#I-D.mastorakis-icnrg-icntraceroute">ICN Traceroute</a> <cite title="NONE">[I-D.mastorakis-icnrg-icntraceroute]</cite> specifications, both of which are capable of exploiting path steering if available.</li>
+  <li>Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.</li>
+  <li>Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <a href="#Mahdian2016">[Mahdian2016]</a> and <a href="#Song2018">[Song2018]</a> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.</li>
+  <li>A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.</li>
+</ul>
+
+<p> Path discovery and subsequent path steering in ICN networks is facilitated by the symmetry of forward and reverse paths in the CCNx and NDN architectures. Path discovery is achieved by a consumer endpoint transmitting an ordinary Interest message and receiving a Content (Data) message containing an end-to-end path label constructed on the reverse path by the forwarding plane. Path steering is achieved by a consumer endpoint including a path label in the Interest message, which is forwarded to each nexthop through the corresponding egress interfaces in conjunction with longest name prefix match (LNPM) FIB lookup.</p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> Requirements Language</h1>
 <p id="rfc.section.1.1.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <a href="#RFC2119">RFC 2119</a> <cite title="NONE">[RFC2119]</cite>.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#encoding" id="encoding">Mapping to CCNx and NDN packet encodings</a></h1>
-<p id="rfc.section.2.p.1">TBD</p>
-<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#CCNx-encoding" id="CCNx-encoding">Packet encoding for CCNx</a></h1>
-<p id="rfc.section.2.1.p.1">TBD</p>
-<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#NDN-encoding" id="NDN-encoding">Packet encoding for NDN</a></h1>
-<p id="rfc.section.2.2.p.1">TBD based on <a href="#NDNTLV">[NDNTLV]</a>. Suggestions from the NDN team greatly appreciated.</p>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
-<p id="rfc.section.3.p.1">TBD</p>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#Security" id="Security">Security Considerations</a></h1>
-<p id="rfc.section.4.p.1">TBD</p>
-<h1 id="rfc.references"><a href="#rfc.references">5.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">5.1.</a> Normative References</h1>
+<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#design" id="design">Essential elements of ICN path discovery and path steering</a></h1>
+<p id="rfc.section.2.p.1">We elucidate the design using <a href="#RFC8569">CCNx semantics</a> <cite title="NONE">[RFC8569]</cite> and extend its <a href="#RFC8609">Packet Encoding</a> <cite title="NONE">[RFC8609]</cite> as defined in <a href="#CCNx-encoding">Section 3.1</a>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <a href="#NDNTLV">packet encodings</a> <cite title="NONE">[NDNTLV]</cite> (See <a href="#NDN-encoding">Section 3.2</a>).</p>
+<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#discovery" id="discovery">Path Discovery</a></h1>
+<p><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content(Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content(Data) message took to reach the consumer.</p>
+<p><strong>Issue:</strong> <em>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Steering TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path steering TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</em></p>
+<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#steering" id="steering">Path Steering</a></h1>
+<p id="rfc.section.2.2.p.1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <a href="#I-D.icnrg-flic">Manifest</a> <cite title="NONE">[I-D.icnrg-flic]</cite>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure TBD).</p>
+<h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#error-processing" id="error-processing">Handling Path Steering errors</a></h1>
+<p id="rfc.section.2.3.p.1">Over time, the state of interfaces and the FIB on forwarders may change such that, at any particular forwarder, a given nexthop is no longer valid for a given prefix. In this case, the path label will point to a now-invalid nexthop. This is detected by failure to find a match between the decoded nexthop ID and the nexthops of the FIB entry after LNPM FIB lookup.</p>
+<p id="rfc.section.2.3.p.2">On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefor define a new <em>Invalid path label</em> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.</p>
+<p><strong>Issue:</strong> <em>should we provide an option to the consumer to forward the interest rather than returning the error? This is briefly discussed in the paper, but specific machinery isn't suggested. I think this would potentially be useful for diagnosis. If so, we need to re-jigger the description a bit and include the following paragraph</em></p>
+<p id="rfc.section.2.3.p.4">A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the (TBD mechanism) in its Interest message.</p>
+<h1 id="rfc.section.2.4"><a href="#rfc.section.2.4">2.4.</a> <a href="#label-encoding" id="label-encoding">How to represent the Path Label</a></h1>
+<p><a href="#Moiseenko2017">[Moiseenko2017]</a> presents various options for how to represent a path label, with different tradeoffs in flexibility, performance and space efficiency. For this specification, we choose the <em>Polynomial encoding</em> which achieves reasonable space efficiency at the cost of establishing a hard limit on the length of paths that can be represented.</p>
+<p id="rfc.section.2.4.p.2">The polynomial encoding utilizes a fixed-size bit array. Each transit ICN forwarder is allocated a fixed sized portion of the bit array. This design allocates 12 bits (i.e. 4095 as a <em>generator polynomial</em>) to each intermediate ICN forwarder. This should match the scalability of today's commercial routers that support up to 4096 physical and logical interfaces and usually do not have more than a few hundred active ones.</p>
+<p id="rfc.section.2.4.p.3">A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label (Figure fig:poly). Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.</p>
+<p id="rfc.section.2.4.p.4">This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be repreented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path steering TLV of 36 bytes.</p>
+<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#encoding" id="encoding">Mapping to CCNx and NDN packet encodings</a></h1>
+<p id="rfc.section.3.p.1">TBD.Need definitions for: </p>
+
+<ol>
+  <li>Path Steering hop-by-hop header TLV</li>
+  <li>Interest Return error code for <em>Invalid Path Label</em></li>
+  <li>Way to indicate whether to throw error or continue to forward on encountering invalid path label</li>
+  <li>Way to tell producer the traversed hop count if we don't put a full-sized path Steering TLV in an interest message</li>
+</ol>
+
+<p> </p>
+<h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#CCNx-encoding" id="CCNx-encoding">Packet encoding for CCNx</a></h1>
+<p id="rfc.section.3.1.p.1">TBD</p>
+<h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#NDN-encoding" id="NDN-encoding">Packet encoding for NDN</a></h1>
+<p id="rfc.section.3.2.p.1">TBD based on <a href="#NDNTLV">[NDNTLV]</a>. Suggestions from the NDN team greatly appreciated.</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
+<p id="rfc.section.4.p.1">TBD. Need definitions for: </p>
+
+<ol>
+  <li>Path Steering hop-by-hop header TLV</li>
+  <li>Interest Return error code for <em>Invalid Path Label</em></li>
+  <li>Way to indicate whether to throw error or continue to forward on invalid path label</li>
+  <li>Way to tell producer the traversed hop count if we don't put a full-sized path Steering TLV in an interest message</li>
+</ol>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#security" id="security">Security Considerations</a></h1>
+<p id="rfc.section.5.p.1">A path is invalidated by renumbering nexthop label(s). A malicious consumer can attempt to mount an attack by transmitting Interests with path labels which differ only in a single now-invalid nexthop label in order to <em>brute force</em> a valid nexthop label. If such an attack succeeds, a malicious consumer would be capable of steering Interests over a network path that may not match the paths computed by the routing algorithm or learned adaptively by the forwarders.</p>
+<p id="rfc.section.5.p.2">When a label lookup fails, by default an <em>Invalid path label</em> Interest-Return (NACK) message is returned to the consumer. This contains a path label identical to the one included in the corresponding Interest message. A malicious consumer can therefore analyze the message's Hop Count field to infer which specific nexthop label had failed and direct an attack to influence path steering at that hop. This threat can be mitigated by the following countermeasures: </p>
+
+<ul>
+  <li>A nexthop label of larger size is harder to crack. If nexthop labels are not allocated in a predictable fashion by the routers, brute forcing a 32-bit nexthop label requires on average O(2^31) Interests. However, this specification uses nexthop labels with much less entropy (12 bits), so depending on computational hardness is not workable.</li>
+  <li>An ICN forwarder can periodically update nexthop labels to limit the maximum lifetime of paths. It is RECOMMENDED that forwarders update path labels at least every few minutes.</li>
+  <li>A void Hop Count field in an <em>Invalid path label</em> Interest-Return (NACK) message would not give out the information on which specific nexthop label had failed. An attacker might need to brute force all nexthop labels in all combinations. However, some useful diagnostic capability is lost by obscuring the hop count. For example the locus of routing churn is harder to pin down through analysis of path-steered pings or traceroutes. A forwarder MAY choose to invalidate the hop count in addition to changing nexthop labels periodically as above.</li>
+</ul>
+<p id="rfc.section.5.p.3">ICN protocols can be susceptible to a variety of cache poisoning attacks, where a colluding consumer and producer arrange for bogus content (with either invalid or inappropriate signatures) to populate forwarder caches. These are generally confined to on-path attacks. It is also theoretically possible to launch a similar attack without a cooperating producer such that the caches of on-path routers become poisoned with the content from off-path routers (i.e. physical connectivity, but no route in a FIB for a given prefix). We estimate that without any prior knowledge of the network topology, the complexity of this type of attack is in the ballpark of Breadth-First-Search and Depth-First-Search algorithms with the additional burden of transmitting 2^31 Interests in order to crack a nexthop label on each hop.  Relatively short periodic update of nexthop labels and anti- <em>label scan</em> heuristics implemented in the ICN forwarder may successfully mitigate this type of attack.</p>
+<h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#encryptpathlabel" id="encryptpathlabel">Cryptographic protection of a path label</a></h1>
+<p id="rfc.section.5.1.p.1">If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (Figure TBD). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.</p>
+<p id="rfc.section.5.1.p.2">Cryptographic protection of a path label does not require any key negotiation among ICN forwarders, and is no more expensive than MACsec or IPsec. It is also quite possible that strict hop-by-hop path label encryption is not necessary and path label encryption only on the border routers of the trusted administrative or routing domains may suffice.</p>
+<h1 id="rfc.references"><a href="#rfc.references">6.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">6.1.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -428,9 +494,21 @@ ul.toc li {
     </tr>
   </tbody>
 </table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">5.2.</a> Informative References</h1>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">6.2.</a> Informative References</h1>
 <table>
   <tbody>
+    <tr>
+      <td class="reference">
+        <b id="I-D.icnrg-flic">[I-D.icnrg-flic]</b>
+      </td>
+      <td class="top"><a>Tschudin, C.</a> and <a>C. Wood</a>, "<a href="http://tools.ietf.org/html/draft-icnrg-flic-00">File-Like ICN Collection (FLIC)</a>", Internet-Draft draft-icnrg-flic-00, June 2017.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.mastorakis-icnrg-icnping">[I-D.mastorakis-icnrg-icnping]</b>
+      </td>
+      <td class="top"><a>Mastorakis, S.</a>, <a>Gibson, J.</a>, <a>Moiseenko, I.</a>, <a>Droms, R.</a> and <a>D. Oran</a>, "<a href="http://tools.ietf.org/html/draft-mastorakis-icnrg-icnping-05">ICN Ping Protocol Specification</a>", Internet-Draft draft-mastorakis-icnrg-icnping-05, August 2019.</td>
+    </tr>
     <tr>
       <td class="reference">
         <b id="I-D.mastorakis-icnrg-icntraceroute">[I-D.mastorakis-icnrg-icntraceroute]</b>
@@ -454,6 +532,12 @@ ul.toc li {
         <b id="NDNTLV">[NDNTLV]</b>
       </td>
       <td class="top"><a>NDN Project Team, </a>, "<a href="http://named-data.net/doc/ndn-tlv/">NDN Packet Format Specification.</a>", 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC8029">[RFC8029]</b>
+      </td>
+      <td class="top"><a>Kompella, K.</a>, <a>Swallow, G.</a>, <a>Pignataro, C.</a>, <a>Kumar, N.</a>, <a>Aldrin, S.</a> and <a>M. Chen</a>, "<a href="http://tools.ietf.org/html/rfc8029">Detecting Multiprotocol Label Switched (MPLS) Data-Plane Failures</a>", RFC 8029, DOI 10.17487/RFC8029, March 2017.</td>
     </tr>
     <tr>
       <td class="reference">
