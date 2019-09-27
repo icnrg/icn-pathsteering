@@ -106,7 +106,7 @@
             <street></street>
             <!-- Reorder these if your country does things differently -->
             <city>Omaha</city>
-            <region>NB</region>
+            <region>NE</region>
             <code></code>
             <country>US</country>
         </postal>
@@ -156,7 +156,7 @@
 	
 	<t>There are a number of important use cases to justify extending ICN architectures such as <xref target="RFC8569">CCNx</xref> or <xref target="NDN">NDN</xref> to provide these capabilities. These are summarized as follows:
 	<list style="symbols">
-		<t>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <spanx>traceroute</spanx> and <spanx>ping</spanx> For point-to-multipoint MPLS the more recent <xref target="RFC8029">tree trace</xref> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <xref target="I-D.mastorakis-icnrg-icnping">ICN Ping</xref> and <xref target="I-D.mastorakis-icnrg-icntraceroute">ICN Traceroute</xref> specifications, both of which are capable of exploiting path steering if available.</t>
+		<t>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <spanx>traceroute</spanx> and <spanx>ping</spanx>. For point-to-multipoint MPLS the more recent <xref target="RFC8029">tree trace</xref> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <xref target="I-D.mastorakis-icnrg-icnping">ICN Ping</xref> and <xref target="I-D.mastorakis-icnrg-icntraceroute">ICN Traceroute</xref> specifications, both of which are capable of exploiting path steering if available.</t>
 		
 		<t>Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.</t>
 		
@@ -179,7 +179,7 @@
 	<t>We elucidate the design using <xref target="RFC8569">CCNx semantics</xref> and extend its <xref target="RFC8609">Packet Encoding</xref> as defined in <xref target="CCNx-encoding"/>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <xref target="NDNTLV">packet encodings</xref> (See <xref target="NDN-encoding"/>).</t>
 
 	<section anchor="discovery" title="Path Discovery">
-		<t><spanx>End-to-end Path Discovery</spanx> for CCNx is achieved by creating a <spanx>path label</spanx> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content(Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content(Data) message took to reach the consumer.</t>
+		<t><spanx>End-to-end Path Discovery</spanx> for CCNx is achieved by creating a <spanx>path label</spanx> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</t>
 		
 		<t><spanx style="strong">Issue:</spanx> <spanx>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Steering TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path steering TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</spanx></t>
 		
