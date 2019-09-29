@@ -98,23 +98,6 @@
         </address>
     </author>
 
-<author fullname="Spyridon Mastorakis" initials="S"
-    surname="Mastorakis">
-    <organization>University of Nebraska at Omaha</organization>
-    <address>
-        <postal>
-            <street></street>
-            <!-- Reorder these if your country does things differently -->
-            <city>Omaha</city>
-            <region>NE</region>
-            <code></code>
-            <country>US</country>
-        </postal>
-        <email>smastorakis@unomaha.edu</email>
-
-        <!-- uri and facsimile elements may also be added -->
-    </address>
-</author>
 
     <date month="September" year="2019" />
 

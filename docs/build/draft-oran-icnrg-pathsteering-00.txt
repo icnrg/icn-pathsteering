@@ -5,10 +5,8 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                            Apple Computer
 Intended status: Experimental                                    D. Oran
-Expires: March 28, 2020              Network Systems Research and Design
-                                                           S. Mastorakis
-                                         University of Nebraska at Omaha
-                                                      September 25, 2019
+Expires: April 1, 2020               Network Systems Research and Design
+                                                      September 29, 2019
 
 
                      Path Steering in CCNx and NDN
@@ -42,25 +40,24 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 28, 2020.
+   This Internet-Draft will expire on April 1, 2020.
 
 Copyright Notice
 
    Copyright (c) 2019 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
 
 
 
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 1]
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 1]
 
 Internet-Draft              ICN Path Steering             September 2019
 
 
-   This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
@@ -72,10 +69,10 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   3
-   2.  Essential elements of ICN path discovery and path steering  .   4
+   2.  Essential elements of ICN path discovery and path steering  .   3
      2.1.  Path Discovery  . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Path Steering . . . . . . . . . . . . . . . . . . . . . .   4
-     2.3.  Handling Path Steering errors . . . . . . . . . . . . . .   5
+     2.3.  Handling Path Steering errors . . . . . . . . . . . . . .   4
      2.4.  How to represent the Path Label . . . . . . . . . . . . .   5
    3.  Mapping to CCNx and NDN packet encodings  . . . . . . . . . .   6
      3.1.  Packet encoding for CCNx  . . . . . . . . . . . . . . . .   6
@@ -83,8 +80,8 @@ Table of Contents
    4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
      5.1.  Cryptographic protection of a path label  . . . . . . . .   8
-   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
-     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
      6.2.  Informative References  . . . . . . . . . . . . . . . . .   9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
@@ -104,25 +101,24 @@ Table of Contents
    details are different however, and where there are differences, the
    design documented here is to be considered definitive.
 
-
-
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 2]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
    There are a number of important use cases to justify extending ICN
    architectures such as CCNx [RFC8569] or NDN [NDN] to provide these
    capabilities.  These are summarized as follows:
+
+
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 2]
+
+Internet-Draft              ICN Path Steering             September 2019
+
 
    o  Support the discovery, monitoring and troubleshooting of multi-
       path network connectivity based on names and name prefixes.
       Analogous functions have been shown to be a crucial operational
       capability in multicast and multi-path topologies for IP.  The
-      canonical tools are the well-known _traceroute_ and _ping_ For
+      canonical tools are the well-known _traceroute_ and _ping_. For
       point-to-multipoint MPLS the more recent tree trace [RFC8029]
       protocol is used.  Equivalent diagnostic functions have been
       defined for CCNx through the ICN Ping
@@ -161,20 +157,19 @@ Internet-Draft              ICN Path Steering             September 2019
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in RFC 2119 [RFC2119].
 
-
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 3]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
 2.  Essential elements of ICN path discovery and path steering
 
    We elucidate the design using CCNx semantics [RFC8569] and extend its
    Packet Encoding [RFC8609] as defined in Section 3.1.  While the
    terminology is slightly different, this design can be applied also to
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 3]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
    NDN, by extending its bespoke packet encodings [NDNTLV] (See
    Section 3.2).
 
@@ -185,10 +180,10 @@ Internet-Draft              ICN Path Steering             September 2019
    message.  The path label is constructed hop-by-hop as the message
    traverses the reverse path of transit CCNx forwarders (Figure TBD).
    The path label is updated by adding to the existing path label the
-   nexthop label of the interface at which the Content(Data) message has
-   arrived.  Eventually, when the Content(Data) message arrives at the
-   consumer, the path label identifies the complete path the
-   Content(Data) message took to reach the consumer.
+   nexthop label of the interface at which the Content (Data) message
+   has arrived.  Eventually, when the Content(Data) message arrives at
+   the consumer, the path label identifies the complete path the Content
+   (Data) message took to reach the consumer.
 
    *Issue:* _how to indicate in an Interest message that the consumer
    wants to do path discovery?  Flag in the fixed header?  Empty Path
@@ -217,21 +212,20 @@ Internet-Draft              ICN Path Steering             September 2019
    forwarder and forwarding the Interest through the specified nexthop
    among those identified as feasible by LNPM FIB lookup (Figure TBD).
 
-
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 4]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
 2.3.  Handling Path Steering errors
 
    Over time, the state of interfaces and the FIB on forwarders may
    change such that, at any particular forwarder, a given nexthop is no
    longer valid for a given prefix.  In this case, the path label will
    point to a now-invalid nexthop.  This is detected by failure to find
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 4]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
    a match between the decoded nexthop ID and the nexthops of the FIB
    entry after LNPM FIB lookup.
 
@@ -273,15 +267,6 @@ Internet-Draft              ICN Path Steering             September 2019
    array.  This design allocates 12 bits (i.e. 4095 as a _generator
    polynomial_) to each intermediate ICN forwarder.  This should match
    the scalability of today's commercial routers that support up to 4096
-
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 5]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
    physical and logical interfaces and usually do not have more than a
    few hundred active ones.
 
@@ -289,6 +274,14 @@ Internet-Draft              ICN Path Steering             September 2019
    nexthop label in the next available slot and increments label
    (Figure fig:poly).  Conversely, a forwarder that receives an Interest
    message reads the current nexthop label and decrements label index.
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 5]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
    Therefore, the extra computation required at each hop to forward
    either an interest or Content Object message with a path label is
    minimized and constitutes a fairly trivial additional overhead
@@ -331,17 +324,19 @@ Internet-Draft              ICN Path Steering             September 2019
 
    1.  Path Steering hop-by-hop header TLV
 
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 6]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
    2.  Interest Return error code for _Invalid Path Label_
 
    3.  Way to indicate whether to throw error or continue to forward on
        invalid path label
+
+
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 6]
+
+Internet-Draft              ICN Path Steering             September 2019
+
 
    4.  Way to tell producer the traversed hop count if we don't put a
        full-sized path Steering TLV in an interest message
@@ -386,19 +381,19 @@ Internet-Draft              ICN Path Steering             September 2019
       forwarder MAY choose to invalidate the hop count in addition to
       changing nexthop labels periodically as above.
 
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 7]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
    ICN protocols can be susceptible to a variety of cache poisoning
    attacks, where a colluding consumer and producer arrange for bogus
    content (with either invalid or inappropriate signatures) to populate
    forwarder caches.  These are generally confined to on-path attacks.
    It is also theoretically possible to launch a similar attack without
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 7]
+
+Internet-Draft              ICN Path Steering             September 2019
+
+
    a cooperating producer such that the caches of on-path routers become
    poisoned with the content from off-path routers (i.e. physical
    connectivity, but no route in a FIB for a given prefix).  We estimate
@@ -439,20 +434,21 @@ Internet-Draft              ICN Path Steering             September 2019
    on the border routers of the trusted administrative or routing
    domains may suffice.
 
-
-
-
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 8]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
 6.  References
 
 6.1.  Normative References
+
+
+
+
+
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 8]
+
+Internet-Draft              ICN Path Steering             September 2019
+
 
    [Moiseenko2017]
               Moiseenko, I. and D. Oran, "Path Switching in Content
@@ -501,7 +497,11 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko, et al.     Expires March 28, 2020                 [Page 9]
+
+
+
+
+I. Moiseenko & D. Oran    Expires April 1, 2020                 [Page 9]
 
 Internet-Draft              ICN Path Steering             September 2019
 
@@ -557,60 +557,4 @@ Authors' Addresses
 
 
 
-I. Moiseenko, et al.     Expires March 28, 2020                [Page 10]
-
-Internet-Draft              ICN Path Steering             September 2019
-
-
-   Spyridon Mastorakis
-   University of Nebraska at Omaha
-   Omaha, NB
-   US
-
-   Email: smastorakis@unomaha.edu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-I. Moiseenko, et al.     Expires March 28, 2020                [Page 11]
+I. Moiseenko & D. Oran    Expires April 1, 2020                [Page 10]

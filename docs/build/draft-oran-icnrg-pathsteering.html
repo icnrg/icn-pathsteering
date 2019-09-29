@@ -304,9 +304,9 @@ ul.toc li {
   <meta name="generator" content="xml2rfc version 2.5.2 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="I. Moiseenko, , D. Oran, , and S. Mastorakis" />
+  <meta name="dct.creator" content="I. Moiseenko,  and  D. Oran" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-oran-icnrg-pathsteering-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-9-25" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-9-29" />
   <meta name="dct.abstract" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in " />
   <meta name="description" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in " />
 
@@ -330,20 +330,12 @@ ul.toc li {
   <td class="right">D. Oran</td>
 </tr>
 <tr>
-  <td class="left">Expires: March 28, 2020</td>
+  <td class="left">Expires: April 1, 2020</td>
   <td class="right">Network Systems Research and Design</td>
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">S. Mastorakis</td>
-</tr>
-<tr>
-  <td class="left"></td>
-  <td class="right">University of Nebraska at Omaha</td>
-</tr>
-<tr>
-  <td class="left"></td>
-  <td class="right">September 25, 2019</td>
+  <td class="right">September 29, 2019</td>
 </tr>
 
     	
@@ -363,7 +355,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on March 28, 2020.</p>
+<p>This Internet-Draft will expire on April 1, 2020.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -401,7 +393,7 @@ ul.toc li {
 <p id="rfc.section.1.p.2">There are a number of important use cases to justify extending ICN architectures such as <a href="#RFC8569">CCNx</a> <cite title="NONE">[RFC8569]</cite> or <a href="#NDN">NDN</a> <cite title="NONE">[NDN]</cite> to provide these capabilities. These are summarized as follows: </p>
 
 <ul>
-  <li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em> For point-to-multipoint MPLS the more recent <a href="#RFC8029">tree trace</a> <cite title="NONE">[RFC8029]</cite> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <a href="#I-D.mastorakis-icnrg-icnping">ICN Ping</a> <cite title="NONE">[I-D.mastorakis-icnrg-icnping]</cite> and <a href="#I-D.mastorakis-icnrg-icntraceroute">ICN Traceroute</a> <cite title="NONE">[I-D.mastorakis-icnrg-icntraceroute]</cite> specifications, both of which are capable of exploiting path steering if available.</li>
+  <li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <a href="#RFC8029">tree trace</a> <cite title="NONE">[RFC8029]</cite> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <a href="#I-D.mastorakis-icnrg-icnping">ICN Ping</a> <cite title="NONE">[I-D.mastorakis-icnrg-icnping]</cite> and <a href="#I-D.mastorakis-icnrg-icntraceroute">ICN Traceroute</a> <cite title="NONE">[I-D.mastorakis-icnrg-icntraceroute]</cite> specifications, both of which are capable of exploiting path steering if available.</li>
   <li>Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.</li>
   <li>Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <a href="#Mahdian2016">[Mahdian2016]</a> and <a href="#Song2018">[Song2018]</a> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.</li>
   <li>A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.</li>
@@ -413,7 +405,7 @@ ul.toc li {
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#design" id="design">Essential elements of ICN path discovery and path steering</a></h1>
 <p id="rfc.section.2.p.1">We elucidate the design using <a href="#RFC8569">CCNx semantics</a> <cite title="NONE">[RFC8569]</cite> and extend its <a href="#RFC8609">Packet Encoding</a> <cite title="NONE">[RFC8609]</cite> as defined in <a href="#CCNx-encoding">Section 3.1</a>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <a href="#NDNTLV">packet encodings</a> <cite title="NONE">[NDNTLV]</cite> (See <a href="#NDN-encoding">Section 3.2</a>).</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#discovery" id="discovery">Path Discovery</a></h1>
-<p><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content(Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content(Data) message took to reach the consumer.</p>
+<p><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</p>
 <p><strong>Issue:</strong> <em>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Steering TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path steering TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</em></p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#steering" id="steering">Path Steering</a></h1>
 <p id="rfc.section.2.2.p.1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <a href="#I-D.icnrg-flic">Manifest</a> <cite title="NONE">[I-D.icnrg-flic]</cite>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure TBD).</p>
@@ -591,27 +583,6 @@ ul.toc li {
 	  <span class="country-name vcardline">USA</span>
 	</span>
 	<span class="vcardline">EMail: <a href="mailto:daveoran@orandom.net">daveoran@orandom.net</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Spyridon Mastorakis</span> 
-	  <span class="n hidden">
-		<span class="family-name">Mastorakis</span>
-	  </span>
-	</span>
-	<span class="org vcardline">University of Nebraska at Omaha</span>
-	<span class="adr">
-	  
-	  <span class="vcardline">
-		<span class="locality">Omaha</span>,  
-		<span class="region">NB</span> 
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">US</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:smastorakis@unomaha.edu">smastorakis@unomaha.edu</a></span>
 
   </address>
 </div>
