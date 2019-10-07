@@ -164,7 +164,7 @@
 	<section anchor="discovery" title="Path Discovery">
 		<t><spanx>End-to-end Path Discovery</spanx> for CCNx is achieved by creating a <spanx>path label</spanx> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</t>
 
-		<t><spanx style="strong">Issue:</spanx> <spanx>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Steering TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path steering TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</spanx></t>
+		<t><spanx style="strong">Issue:</spanx> <spanx>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Label TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path Label TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</spanx></t>
 
     <t><spanx style="strong">Ilya:</spanx>I added some flags TLV, so it is possible to have a separate "Discovery mode" flag, that would tell forwarders to increment hop label index (instead of decrementing and reading the path label)</t>
     <t><spanx style="strong">Ilya:</spanx>Is 64 bytes really much these days? I don't quite like the idea of telling the producer how far away i am. I think it will be a privacy concern for some people.</t>
@@ -211,7 +211,7 @@
 
 		<t>A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label index. Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.</t>
 
-		<t>This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be repreented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path steering TLV of 36 bytes.</t>
+		<t>This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be repreented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path label TLV of 36 bytes.</t>
 
 
   </section>
@@ -220,10 +220,10 @@
 <section anchor="encoding" title="Mapping to CCNx and NDN packet encodings">
   <t>TBD.Need definitions for:
 	<list style="numbers">
-		<t>Path Steering hop-by-hop header TLV</t>
+		<t>Path Label hop-by-hop header TLV</t>
 		<t>Interest Return error code for <spanx>Invalid Path Label</spanx></t>
 		<t>Way to indicate whether to throw error or continue to forward on encountering invalid path label</t>
-		<t>Way to tell producer the traversed hop count if we don't put a full-sized path Steering TLV in an interest message</t>
+		<t>Way to tell producer the traversed hop count if we don't put a full-sized path label TLV in an interest message</t>
 	</list>
 	</t>
 
@@ -314,10 +314,10 @@
 
 	<t>TBD. Need definitions for:
 	<list style="numbers">
-		<t>Path Steering hop-by-hop header TLV</t>
+		<t>Path Label hop-by-hop header TLV</t>
 		<t>Interest Return error code for <spanx>Invalid Path Label</spanx></t>
 		<t>Way to indicate whether to throw error or continue to forward on invalid path label</t>
-		<t>Way to tell producer the traversed hop count if we don't put a full-sized path Steering TLV in an interest message</t>
+		<t>Way to tell producer the traversed hop count if we don't put a full-sized path label TLV in an interest message</t>
 	</list></t>
 </section>
 
