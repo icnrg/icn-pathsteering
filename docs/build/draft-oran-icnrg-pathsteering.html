@@ -324,7 +324,7 @@ ul.toc li {
 </tr>
 <tr>
   <td class="left">Internet-Draft</td>
-  <td class="right">University of California, Los Angeles</td>
+  <td class="right">UCLA</td>
 </tr>
 <tr>
   <td class="left">Intended status: Experimental</td>
@@ -407,115 +407,199 @@ ul.toc li {
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#design" id="design">Essential elements of ICN path discovery and path steering</a></h1>
 <p id="rfc.section.2.p.1">We elucidate the design using <a href="#RFC8569">CCNx semantics</a> <cite title="NONE">[RFC8569]</cite> and extend its <a href="#RFC8609">Packet Encoding</a> <cite title="NONE">[RFC8609]</cite> as defined in <a href="#CCNx-encoding">Section 3.2</a>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <a href="#NDNTLV">packet encodings</a> <cite title="NONE">[NDNTLV]</cite> (See <a href="#NDN-encoding">Section 3.3</a>).</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#discovery" id="discovery">Path Discovery</a></h1>
-<p><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure TBD). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</p>
-<p><strong>Issue:</strong> <em>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Label TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path Label TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</em></p>
-<p><strong>Ilya:</strong>I added some flags TLV, so it is possible to have a separate "Discovery mode" flag, that would tell forwarders to increment hop label index (instead of decrementing and reading the path label)</p>
-<p><strong>Ilya:</strong>Is 64 bytes really much these days? I don't quite like the idea of telling the producer how far away i am. I think it will be a privacy concern for some people.</p>
-<p><strong>Ilya:</strong>Can it be solved from prefix registration side? Producer gets label size supported by the network from its ISP? Idk what about intermediate caches. </p>
+<p><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure 1). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</p>
+<pre>
+
+                Consumer                   Interest 1  ___  Interest 2
+                   |                           |        ^       |
+                   |                           |        |       |
+                   |                           |        |       |
+              Forwarder 1                      v        |       V
+                   | (nexthop 1)           (nexthop 1)  ^   (nexthop 1)
+                   |                           |        |       |
+                   |                           |        |       |
+              Forwarder 2                      v        |       v
+      (nexthop 3) / \ (nexthop 2)          (nexthop 2)  ^   (nexthop 2)
+                 /   \                         |        |       |
+                /     \                        |        |       |
+               /       \                       |        |       |
+              /         \                      |        |       |
+             /           \                     |        |       |
+       Forwarder 4    Forwarder 3              v        |       v
+(nexthop 5) \             / (nexthop 4)    (nexthop 4)  ^   (nexthop 4)
+             \           /                     |        |       |
+              \         /                      |        |       |
+               \       /                       |        |       |
+                \     /                        |        |       |
+                 \   /                         |        |       |
+                  \ /                          v        |       v
+                Producer                      ___     Data 1   ___
+                  or
+             Content Store
+      </pre>
+<p class="figure">Figure 1: Basic example of path discovery and steering</p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#steering" id="steering">Path Steering</a></h1>
-<p id="rfc.section.2.2.p.1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <a href="#I-D.icnrg-flic">Manifest</a> <cite title="NONE">[I-D.icnrg-flic]</cite>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure TBD).</p>
+<p id="rfc.section.2.2.p.1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <a href="#I-D.icnrg-flic">Manifest</a> <cite title="NONE">[I-D.icnrg-flic]</cite>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).</p>
+<pre>
+
+--------------------------------------------------------------------------------
+                              FORWARD PATH
+--------------------------------------------------------------------------------
+
+Interest   +---------+    +-----+  (path label)  +--------+  (match)   Interest
+----------&gt;| Content |---&gt;| PIT | --------------&gt;| Label  |--------------------&gt;
+           |  Store  |    +-----+                | Lookup |
+           +---------+       | \ (no path label) +--------+
+                |            |  \                    |\ (path label mismatch)
+Data            |            |   \                   | \
+&lt;---------------+            v    \                  |  \
+                        aggregate  \                 |   \
+                                    \                |    \
+                                     \               |     +-----+     Interest
+                                      +--------------|----&gt;| FIB |-------------&gt;
+                                                     |     +-----+
+Interest-Return (NACK)                               v        | (no route)
+&lt;----------------------------------------------------+&lt;-------+
+
+
+
+
+--------------------------------------------------------------------------------
+                              REVERSE PATH
+--------------------------------------------------------------------------------
+
+Interest-return (NACK)      +-----+  (update path label)  Interest-Return (NACK)
+&lt;---------------------------|     |&lt;--------------------------------------------
+                            |     |
+Data         +---------+    | PIT |  (update path label)                   Data
+&lt;------------| Content |&lt;---|     |&lt;--------------------------------------------
+             |  Store  |    |     |
+             +---------+    +-----+
+                               |
+                               | (no match)
+                               v
+      </pre>
+<p class="figure">Figure 2: Path Steering CCN / NDN data plane</p>
 <h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#error-processing" id="error-processing">Handling Path Steering errors</a></h1>
 <p id="rfc.section.2.3.p.1">Over time, the state of interfaces and the FIB on forwarders may change such that, at any particular forwarder, a given nexthop is no longer valid for a given prefix. In this case, the path label will point to a now-invalid nexthop. This is detected by failure to find a match between the decoded nexthop ID and the nexthops of the FIB entry after LNPM FIB lookup.</p>
 <p id="rfc.section.2.3.p.2">On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefor define a new <em>Invalid path label</em> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.</p>
-<p><strong>Issue:</strong> <em>should we provide an option to the consumer to forward the interest rather than returning the error? This is briefly discussed in the paper, but specific machinery isn't suggested. I think this would potentially be useful for diagnosis. If so, we need to re-jigger the description a bit and include the following paragraph</em></p>
-<p id="rfc.section.2.3.p.4">A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the (TBD mechanism) in its Interest message.</p>
+<p id="rfc.section.2.3.p.3">A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the (TBD mechanism) in its Interest message.</p>
 <h1 id="rfc.section.2.4"><a href="#rfc.section.2.4">2.4.</a> <a href="#label-encoding" id="label-encoding">How to represent the Path Label</a></h1>
 <p><a href="#Moiseenko2017">[Moiseenko2017]</a> presents various options for how to represent a path label, with different tradeoffs in flexibility, performance and space efficiency. For this specification, we choose the <em>Polynomial encoding</em> which achieves reasonable space efficiency at the cost of establishing a hard limit on the length of paths that can be represented.</p>
 <p id="rfc.section.2.4.p.2">The polynomial encoding utilizes a fixed-size bit array. Each transit ICN forwarder is allocated a fixed sized portion of the bit array. This design allocates 12 bits (i.e. 4095 as a <em>generator polynomial</em>) to each intermediate ICN forwarder. This should match the scalability of today's commercial routers that support up to 4096 physical and logical interfaces and usually do not have more than a few hundred active ones.</p>
 <pre>
-        +----------+-----------+-----------+------------------+
-        |   index  |  nexthop  |  nexthop  |                  |
-        |          |   label   |   label   |                  |
-        +----------+-----------+-----------+------------------+
-        |&lt;- 8bit -&gt;|&lt;- 12bit -&gt;|&lt;- 12bit -&gt;|&lt;----------------&gt;|
+           +------------------------------------------------------------------+
+           |                      Path Label bitmap                           |
++----------+-----------------+-----------------+------------------------------+
+|   index  |  nexthop label  |  nexthop label  |                              |
++----------+-----------------+-----------------+------------------------------+
+|&lt;- 8bit -&gt;|&lt;---- 12bit ----&gt;|&lt;---- 12bit ----&gt;|&lt;----------------------------&gt;|
       </pre>
-<p class="figure">Figure 1: Fixed size path label bitmap</p>
+<p class="figure">Figure 3: Fixed size path label</p>
 <p id="rfc.section.2.4.p.3">A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label index. Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.</p>
-<p id="rfc.section.2.4.p.4">This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be repreented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path label TLV of 36 bytes.</p>
+<p id="rfc.section.2.4.p.4">This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be represented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path label TLV of 36 bytes.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#encoding" id="encoding">Mapping to CCNx and NDN packet encodings</a></h1>
-<p id="rfc.section.3.p.1">TBD.Need definitions for: </p>
-
-<ol>
-  <li>Path Label hop-by-hop header TLV</li>
-  <li>Interest Return error code for <em>Invalid Path Label</em></li>
-  <li>Way to indicate whether to throw error or continue to forward on encountering invalid path label</li>
-  <li>Way to tell producer the traversed hop count if we don't put a full-sized path label TLV in an interest message</li>
-</ol>
-
-<p> </p>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#Path-label-types" id="Path-label-types">Path label TLV</a></h1>
-<p id="rfc.section.3.1.p.1">NDN and CCNx entities MUST support 512-bit path label bitmaps. An entity MAY support the remaining path label types. New path label types MAY be added in future to support emerging communication patterns.</p>
-<pre>
-                +-------------------+------------------------+
-                |      Abbrev       |    Lengths (octets)    |
-                +-------------------+------------------------+
-                | T_PATH_LABEL-128  |           16           |
-                |                   |                        |
-                | T_PATH_LABEL-256  |           32           |
-                |                   |                        |
-                | T_PATH_LABEL-512  |           64           |
-                |                   |                        |
-                | T_PATH_LABEL-1024 |           128          |
-                +-------------------+------------------------+
-                
-        </pre>
-<p class="figure">Table 1: Path label types</p>
-<p id="rfc.section.3.1.p.2">NDN and CCNx forwarders MUST fallback to longest name prefix match (LNPM) FIB lookup if Interest packet carries an invalid path label and FALLBACK MODE flag is set.</p>
-<p id="rfc.section.3.1.p.3">CCNx forwarders MUST respond with Interest Return packet with T_RETURN_INVALID_PATH_LABEL code if Interest packet carries an invalid path label and STRICT MODE flag is set.</p>
-<p id="rfc.section.3.1.p.4">NDN forwarders MUST respond with Interest NACK packet with InvalidPathLabel NACK reason if Interest packet carries an invalid path label and STRICT MODE flag is set. InvalidPathLabel NACK reason SHALL be assigned 0xC8 hexademical number.</p>
-<p id="rfc.section.3.1.p.5">CCNx forwarders MUST respond with Interest Return packet with T_RETURN_MALFORMED_INTEREST code if Interest packet carries a path label TLV with both FALLBACK MODE and STRICT MODE set. </p>
-<p id="rfc.section.3.1.p.6">NDN forwarders MUST drop the Interest if the packet carries a path label TLV with both FALLBACK MODE and STRICT MODE set. </p>
+<p id="rfc.section.3.1.p.1">A Path label TLV is the tuple: {Flags, [Path Label Hop Count], [Nexthop Label], [Path label bitmap]}.</p>
+<p id="rfc.section.3.1.p.2">Path label flags are applicable to Interest packets only and SHOULD be ignored for other types of packets. </p>
+<div id="rfc.figure.1"/>
+<div id="pathlabelflags"/>
 <pre>
                 +-------------------+------------------------+
                 |       Flag        |      Value (hex)       |
                 +-------------------+------------------------+
+                | DISCOVERY MODE    |         0x00           |
+                |                   |                        |
                 | FALLBACK MODE     |         0x01           |
                 |                   |                        |
                 | STRICT MODE       |         0x02           |
                 +-------------------+------------------------+
                 
         </pre>
-<p class="figure">Table 2: Path label flags</p>
+<p class="figure">Figure 1: Table 1: Path label flags</p>
+<p id="rfc.section.3.1.p.3">The Path Label Hop Count (PLHC) MUST be incremented by NDN and CCNx forwarders if the Interest packet carries a path label and DISCOVERY mode flag is set.  A producer node or a forwarder with cached data packet MUST use PLHC in calculation of a path label bitmap size suitable for encoding the entire path to the consumer.  The Path Label Hop Count (PLHC) MUST be set to zero in newly created Data or Interest-Return (NACK) packets.  A consumer node MUST reuse Path Label Hop Count (PLHC) together with the Path label bitmap (PLB) in order to correctly forward the Interest(s) along the corresponding network path.</p>
+<p id="rfc.section.3.1.p.4">If an NDN or CCNx forwarder supports path labeling, the Nexthop label MUST be used  to determine the correct egress interface for an Interest packet carrying either the FALLBACK MODE or STRICT MODE flag. If any particular NDN or CCNx forwarder is configured to decrypt path labels of Interest packets (Section <a href="#security">"Security considerations"</a> <cite title="NONE">[security]</cite>), then the forwarder MUST </p>
+
+<ol>
+  <li>decrypt the path label with its own symmetric key,</li>
+  <li>update the nexthop label with outermost label in the path label,</li>
+  <li>decrement Path Label Hop Count (PLHC), and</li>
+  <li>remove the outermost label from the path label.</li>
+</ol>
+
+<p> If any particular NDN or CCNx forwarder is NOT configured to decrypt path labels of Interest packets, then path label decryption SHOULD NOT be performed.</p>
+<p id="rfc.section.3.1.p.5">The Nexthop label MUST be ignored by NDN and CCNx forwarders if present in Data or Interest-Return (NACK) packets. If any particular NDN or CCNx forwarder is configured to encrypt path labels of Data and Interest-Return (NACK) packets       (Section <a href="#security">"Security considerations"</a> <cite title="NONE">[security]</cite>), then the forwarder MUST encrypt existing path label with its own symmetric key, append the nexthop label of the ingress interface to the path label, and increment Path Label Hop Count (PLHC). If any particular NDN or CCNx forwarder is NOT configured to encrypt path labels of Interest packets, then path label encryption SHOULD NOT be performed.</p>
+<p id="rfc.section.3.1.p.6">NDN and CCNx forwarders MUST fallback to longest name prefix match (LNPM) FIB lookup if an Interest packet carries an invalid nexthop label and the FALLBACK MODE flag is set.</p>
+<p id="rfc.section.3.1.p.7">CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_INVALID_PATH_LABEL code if Interest packet carries an invalid path label and the STRICT MODE flag is set.</p>
+<p id="rfc.section.3.1.p.8">CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_MALFORMED_INTEREST code if the Interest packet carries a path label TLV with both FALLBACK MODE and STRICT MODE set.</p>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#CCNx-encoding" id="CCNx-encoding">Path label encoding for CCNx</a></h1>
 <p id="rfc.section.3.2.p.1">Path label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</p>
 <pre>
          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
         +---------------+---------------+---------------+---------------+
-        |         T_PATH_LABEL          |  Length + 1   |     Flags     |
+        |         T_PATH_LABEL          |          Length + 4           |
+        +---------------+---------------+---------------+---------------+
+        |     Flags     |  Path Label   |        Nexthop Label          |
+        |               |  Hop Count    |                               |
         +---------------+---------------+---------------+---------------+
         /                                                               /
-        /                      Path label (Length octets)               /
+        /               Path label bitmap (Length octets)               /
         /                                                               /
         +---------------+---------------+---------------+---------------+
       </pre>
-<p class="figure">Figure 2: Path label Hop-by-Hop header TLV for CCNx</p>
+<p class="figure">Figure 4: Path label Hop-by-Hop header TLV for CCNx</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#NDN-encoding" id="NDN-encoding">Path label encoding for NDN</a></h1>
-<p id="rfc.section.3.3.p.1">Path label is an optional TLV in NDN Interest and Data packets. Path Label TLV SHALL NOT take part in Interest or Data signature calculation. </p>
+<p id="rfc.section.3.3.p.1">Path label is an optional TLV in NDN Interest, Data and NACK packets. Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.</p>
 <pre>
         PathLabel = PATH-LABEL-TYPE TLV-LENGTH
                     PathLabelFlags
                     PathLabelBitmap
 
-        PathLabelFlags  = PATH-LABEL-FLAGS-TYPE
-                          TLV-LENGTH ; == 1
-                          OCTET
+        PathLabelFlags    = PATH-LABEL-FLAGS-TYPE
+                            TLV-LENGTH ; == 1
+                            OCTET
 
-        PathLabelBitmap = PATH-LABEL-BITMAP-TYPE
-                          TLV-LENGTH ; == 64
-                          64 OCTET
+        NexthopLabel      = PATH-LABEL-NEXTHOP-LABEL-TYPE
+                            TLV-LENGTH ; == 2
+                            2 OCTET
+
+        PathLabelHopCount = PATH-LABEL-HOP-COUNT-TYPE
+                            TLV-LENGTH ; == 1
+                            OCTET
+
+        PathLabelBitmap   = PATH-LABEL-BITMAP-TYPE
+                            TLV-LENGTH ; == 64
+                            64 OCTET
       </pre>
-<p class="figure">Figure 3: Path label TLV for NDN</p>
-<p id="rfc.section.3.3.p.2">PATH-LABEL-TYPE SHALL be assigned 0x09 hexadecimal number, PATH-LABEL-FLAGS-TYPE SHALL be assigned 0xB hexademical number, PATH-LABEL-BITMAP-TYPE SHALL be assigned 0xD hexademical number.</p>
+<p class="figure">Figure 5: Path label TLV for NDN</p>
+<div id="rfc.figure.2"/>
+<div id="pathlabelTLVs"/>
+<pre>
+          +-------------------------------+------------------------+
+          |       Flag                    |      Value (hex)       |
+          +-------------------------------+------------------------+
+          | PATH-LABEL-TYPE               |         0x09           |
+          |                               |                        |
+          | PATH-LABEL-FLAGS-TYPE         |         0x0B           |
+          |                               |                        |
+          | PATH-LABEL-BITMAP-TYPE        |         0x0D           |
+          |                               |                        |
+          | PATH-LABEL-NEXTHOP-LABEL-TYPE |         0x0E           |
+          |                               |                        |
+          | PATH-LABEL-HOP-COUNT-TYPE     |         0x0F           |
+          |                               |                        |
+          +-------------------------------+------------------------+
+                  
+          </pre>
+<p class="figure">Figure 2: Table 2: TLV-TYPE number assignments </p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#IANA" id="IANA">IANA Considerations</a></h1>
-<p id="rfc.section.4.p.1">T_PATH_LABEL SHALL use 0x0004 value in "CCNx Hop-by-Hop Types" registry. </p>
-<p id="rfc.section.4.p.2">T_RETURN_INVALID_PATH_LABEL SHALL use 0xA value in "CCNx Interest Return Code Types" registry. </p>
-<p id="rfc.section.4.p.3">TBD. Need definitions for: </p>
+<p id="rfc.section.4.p.1">IANA is requested to make the following assignments: </p>
 
 <ol>
-  <li>Path Label hop-by-hop header TLV</li>
-  <li>Interest Return error code for <em>Invalid Path Label</em></li>
-  <li>Way to indicate whether to throw error or continue to forward on invalid path label</li>
-  <li>Way to tell producer the traversed hop count if we don't put a full-sized path label TLV in an interest message</li>
+  <li>Please assign the value 0x0004 for T_PATH_LABEL in the <strong>CCNx Hop-by-Hop Types</strong> registry.</li>
+  <li>Please assign the TLV types in <a href="#pathlabelTLVs">Figure 2</a> in the <strong>CCNx Hop-by-Hop type registry</strong>.</li>
+  <li>Please assign the value 0xA for the T_RETURN_INVALID_PATH_LABEL in the <strong>CCNx Interest Return Code Types" registry</strong>.</li>
+  <li>Please create the <strong>CCNx Path Label Flags</strong> registry and assign the values listed in <a href="#pathlabelflags">Figure 1</a>.</li>
 </ol>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#security" id="security">Security Considerations</a></h1>
 <p id="rfc.section.5.p.1">A path is invalidated by renumbering nexthop label(s). A malicious consumer can attempt to mount an attack by transmitting Interests with path labels which differ only in a single now-invalid nexthop label in order to <em>brute force</em> a valid nexthop label. If such an attack succeeds, a malicious consumer would be capable of steering Interests over a network path that may not match the paths computed by the routing algorithm or learned adaptively by the forwarders.</p>
@@ -528,8 +612,61 @@ ul.toc li {
 </ul>
 <p id="rfc.section.5.p.3">ICN protocols can be susceptible to a variety of cache poisoning attacks, where a colluding consumer and producer arrange for bogus content (with either invalid or inappropriate signatures) to populate forwarder caches. These are generally confined to on-path attacks. It is also theoretically possible to launch a similar attack without a cooperating producer such that the caches of on-path routers become poisoned with the content from off-path routers (i.e. physical connectivity, but no route in a FIB for a given prefix). We estimate that without any prior knowledge of the network topology, the complexity of this type of attack is in the ballpark of Breadth-First-Search and Depth-First-Search algorithms with the additional burden of transmitting 2^31 Interests in order to crack a nexthop label on each hop.  Relatively short periodic update of nexthop labels and anti- <em>label scan</em> heuristics implemented in the ICN forwarder may successfully mitigate this type of attack.</p>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#encryptpathlabel" id="encryptpathlabel">Cryptographic protection of a path label</a></h1>
-<p id="rfc.section.5.1.p.1">If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (Figure TBD). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.</p>
+<p id="rfc.section.5.1.p.1">If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (Figure 6). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.</p>
 <p id="rfc.section.5.1.p.2">Cryptographic protection of a path label does not require any key negotiation among ICN forwarders, and is no more expensive than MACsec or IPsec. It is also quite possible that strict hop-by-hop path label encryption is not necessary and path label encryption only on the border routers of the trusted administrative or routing domains may suffice.</p>
+<pre>
+
+                                  Producer
+                                  |      ^
+                                  |      |
+           Path Label TLV         |      |           Path Label TLV
+      +-----------------------+   |      |     +-----------------------+
+      |nexthop label=456      |   v      |     |nexthop label=456      |
+      |encrypted path label={}|  Forwarder 3   |encrypted path label={}|
+      +-----------------------+   |      ^     +-----------------------+
+                                  |      |
+      path label is encrypted     |      |     path label is decrypted
+      with Forwarder 3            |      |     with Forwarder 3
+      symmetric key               |      |     symmetric key
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+           Path Label TLV         |      |           Path Label TLV
+      +-----------------------+   |      |     +-----------------------+
+      |nexthop label=634      |   v      |     |nexthop label=634      |
+      |encrypted path label=  |  Forwarder 2   |encrypted path label=  |
+      | {456}                 |   |      ^     | {456}                 |
+      +-----------------------+   |      |     +-----------------------+
+                                  |      |
+      path label is encrypted     |      |     path label is decrypted
+      with Forwarder 2            |      |     with Forwarder 2
+      symmetric key               |      |     symmetric key
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+           Path Label TLV         |      |           Path Label TLV
+      +-----------------------+   |      |     +-----------------------+
+      |nexthop label=912      |   v      |     |nexthop label=912      |
+      |encrypted path label=  |  Forwarder 1   |encrypted path label=  |
+      | {634, encrypted path  |   |      ^     | {634, encrypted path  |
+      | label {456}}          |   |      |     | label {456}}          |
+      +-----------------------+   |      |     +-----------------------+
+                                  |      |
+      path label is encrypted     |      |     path label is decrypted
+      with Forwarder 1            |      |     with Forwarder 1
+      symmetric key               |      |     symmetric key
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+                                  v      |
+                                  Consumer
+      </pre>
+<p class="figure">Figure 6: Path label protection with hop-by-hop symmetric cryptography</p>
 <h1 id="rfc.references"><a href="#rfc.references">6.</a> References</h1>
 <h1 id="rfc.references.1"><a href="#rfc.references.1">6.1.</a> Normative References</h1>
 <table>
@@ -624,7 +761,7 @@ ul.toc li {
 		<span class="family-name">I. Moiseenko</span>
 	  </span>
 	</span>
-	<span class="org vcardline">University of California, Los Angeles</span>
+	<span class="org vcardline">UCLA</span>
 	<span class="adr">
 	  
 	  <span class="vcardline">
