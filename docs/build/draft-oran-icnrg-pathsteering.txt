@@ -5,8 +5,8 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                                      UCLA
 Intended status: Experimental                                    D. Oran
-Expires: March 4, 2020               Network Systems Research and Design
-                                                          September 2019
+Expires: April 22, 2020              Network Systems Research and Design
+                                                        October 20, 2019
 
 
                      Path Steering in CCNx and NDN
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 4, 2020.
+   This Internet-Draft will expire on April 22, 2020.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 1]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 1]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    publication of this document.  Please review these documents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 2]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 2]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    o  Support the discovery, monitoring and troubleshooting of multi-
@@ -165,9 +165,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 3]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 3]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    NDN, by extending its bespoke packet encodings [NDNTLV] (See
@@ -221,9 +221,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 4]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 4]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
 2.2.  Path Steering
@@ -277,9 +277,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 5]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 5]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
 --------------------------------------------------------------------------------
@@ -333,13 +333,13 @@ Data         +---------+    | PIT |  (update path label)                   Data
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 6]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 6]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    On detecting an invalid path label, the forwarder SHOULD respond to
-   the Interest with an Interest-Return.  We therefor define a new
+   the Interest with an Interest-Return.  We therefore define a new
    _Invalid path label_ response code for the Interest Return message
    and include the current path label as a hop-by-hop header.  Each
    transit forwarder processing the Interest-Return message updates the
@@ -354,7 +354,7 @@ Internet-Draft              ICN Path Steering             September 2019
    if the path label sent with the Interest fails to match the path
    label in the corresponding returned Content (Data), and use that
    information to replace stale path labels.  It does so by setting the
-   (TBD mechanism) in its Interest message.
+   FALLBACK MODE flag of the path label TLV in its Interest message.
 
 2.4.  How to represent the Path Label
 
@@ -389,9 +389,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 7]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 7]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    extra computation required at each hop to forward either an interest
@@ -402,16 +402,17 @@ Internet-Draft              ICN Path Steering             September 2019
    This approach results in individual path label TLV instances being of
    fixed pre-computed size.  While this places a hard upper bound on the
    maximum number of network hops that can be represented, this is not a
-   significant a practical problem in CCNx, since the size can be pre-
-   set during Interest message encoding based on the consumer specified
-   value of the hop-limit.  Even long paths of 24 hops will fit in a
-   path label TLV of 36 bytes.
+   significant a practical problem in NDN and CCNx, since the size can
+   be pre-set during Content(Data) message encoding based on the exact
+   number of network hops traversed by the Interest message.  Even long
+   paths of 24 hops will fit in a path label bitmap of 36 bytes if
+   nexthop label is encoded in 12 bits.
 
 3.  Mapping to CCNx and NDN packet encodings
 
 3.1.  Path label TLV
 
-   A Path label TLV is the tuple: {Flags, [Path Label Hop Count],
+   A Path label TLV is the tuple: {[Flags], [Path Label Hop Count],
    [Nexthop Label], [Path label bitmap]}.
 
    Path label flags are applicable to Interest packets only and SHOULD
@@ -444,10 +445,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 8]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 8]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    If an NDN or CCNx forwarder supports path labeling, the Nexthop label
@@ -472,7 +472,7 @@ Internet-Draft              ICN Path Steering             September 2019
    The Nexthop label MUST be ignored by NDN and CCNx forwarders if
    present in Data or Interest-Return (NACK) packets.  If any particular
    NDN or CCNx forwarder is configured to encrypt path labels of Data
-   and Interest-Return (NACK) packets (Section "Security considerations"
+   and Interest-Return (NACK) packets (Section Security Considerations
    (Section 5)), then the forwarder MUST encrypt existing path label
    with its own symmetric key, append the nexthop label of the ingress
    interface to the path label, and increment Path Label Hop Count
@@ -491,19 +491,19 @@ Internet-Draft              ICN Path Steering             September 2019
    CCNx forwarders MUST respond with an Interest Return packet
    specifying the T_RETURN_MALFORMED_INTEREST code if the Interest
    packet carries a path label TLV with both FALLBACK MODE and STRICT
-   MODE set.
+   MODE flags set.
 
 3.2.  Path label encoding for CCNx
 
-   Path label is an optional Hop-by-Hop header TLV that can be present
+   Path Label is an optional Hop-by-Hop header TLV that can be present
    in CCNx Interest, InterestReturn and Content Object packets.
 
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                 [Page 9]
+I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 9]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -522,8 +522,8 @@ Internet-Draft              ICN Path Steering             September 2019
 
 3.3.  Path label encoding for NDN
 
-   Path label is an optional TLV in NDN Interest, Data and NACK packets.
-   Path Label TLV SHOULD NOT take part in Interest, Data or NACK
+   Path Label is an optional TLV in NDN Interest, Data and NACK packets.
+   The Path Label TLV SHOULD NOT take part in Interest, Data or NACK
    signature calculation as it is potentially modified at every network
    hop.
 
@@ -557,9 +557,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 10]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 10]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
              +-------------------------------+------------------------+
@@ -613,9 +613,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 11]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 11]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    analyze the message's Hop Count field to infer which specific nexthop
@@ -669,9 +669,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 12]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 12]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    method is viable due to the symmetry of forward and reverse paths in
@@ -725,9 +725,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 13]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 13]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
       path label is encrypted     |      |     path label is decrypted
@@ -781,9 +781,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 14]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 14]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    [RFC8569]  Mosko, M., Solis, I., and C. Wood, "Content-Centric
@@ -837,9 +837,9 @@ Internet-Draft              ICN Path Steering             September 2019
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 15]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 15]
 
-Internet-Draft              ICN Path Steering             September 2019
+Internet-Draft              ICN Path Steering               October 2019
 
 
    [Song2018]
@@ -893,4 +893,4 @@ Authors' Addresses
 
 
 
-I. Moiseenko & D. Oran    Expires March 4, 2020                [Page 16]
+I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 16]

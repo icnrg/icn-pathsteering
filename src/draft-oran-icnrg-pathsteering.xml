@@ -99,7 +99,7 @@
     </author>
 
 
-    <date month="September" year="2019" />
+    <date month="October" year="2019" />
 
     <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
          in the current day for you. If only the current year is specified, xml2rfc will fill
@@ -256,13 +256,13 @@ Data         +---------+    | PIT |  (update path label)                   Data
 	<section anchor="error-processing" title="Handling Path Steering errors">
 		<t>Over time, the state of interfaces and the FIB on forwarders may change such that, at any particular forwarder, a given nexthop is no longer valid for a given prefix. In this case, the path label will point to a now-invalid nexthop. This is detected by failure to find a match between the decoded nexthop ID and the nexthops of the FIB entry after LNPM FIB lookup.</t>
 
-		<t>On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefor define a new <spanx>Invalid path label</spanx> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.</t>
+		<t>On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefore define a new <spanx>Invalid path label</spanx> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.</t>
 
 <!-->
 		<t><spanx style="strong">Issue:</spanx> <spanx>should we provide an option to the consumer to forward the interest rather than returning the error? This is briefly discussed in the paper, but specific machinery isn't suggested. I think this would potentially be useful for diagnosis. If so, we need to re-jigger the description a bit and include the following paragraph</spanx></t>
 -->
 
-		<t>A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the (TBD mechanism) in its Interest message.</t>
+		<t>A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the FALLBACK MODE flag of the path label TLV in its Interest message.</t>
 	</section>
 
 	<section anchor="label-encoding" title="How to represent the Path Label">
@@ -283,7 +283,9 @@ Data         +---------+    | PIT |  (update path label)                   Data
 
 		<t>A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label index. Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.</t>
 
-		<t>This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be represented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path label TLV of 36 bytes.</t>
+		<t>This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be represented, this is not a significant a practical problem in NDN and CCNx,
+      since the size can be pre-set during Content(Data) message encoding based on the exact number of network hops traversed by the Interest message.
+      Even long paths of 24 hops will fit in a path label bitmap of 36 bytes if nexthop label is encoded in 12 bits.</t>
 
 
   </section>
@@ -291,7 +293,7 @@ Data         +---------+    | PIT |  (update path label)                   Data
 
 <section anchor="encoding" title="Mapping to CCNx and NDN packet encodings">
   <section anchor="Path-label-types" title="Path label TLV">
-    <t> A Path label TLV is the tuple: {Flags, [Path Label Hop Count], [Nexthop Label], [Path label bitmap]}.</t>
+    <t> A Path label TLV is the tuple: {[Flags], [Path Label Hop Count], [Nexthop Label], [Path label bitmap]}.</t>
     <t> Path label flags are applicable to Interest packets only and SHOULD be ignored for other types of packets. </t>
     <figure anchor="pathlabelflags" title="Table 1: Path label flags">
       <artwork><![CDATA[
@@ -314,7 +316,7 @@ Data         +---------+    | PIT |  (update path label)                   Data
     The Path Label Hop Count (PLHC) MUST be set to zero in newly created Data or Interest-Return (NACK) packets.
     A consumer node MUST reuse Path Label Hop Count (PLHC) together with the Path label bitmap (PLB) in order to correctly forward the Interest(s) along the corresponding network path.</t>
 
-    <t>If an NDN or CCNx forwarder supports path labeling, the Nexthop label MUST be used  to determine the correct egress interface for an Interest packet carrying either the FALLBACK MODE or STRICT MODE flag. If any particular NDN or CCNx forwarder is configured to decrypt path labels of Interest packets (Section <xref target="security">"Security considerations"</xref>), then the forwarder MUST 
+    <t>If an NDN or CCNx forwarder supports path labeling, the Nexthop label MUST be used  to determine the correct egress interface for an Interest packet carrying either the FALLBACK MODE or STRICT MODE flag. If any particular NDN or CCNx forwarder is configured to decrypt path labels of Interest packets (Section <xref target="security">"Security considerations"</xref>), then the forwarder MUST
     <list style="numbers">
     	<t>decrypt the path label with its own symmetric key,</t>
     	<t>update the nexthop label with outermost label in the path label,</t>
@@ -322,19 +324,19 @@ Data         +---------+    | PIT |  (update path label)                   Data
     	<t>remove the outermost label from the path label.</t>
     </list>
     If any particular NDN or CCNx forwarder is NOT configured to decrypt path labels of Interest packets, then path label decryption SHOULD NOT be performed.</t>
-    
-    <t> The Nexthop label MUST be ignored by NDN and CCNx forwarders if present in Data or Interest-Return (NACK) packets. If any particular NDN or CCNx forwarder is configured to encrypt path labels of Data and Interest-Return (NACK) packets       (Section <xref target="security">"Security considerations"</xref>), then the forwarder MUST encrypt existing path label with its own symmetric key, append the nexthop label of the ingress interface to the path label, and increment Path Label Hop Count (PLHC). If any particular NDN or CCNx forwarder is NOT configured to encrypt path labels of Interest packets, then path label encryption SHOULD NOT be performed.</t>
+
+    <t> The Nexthop label MUST be ignored by NDN and CCNx forwarders if present in Data or Interest-Return (NACK) packets. If any particular NDN or CCNx forwarder is configured to encrypt path labels of Data and Interest-Return (NACK) packets       (Section <xref target="security">Security Considerations</xref>), then the forwarder MUST encrypt existing path label with its own symmetric key, append the nexthop label of the ingress interface to the path label, and increment Path Label Hop Count (PLHC). If any particular NDN or CCNx forwarder is NOT configured to encrypt path labels of Interest packets, then path label encryption SHOULD NOT be performed.</t>
 
     <t>NDN and CCNx forwarders MUST fallback to longest name prefix match (LNPM) FIB lookup if an Interest packet carries an invalid nexthop label and the FALLBACK MODE flag is set.</t>
 
     <t>CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_INVALID_PATH_LABEL code if Interest packet carries an invalid path label and the STRICT MODE flag is set.</t>
 
-    <t>CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_MALFORMED_INTEREST code if the Interest packet carries a path label TLV with both FALLBACK MODE and STRICT MODE set.</t>
+    <t>CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_MALFORMED_INTEREST code if the Interest packet carries a path label TLV with both FALLBACK MODE and STRICT MODE flags set.</t>
   </section>
 
 
 	<section anchor="CCNx-encoding" title="Path label encoding for CCNx">
-    <t> Path label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</t>
+    <t>Path Label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</t>
     <figure title="Figure 4: Path label Hop-by-Hop header TLV for CCNx">
       <artwork><![CDATA[
          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -353,7 +355,7 @@ Data         +---------+    | PIT |  (update path label)                   Data
 	</section>
 
 	<section anchor="NDN-encoding" title="Path label encoding for NDN">
-		<t>Path label is an optional TLV in NDN Interest, Data and NACK packets. Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.</t>
+		<t>Path Label is an optional TLV in NDN Interest, Data and NACK packets. The Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.</t>
     <figure title="Figure 5: Path label TLV for NDN">
       <artwork><![CDATA[
         PathLabel = PATH-LABEL-TYPE TLV-LENGTH

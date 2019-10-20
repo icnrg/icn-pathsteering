@@ -307,7 +307,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="I. Moiseenko,  and  D. Oran" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-oran-icnrg-pathsteering-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-9" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-10-20" />
   <meta name="dct.abstract" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in " />
   <meta name="description" content="Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in " />
 
@@ -331,12 +331,12 @@ ul.toc li {
   <td class="right">D. Oran</td>
 </tr>
 <tr>
-  <td class="left">Expires: March 4, 2020</td>
+  <td class="left">Expires: April 22, 2020</td>
   <td class="right">Network Systems Research and Design</td>
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">September 2019</td>
+  <td class="right">October 20, 2019</td>
 </tr>
 
     	
@@ -356,7 +356,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on March 4, 2020.</p>
+<p>This Internet-Draft will expire on April 22, 2020.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -482,8 +482,8 @@ Data         +---------+    | PIT |  (update path label)                   Data
 <p class="figure">Figure 2: Path Steering CCN / NDN data plane</p>
 <h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#error-processing" id="error-processing">Handling Path Steering errors</a></h1>
 <p id="rfc.section.2.3.p.1">Over time, the state of interfaces and the FIB on forwarders may change such that, at any particular forwarder, a given nexthop is no longer valid for a given prefix. In this case, the path label will point to a now-invalid nexthop. This is detected by failure to find a match between the decoded nexthop ID and the nexthops of the FIB entry after LNPM FIB lookup.</p>
-<p id="rfc.section.2.3.p.2">On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefor define a new <em>Invalid path label</em> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.</p>
-<p id="rfc.section.2.3.p.3">A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the (TBD mechanism) in its Interest message.</p>
+<p id="rfc.section.2.3.p.2">On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefore define a new <em>Invalid path label</em> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.</p>
+<p id="rfc.section.2.3.p.3">A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the FALLBACK MODE flag of the path label TLV in its Interest message.</p>
 <h1 id="rfc.section.2.4"><a href="#rfc.section.2.4">2.4.</a> <a href="#label-encoding" id="label-encoding">How to represent the Path Label</a></h1>
 <p><a href="#Moiseenko2017">[Moiseenko2017]</a> presents various options for how to represent a path label, with different tradeoffs in flexibility, performance and space efficiency. For this specification, we choose the <em>Polynomial encoding</em> which achieves reasonable space efficiency at the cost of establishing a hard limit on the length of paths that can be represented.</p>
 <p id="rfc.section.2.4.p.2">The polynomial encoding utilizes a fixed-size bit array. Each transit ICN forwarder is allocated a fixed sized portion of the bit array. This design allocates 12 bits (i.e. 4095 as a <em>generator polynomial</em>) to each intermediate ICN forwarder. This should match the scalability of today's commercial routers that support up to 4096 physical and logical interfaces and usually do not have more than a few hundred active ones.</p>
@@ -497,10 +497,10 @@ Data         +---------+    | PIT |  (update path label)                   Data
       </pre>
 <p class="figure">Figure 3: Fixed size path label</p>
 <p id="rfc.section.2.4.p.3">A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label index. Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.</p>
-<p id="rfc.section.2.4.p.4">This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be represented, this is not a significant a practical problem in CCNx, since the size can be pre-set during Interest message encoding based on the consumer specified value of the hop-limit. Even long paths of 24 hops will fit in a path label TLV of 36 bytes.</p>
+<p id="rfc.section.2.4.p.4">This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be represented, this is not a significant a practical problem in NDN and CCNx, since the size can be pre-set during Content(Data) message encoding based on the exact number of network hops traversed by the Interest message.  Even long paths of 24 hops will fit in a path label bitmap of 36 bytes if nexthop label is encoded in 12 bits.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#encoding" id="encoding">Mapping to CCNx and NDN packet encodings</a></h1>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#Path-label-types" id="Path-label-types">Path label TLV</a></h1>
-<p id="rfc.section.3.1.p.1">A Path label TLV is the tuple: {Flags, [Path Label Hop Count], [Nexthop Label], [Path label bitmap]}.</p>
+<p id="rfc.section.3.1.p.1">A Path label TLV is the tuple: {[Flags], [Path Label Hop Count], [Nexthop Label], [Path label bitmap]}.</p>
 <p id="rfc.section.3.1.p.2">Path label flags are applicable to Interest packets only and SHOULD be ignored for other types of packets. </p>
 <div id="rfc.figure.1"/>
 <div id="pathlabelflags"/>
@@ -528,12 +528,12 @@ Data         +---------+    | PIT |  (update path label)                   Data
 </ol>
 
 <p> If any particular NDN or CCNx forwarder is NOT configured to decrypt path labels of Interest packets, then path label decryption SHOULD NOT be performed.</p>
-<p id="rfc.section.3.1.p.5">The Nexthop label MUST be ignored by NDN and CCNx forwarders if present in Data or Interest-Return (NACK) packets. If any particular NDN or CCNx forwarder is configured to encrypt path labels of Data and Interest-Return (NACK) packets       (Section <a href="#security">"Security considerations"</a> <cite title="NONE">[security]</cite>), then the forwarder MUST encrypt existing path label with its own symmetric key, append the nexthop label of the ingress interface to the path label, and increment Path Label Hop Count (PLHC). If any particular NDN or CCNx forwarder is NOT configured to encrypt path labels of Interest packets, then path label encryption SHOULD NOT be performed.</p>
+<p id="rfc.section.3.1.p.5">The Nexthop label MUST be ignored by NDN and CCNx forwarders if present in Data or Interest-Return (NACK) packets. If any particular NDN or CCNx forwarder is configured to encrypt path labels of Data and Interest-Return (NACK) packets       (Section <a href="#security">Security Considerations</a> <cite title="NONE">[security]</cite>), then the forwarder MUST encrypt existing path label with its own symmetric key, append the nexthop label of the ingress interface to the path label, and increment Path Label Hop Count (PLHC). If any particular NDN or CCNx forwarder is NOT configured to encrypt path labels of Interest packets, then path label encryption SHOULD NOT be performed.</p>
 <p id="rfc.section.3.1.p.6">NDN and CCNx forwarders MUST fallback to longest name prefix match (LNPM) FIB lookup if an Interest packet carries an invalid nexthop label and the FALLBACK MODE flag is set.</p>
 <p id="rfc.section.3.1.p.7">CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_INVALID_PATH_LABEL code if Interest packet carries an invalid path label and the STRICT MODE flag is set.</p>
-<p id="rfc.section.3.1.p.8">CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_MALFORMED_INTEREST code if the Interest packet carries a path label TLV with both FALLBACK MODE and STRICT MODE set.</p>
+<p id="rfc.section.3.1.p.8">CCNx forwarders MUST respond with an Interest Return packet specifying the T_RETURN_MALFORMED_INTEREST code if the Interest packet carries a path label TLV with both FALLBACK MODE and STRICT MODE flags set.</p>
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#CCNx-encoding" id="CCNx-encoding">Path label encoding for CCNx</a></h1>
-<p id="rfc.section.3.2.p.1">Path label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</p>
+<p id="rfc.section.3.2.p.1">Path Label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</p>
 <pre>
          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
         +---------------+---------------+---------------+---------------+
@@ -549,7 +549,7 @@ Data         +---------+    | PIT |  (update path label)                   Data
       </pre>
 <p class="figure">Figure 4: Path label Hop-by-Hop header TLV for CCNx</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#NDN-encoding" id="NDN-encoding">Path label encoding for NDN</a></h1>
-<p id="rfc.section.3.3.p.1">Path label is an optional TLV in NDN Interest, Data and NACK packets. Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.</p>
+<p id="rfc.section.3.3.p.1">Path Label is an optional TLV in NDN Interest, Data and NACK packets. The Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.</p>
 <pre>
         PathLabel = PATH-LABEL-TYPE TLV-LENGTH
                     PathLabelFlags
