@@ -5,8 +5,8 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                                      UCLA
 Intended status: Experimental                                    D. Oran
-Expires: April 22, 2020              Network Systems Research and Design
-                                                        October 20, 2019
+Expires: April 23, 2020              Network Systems Research and Design
+                                                        October 21, 2019
 
 
                      Path Steering in CCNx and NDN
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 22, 2020.
+   This Internet-Draft will expire on April 23, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 1]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 1]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 2]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 2]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -165,7 +165,7 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 3]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 3]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -221,7 +221,7 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 4]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 4]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -277,7 +277,7 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 5]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 5]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -333,7 +333,7 @@ Data         +---------+    | PIT |  (update path label)                   Data
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 6]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 6]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -389,7 +389,7 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 7]
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 7]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -415,21 +415,15 @@ Internet-Draft              ICN Path Steering               October 2019
    A Path label TLV is the tuple: {[Flags], [Path Label Hop Count],
    [Nexthop Label], [Path label bitmap]}.
 
-   Path label flags are applicable to Interest packets only and SHOULD
-   be ignored for other types of packets.
+                     +----------------+-------------+
+                     |      Flag      | Value (hex) |
+                     +----------------+-------------+
+                     | DISCOVERY MODE |     0x00    |
+                     | FALLBACK MODE  |     0x01    |
+                     |  STRICT MODE   |     0x02    |
+                     +----------------+-------------+
 
-                   +-------------------+------------------------+
-                   |       Flag        |      Value (hex)       |
-                   +-------------------+------------------------+
-                   | DISCOVERY MODE    |         0x00           |
-                   |                   |                        |
-                   | FALLBACK MODE     |         0x01           |
-                   |                   |                        |
-                   | STRICT MODE       |         0x02           |
-                   +-------------------+------------------------+
-
-
-                    Figure 1: Table 1: Path label flags
+                         Table 1: Path label flags
 
    The Path Label Hop Count (PLHC) MUST be incremented by NDN and CCNx
    forwarders if the Interest packet carries a path label and DISCOVERY
@@ -442,20 +436,19 @@ Internet-Draft              ICN Path Steering               October 2019
    order to correctly forward the Interest(s) along the corresponding
    network path.
 
-
-
-
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 8]
-
-Internet-Draft              ICN Path Steering               October 2019
-
-
    If an NDN or CCNx forwarder supports path labeling, the Nexthop label
    MUST be used to determine the correct egress interface for an
    Interest packet carrying either the FALLBACK MODE or STRICT MODE
    flag.  If any particular NDN or CCNx forwarder is configured to
    decrypt path labels of Interest packets (Section "Security
    considerations" (Section 5)), then the forwarder MUST
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 8]
+
+Internet-Draft              ICN Path Steering               October 2019
+
 
    1.  decrypt the path label with its own symmetric key,
 
@@ -501,7 +494,14 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                 [Page 9]
+
+
+
+
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                 [Page 9]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -557,28 +557,22 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 10]
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 10]
 
 Internet-Draft              ICN Path Steering               October 2019
 
 
-             +-------------------------------+------------------------+
-             |       Flag                    |      Value (hex)       |
-             +-------------------------------+------------------------+
-             | PATH-LABEL-TYPE               |         0x09           |
-             |                               |                        |
-             | PATH-LABEL-FLAGS-TYPE         |         0x0B           |
-             |                               |                        |
-             | PATH-LABEL-BITMAP-TYPE        |         0x0D           |
-             |                               |                        |
-             | PATH-LABEL-NEXTHOP-LABEL-TYPE |         0x0E           |
-             |                               |                        |
-             | PATH-LABEL-HOP-COUNT-TYPE     |         0x0F           |
-             |                               |                        |
-             +-------------------------------+------------------------+
+              +-------------------------------+-------------+
+              |              Flag             | Value (hex) |
+              +-------------------------------+-------------+
+              |        PATH-LABEL-TYPE        |     0x09    |
+              |     PATH-LABEL-FLAGS-TYPE     |     0x0B    |
+              |     PATH-LABEL-BITMAP-TYPE    |     0x0D    |
+              | PATH-LABEL-NEXTHOP-LABEL-TYPE |     0x0E    |
+              |   PATH-LABEL-HOP-COUNT-TYPE   |     0x0F    |
+              +-------------------------------+-------------+
 
-
-              Figure 2: Table 2: TLV-TYPE number assignments
+                   Table 2: TLV-TYPE number assignments
 
 4.  IANA Considerations
 
@@ -587,14 +581,14 @@ Internet-Draft              ICN Path Steering               October 2019
    1.  Please assign the value 0x0004 for T_PATH_LABEL in the *CCNx Hop-
        by-Hop Types* registry.
 
-   2.  Please assign the TLV types in Figure 2 in the *CCNx Hop-by-Hop
+   2.  Please assign the TLV types in Table 2 in the *CCNx Hop-by-Hop
        type registry*.
 
    3.  Please assign the value 0xA for the T_RETURN_INVALID_PATH_LABEL
        in the *CCNx Interest Return Code Types" registry*.
 
    4.  Please create the *CCNx Path Label Flags* registry and assign the
-       values listed in Figure 1.
+       values listed in Table 1.
 
 5.  Security Considerations
 
@@ -610,18 +604,19 @@ Internet-Draft              ICN Path Steering               October 2019
    Interest-Return (NACK) message is returned to the consumer.  This
    contains a path label identical to the one included in the
    corresponding Interest message.  A malicious consumer can therefore
-
-
-
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 11]
-
-Internet-Draft              ICN Path Steering               October 2019
-
-
    analyze the message's Hop Count field to infer which specific nexthop
    label had failed and direct an attack to influence path steering at
    that hop.  This threat can be mitigated by the following
    countermeasures:
+
+
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 11]
+
+Internet-Draft              ICN Path Steering               October 2019
+
 
    o  A nexthop label of larger size is harder to crack.  If nexthop
       labels are not allocated in a predictable fashion by the routers,
@@ -666,19 +661,19 @@ Internet-Draft              ICN Path Steering               October 2019
    protection against malicious mis-steering of Interests, the path
    label can be made opaque to the consumer endpoint via hop-by-hop
    symmetric cryptography applied to the path labels (Figure 6).  This
-
-
-
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 12]
-
-Internet-Draft              ICN Path Steering               October 2019
-
-
    method is viable due to the symmetry of forward and reverse paths in
    CCNx and NDN architectures combined with ICN path steering requiring
    only reads/writes of the topmost nexthop label (i.e. active nexthop
    label) in the path label.  This way a path steering capable ICN
    forwarder receiving a Data (Content) message encrypts the current
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 12]
+
+Internet-Draft              ICN Path Steering               October 2019
+
+
    path label with its own non-shared symmetric key prior to adding a
    new nexthop label to the path label.  The Data (Content) message is
    forwarded downstream with unencrypted topmost (i.e active) nexthop
@@ -722,19 +717,19 @@ Internet-Draft              ICN Path Steering               October 2019
       | {456}                 |   |      ^     | {456}                 |
       +-----------------------+   |      |     +-----------------------+
                                   |      |
-
-
-
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 13]
-
-Internet-Draft              ICN Path Steering               October 2019
-
-
       path label is encrypted     |      |     path label is decrypted
       with Forwarder 2            |      |     with Forwarder 2
       symmetric key               |      |     symmetric key
                                   |      |
                                   |      |
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 13]
+
+Internet-Draft              ICN Path Steering               October 2019
+
+
                                   |      |
                                   |      |
                                   |      |
@@ -776,20 +771,20 @@ Internet-Draft              ICN Path Steering               October 2019
               DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
               editor.org/info/rfc2119>.
 
-
-
-
-
-
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 14]
-
-Internet-Draft              ICN Path Steering               October 2019
-
-
    [RFC8569]  Mosko, M., Solis, I., and C. Wood, "Content-Centric
               Networking (CCNx) Semantics", RFC 8569,
               DOI 10.17487/RFC8569, July 2019, <https://www.rfc-
               editor.org/info/rfc8569>.
+
+
+
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 14]
+
+Internet-Draft              ICN Path Steering               October 2019
+
 
    [RFC8609]  Mosko, M., Solis, I., and C. Wood, "Content-Centric
               Networking (CCNx) Messages in TLV Format", RFC 8609,
@@ -837,7 +832,12 @@ Internet-Draft              ICN Path Steering               October 2019
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 15]
+
+
+
+
+
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 15]
 
 Internet-Draft              ICN Path Steering               October 2019
 
@@ -893,4 +893,4 @@ Authors' Addresses
 
 
 
-I. Moiseenko & D. Oran   Expires April 22, 2020                [Page 16]
+I. Moiseenko & D. Oran   Expires April 23, 2020                [Page 16]

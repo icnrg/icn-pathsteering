@@ -293,22 +293,16 @@ Data         +---------+    | PIT |  (update path label)                   Data
 
 <section anchor="encoding" title="Mapping to CCNx and NDN packet encodings">
   <section anchor="Path-label-types" title="Path label TLV">
-    <t> A Path label TLV is the tuple: {[Flags], [Path Label Hop Count], [Nexthop Label], [Path label bitmap]}.</t>
-    <t> Path label flags are applicable to Interest packets only and SHOULD be ignored for other types of packets. </t>
-    <figure anchor="pathlabelflags" title="Table 1: Path label flags">
-      <artwork><![CDATA[
-                +-------------------+------------------------+
-                |       Flag        |      Value (hex)       |
-                +-------------------+------------------------+
-                | DISCOVERY MODE    |         0x00           |
-                |                   |                        |
-                | FALLBACK MODE     |         0x01           |
-                |                   |                        |
-                | STRICT MODE       |         0x02           |
-                +-------------------+------------------------+
-                ]]>
-        </artwork>
-    </figure>
+    <t> A Path label TLV is the tuple: {[Flags], [Path Label Hop Count], [Nexthop Label], 
+    [Path label bitmap]}.</t>
+
+	<texttable anchor="pathlabelflags" align="center" title="Path label flags">
+		<ttcol align="center">Flag</ttcol><ttcol align="center">Value (hex)</ttcol>
+		<c>DISCOVERY MODE</c><c>0x00</c>
+		<c>FALLBACK MODE</c><c>0x01</c>
+		<c>STRICT MODE</c><c>0x02</c>
+	</texttable>
+	
     <t>The Path Label Hop Count (PLHC) MUST be incremented by NDN and CCNx forwarders if
     the Interest packet carries a path label and DISCOVERY mode flag is set.
     A producer node or a forwarder with cached data packet MUST use PLHC in calculation
@@ -379,25 +373,14 @@ Data         +---------+    | PIT |  (update path label)                   Data
                             64 OCTET
       ]]></artwork>
       </figure>
-      <figure anchor="pathlabelTLVs" title="Table 2: TLV-TYPE number assignments ">
-        <artwork><![CDATA[
-          +-------------------------------+------------------------+
-          |       Flag                    |      Value (hex)       |
-          +-------------------------------+------------------------+
-          | PATH-LABEL-TYPE               |         0x09           |
-          |                               |                        |
-          | PATH-LABEL-FLAGS-TYPE         |         0x0B           |
-          |                               |                        |
-          | PATH-LABEL-BITMAP-TYPE        |         0x0D           |
-          |                               |                        |
-          | PATH-LABEL-NEXTHOP-LABEL-TYPE |         0x0E           |
-          |                               |                        |
-          | PATH-LABEL-HOP-COUNT-TYPE     |         0x0F           |
-          |                               |                        |
-          +-------------------------------+------------------------+
-                  ]]>
-          </artwork>
-      </figure>
+	<texttable anchor="pathlabelTLVs" title="TLV-TYPE number assignments">
+    	<ttcol align="center">Flag</ttcol><ttcol align="center">Value (hex)</ttcol>
+    	<c>PATH-LABEL-TYPE</c><c>0x09</c>
+    	<c>PATH-LABEL-FLAGS-TYPE</c><c>0x0B</c>
+    	<c>PATH-LABEL-BITMAP-TYPE</c><c>0x0D</c>
+    	<c>PATH-LABEL-NEXTHOP-LABEL-TYPE</c><c>0x0E</c>
+    	<c>PATH-LABEL-HOP-COUNT-TYPE</c><c>0x0F</c>
+    </texttable>
 	</section>
 </section>
 
