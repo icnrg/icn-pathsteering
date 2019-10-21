@@ -349,7 +349,7 @@ ul.toc li {
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <a href="#Moiseenko2017">[Moiseenko2017]</a> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.</p>
+<p>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <em>Path Switching in Content Centric and Named Data Networks</em> (4th ACM Conference on Information-Centric Networking - ICN'17) and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
@@ -442,42 +442,40 @@ ul.toc li {
 <p id="rfc.section.2.2.p.1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <a href="#I-D.icnrg-flic">Manifest</a> <cite title="NONE">[I-D.icnrg-flic]</cite>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).</p>
 <pre>
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
                               FORWARD PATH
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Interest   +---------+    +-----+  (path label)  +--------+  (match)   Interest
-----------&gt;| Content |---&gt;| PIT | --------------&gt;| Label  |--------------------&gt;
-           |  Store  |    +-----+                | Lookup |
-           +---------+       | \ (no path label) +--------+
-                |            |  \                    |\ (path label mismatch)
-Data            |            |   \                   | \
-&lt;---------------+            v    \                  |  \
-                        aggregate  \                 |   \
-                                    \                |    \
-                                     \               |     +-----+     Interest
-                                      +--------------|----&gt;| FIB |-------------&gt;
-                                                     |     +-----+
-Interest-Return (NACK)                               v        | (no route)
-&lt;----------------------------------------------------+&lt;-------+
-
-
+Interest +---------+  +-----+ (path label) +--------+ (match) Interest
+--------&gt;| Content |-&gt;| PIT | ------------&gt;| Label  |----------------&gt;
+         |  Store  |  +-----+              | Lookup |
+         +---------+   | \ (no path label) +--------+
+          |            |  \                    |\ (path label mismatch)
+Data      |            |   \                   | \
+&lt;---------+            v    \                  |  \
+                  aggregate  \                 |   \
+                              \                |    \
+                               \               |     +-----+  Interest
+                                +--------------|----&gt;| FIB | ---------&gt;
+                                               |     +-----+
+Interest-Return (NACK)                         v        | (no route)
+&lt;----------------------------------------------+&lt;-------+
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
                               REVERSE PATH
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Interest-return (NACK)      +-----+  (update path label)  Interest-Return (NACK)
-&lt;---------------------------|     |&lt;--------------------------------------------
-                            |     |
-Data         +---------+    | PIT |  (update path label)                   Data
-&lt;------------| Content |&lt;---|     |&lt;--------------------------------------------
-             |  Store  |    |     |
-             +---------+    +-----+
-                               |
-                               | (no match)
-                               v
+Interest-return(NACK) +-----+ (update path label) Interest-Return(NACK)
+&lt;---------------------|     |&lt;-----------------------------------------
+                      |     |
+Data   +---------+    | PIT |  (update path label)                Data
+&lt;------| Content |&lt;---|     |&lt;-----------------------------------------
+       |  Store  |    |     |
+       +---------+    +-----+
+                         |
+                         | (no match)
+                         v
       </pre>
 <p class="figure">Figure 2: Path Steering CCN / NDN data plane</p>
 <h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#error-processing" id="error-processing">Handling Path Steering errors</a></h1>
@@ -488,12 +486,12 @@ Data         +---------+    | PIT |  (update path label)                   Data
 <p><a href="#Moiseenko2017">[Moiseenko2017]</a> presents various options for how to represent a path label, with different tradeoffs in flexibility, performance and space efficiency. For this specification, we choose the <em>Polynomial encoding</em> which achieves reasonable space efficiency at the cost of establishing a hard limit on the length of paths that can be represented.</p>
 <p id="rfc.section.2.4.p.2">The polynomial encoding utilizes a fixed-size bit array. Each transit ICN forwarder is allocated a fixed sized portion of the bit array. This design allocates 12 bits (i.e. 4095 as a <em>generator polynomial</em>) to each intermediate ICN forwarder. This should match the scalability of today's commercial routers that support up to 4096 physical and logical interfaces and usually do not have more than a few hundred active ones.</p>
 <pre>
-           +------------------------------------------------------------------+
-           |                      Path Label bitmap                           |
-+----------+-----------------+-----------------+------------------------------+
-|   index  |  nexthop label  |  nexthop label  |                              |
-+----------+-----------------+-----------------+------------------------------+
-|&lt;- 8bit -&gt;|&lt;---- 12bit ----&gt;|&lt;---- 12bit ----&gt;|&lt;----------------------------&gt;|
++------------------------------------------------------------------+
+|                      Path Label bitmap                           |
++----------+-----------------+-----------------+-------------------+
+|   index  |  nexthop label  |  nexthop label  |                   |           
++----------+-----------------+-----------------+-------------------+
+|&lt;- 8bit -&gt;|&lt;---- 12bit ----&gt;|&lt;---- 12bit ----&gt;|&lt;-----------------&gt;|
       </pre>
 <p class="figure">Figure 3: Fixed size path label</p>
 <p id="rfc.section.2.4.p.3">A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label index. Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.</p>
@@ -544,17 +542,17 @@ Data         +---------+    | PIT |  (update path label)                   Data
 <h1 id="rfc.section.3.2"><a href="#rfc.section.3.2">3.2.</a> <a href="#CCNx-encoding" id="CCNx-encoding">Path label encoding for CCNx</a></h1>
 <p id="rfc.section.3.2.p.1">Path Label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</p>
 <pre>
-         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-        +---------------+---------------+---------------+---------------+
-        |         T_PATH_LABEL          |          Length + 4           |
-        +---------------+---------------+---------------+---------------+
-        |     Flags     |  Path Label   |        Nexthop Label          |
-        |               |  Hop Count    |                               |
-        +---------------+---------------+---------------+---------------+
-        /                                                               /
-        /               Path label bitmap (Length octets)               /
-        /                                                               /
-        +---------------+---------------+---------------+---------------+
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_PATH_LABEL          |          Length + 4           |
++---------------+---------------+---------------+---------------+
+|     Flags     |  Path Label   |        Nexthop Label          |
+|               |  Hop Count    |                               |
++---------------+---------------+---------------+---------------+
+/                                                               /
+/               Path label bitmap (Length octets)               /
+/                                                               /
++---------------+---------------+---------------+---------------+
       </pre>
 <p class="figure">Figure 4: Path label Hop-by-Hop header TLV for CCNx</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#NDN-encoding" id="NDN-encoding">Path label encoding for NDN</a></h1>

@@ -126,7 +126,7 @@
          keywords will be used for the search engine. -->
 
     <abstract>
-       <t>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <xref target="Moiseenko2017"/> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.</t>
+       <t>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <spanx>Path Switching in Content Centric and Named Data Networks</spanx> (4th ACM Conference on Information-Centric Networking - ICN'17) and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.</t>
 
 <!--This document is a product of the IRTF Information-Centric Networking Research Group (ICNRG). -->
     </abstract>
@@ -212,42 +212,40 @@
     <figure title="Figure 2: Path Steering CCN / NDN data plane">
       <artwork><![CDATA[
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
                               FORWARD PATH
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Interest   +---------+    +-----+  (path label)  +--------+  (match)   Interest
----------->| Content |--->| PIT | -------------->| Label  |-------------------->
-           |  Store  |    +-----+                | Lookup |
-           +---------+       | \ (no path label) +--------+
-                |            |  \                    |\ (path label mismatch)
-Data            |            |   \                   | \
-<---------------+            v    \                  |  \
-                        aggregate  \                 |   \
-                                    \                |    \
-                                     \               |     +-----+     Interest
-                                      +--------------|---->| FIB |------------->
-                                                     |     +-----+
-Interest-Return (NACK)                               v        | (no route)
-<----------------------------------------------------+<-------+
-
-
+Interest +---------+  +-----+ (path label) +--------+ (match) Interest
+-------->| Content |->| PIT | ------------>| Label  |---------------->
+         |  Store  |  +-----+              | Lookup |
+         +---------+   | \ (no path label) +--------+
+          |            |  \                    |\ (path label mismatch)
+Data      |            |   \                   | \
+<---------+            v    \                  |  \
+                  aggregate  \                 |   \
+                              \                |    \
+                               \               |     +-----+  Interest
+                                +--------------|---->| FIB | --------->
+                                               |     +-----+
+Interest-Return (NACK)                         v        | (no route)
+<----------------------------------------------+<-------+
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
                               REVERSE PATH
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Interest-return (NACK)      +-----+  (update path label)  Interest-Return (NACK)
-<---------------------------|     |<--------------------------------------------
-                            |     |
-Data         +---------+    | PIT |  (update path label)                   Data
-<------------| Content |<---|     |<--------------------------------------------
-             |  Store  |    |     |
-             +---------+    +-----+
-                               |
-                               | (no match)
-                               v
+Interest-return(NACK) +-----+ (update path label) Interest-Return(NACK)
+<---------------------|     |<-----------------------------------------
+                      |     |
+Data   +---------+    | PIT |  (update path label)                Data
+<------| Content |<---|     |<-----------------------------------------
+       |  Store  |    |     |
+       +---------+    +-----+
+                         |
+                         | (no match)
+                         v
       ]]></artwork>
     </figure>
 
@@ -272,12 +270,12 @@ Data         +---------+    | PIT |  (update path label)                   Data
 
     <figure title="Figure 3: Fixed size path label">
       <artwork><![CDATA[
-           +------------------------------------------------------------------+
-           |                      Path Label bitmap                           |
-+----------+-----------------+-----------------+------------------------------+
-|   index  |  nexthop label  |  nexthop label  |                              |
-+----------+-----------------+-----------------+------------------------------+
-|<- 8bit ->|<---- 12bit ---->|<---- 12bit ---->|<---------------------------->|
++------------------------------------------------------------------+
+|                      Path Label bitmap                           |
++----------+-----------------+-----------------+-------------------+
+|   index  |  nexthop label  |  nexthop label  |                   |           
++----------+-----------------+-----------------+-------------------+
+|<- 8bit ->|<---- 12bit ---->|<---- 12bit ---->|<----------------->|
       ]]></artwork>
     </figure>
 
@@ -333,17 +331,17 @@ Data         +---------+    | PIT |  (update path label)                   Data
     <t>Path Label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</t>
     <figure title="Figure 4: Path label Hop-by-Hop header TLV for CCNx">
       <artwork><![CDATA[
-         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-        +---------------+---------------+---------------+---------------+
-        |         T_PATH_LABEL          |          Length + 4           |
-        +---------------+---------------+---------------+---------------+
-        |     Flags     |  Path Label   |        Nexthop Label          |
-        |               |  Hop Count    |                               |
-        +---------------+---------------+---------------+---------------+
-        /                                                               /
-        /               Path label bitmap (Length octets)               /
-        /                                                               /
-        +---------------+---------------+---------------+---------------+
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++---------------+---------------+---------------+---------------+
+|         T_PATH_LABEL          |          Length + 4           |
++---------------+---------------+---------------+---------------+
+|     Flags     |  Path Label   |        Nexthop Label          |
+|               |  Hop Count    |                               |
++---------------+---------------+---------------+---------------+
+/                                                               /
+/               Path label bitmap (Length octets)               /
+/                                                               /
++---------------+---------------+---------------+---------------+
       ]]></artwork>
     </figure>
 	</section>
