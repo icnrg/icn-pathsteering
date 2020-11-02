@@ -20,7 +20,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" 
 	category="exp" 
-	docName="draft-oran-icnrg-pathsteering-01" 
+	docName="draft-oran-icnrg-pathsteering-02" 
 	ipr="trust200902" 
 	obsoletes="" 
 	updates="" 
@@ -45,7 +45,7 @@
     <title abbrev="ICN Path Steering">
     Path Steering in CCNx and NDN
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-oran-icnrg-pathsteering-01"/>
+    <seriesInfo name="Internet-Draft" value="draft-oran-icnrg-pathsteering-02"/>
     
 
     <author fullname="Ilya Moiseenko" surname="I. Moiseenko">
@@ -107,7 +107,7 @@
       <t>There are a number of important use cases to justify extending ICN architectures such as <xref target="RFC8569" format="default">CCNx</xref> or <xref target="NDN" format="default">NDN</xref> to provide these capabilities. These are summarized as follows:
       </t>
       <ul spacing="normal">
-        <li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <xref target="RFC8029" format="default">tree trace</xref> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <xref target="I-D.mastorakis-icnrg-icnping" format="default">ICN Ping</xref> and <xref target="I-D.mastorakis-icnrg-icntraceroute" format="default">ICN Traceroute</xref> specifications, both of which are capable of exploiting path steering if available.</li>
+        <li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <xref target="RFC8029" format="default">tree trace</xref> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <xref target="I-D.irtf-icnrg-icnping" format="default">ICN Ping</xref> and <xref target="I-D.irtf-icnrg-icntraceroute" format="default">ICN Traceroute</xref> specifications, both of which are capable of exploiting path steering if available.</li>
         <li>Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.</li>
         <li>Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <xref target="Mahdian2016" format="default"/> and <xref target="Song2018" format="default"/> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.</li>
         <li>A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.</li>
@@ -171,7 +171,7 @@
 	</section>
       <section anchor="steering" numbered="true" toc="default">
         <name>Path Steering</name>
-        <t>Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <xref target="I-D.icnrg-flic" format="default">Manifest</xref>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).</t>
+        <t>Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <xref target="I-D.irtf-icnrg-flic" format="default">Manifest</xref>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).</t>
         <figure>
           <name>Figure 2: Path Steering CCN / NDN data plane</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -490,6 +490,7 @@ symmetric key               |      |     symmetric key
 		<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8569.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8609.xml"/>
+        
         <reference anchor="Moiseenko2017" target="https://conferences.sigcomm.org/acm-icn/2017/proceedings/icn17-2.pdf">
           <front>
             <title>Path Switching in Content Centric and Named Data Networks, in 4th ACM Conference on Information-Centric Networking (ICN 2017)</title>
@@ -500,12 +501,13 @@ symmetric key               |      |     symmetric key
           </front>
         </reference>
       </references>
+
       <references>
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8029.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-mastorakis-icnrg-icnping-06.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-mastorakis-icnrg-icntraceroute-06.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-icnrg-flic-00.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icnping-01.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icntraceroute-01.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-flic-02.xml"/>
         <reference anchor="Mahdian2016" target="http://conferences2.sigcomm.org/acm-icn/2016/proceedings/p1-mahdian.pdf">
           <front>
             <title>MIRCC: Multipath-aware ICN Rate-based Congestion Control, in Proceedings of the 3rd ACM Conference on Information-Centric Networking</title>
@@ -546,6 +548,7 @@ symmetric key               |      |     symmetric key
     <!-- Change Log
 v00 2019-07-13  DRO Initial version
 v01 2020-04-24	DRO	Respond to comments by Naveen Nathan and Klaus Schneider, convert to V3
+v02 2020-11-02	DRO Update references for IN Piing and Traceroute
 	-->
   </back>
 </rfc>

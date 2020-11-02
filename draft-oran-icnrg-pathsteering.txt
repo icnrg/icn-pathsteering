@@ -5,12 +5,12 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                                      UCLA
 Intended status: Experimental                                    D. Oran
-Expires: 25 October 2020             Network Systems Research and Design
-                                                           23 April 2020
+Expires: 6 May 2021                  Network Systems Research and Design
+                                                         2 November 2020
 
 
                      Path Steering in CCNx and NDN
-                    draft-oran-icnrg-pathsteering-01
+                    draft-oran-icnrg-pathsteering-02
 
 Abstract
 
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 October 2020.
+   This Internet-Draft will expire on 6 May 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 1]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 1]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 2]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 2]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    *  Support the discovery, monitoring and troubleshooting of multi-
@@ -121,10 +121,9 @@ Internet-Draft              ICN Path Steering                 April 2020
       canonical tools are the well-known _traceroute_ and _ping_. For
       point-to-multipoint MPLS the more recent tree trace [RFC8029]
       protocol is used.  Equivalent diagnostic functions have been
-      defined for CCNx through the ICN Ping
-      [I-D.mastorakis-icnrg-icnping] and ICN Traceroute
-      [I-D.mastorakis-icnrg-icntraceroute] specifications, both of which
-      are capable of exploiting path steering if available.
+      defined for CCNx through the ICN Ping [I-D.irtf-icnrg-icnping] and
+      ICN Traceroute [I-D.irtf-icnrg-icntraceroute] specifications, both
+      of which are capable of exploiting path steering if available.
 
    *  Perform accurate online measurement of network performance, which
       generally requires multiple consecutive packets follow the same
@@ -165,9 +164,10 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 3]
+
+Moiseenko & Oran           Expires 6 May 2021                   [Page 3]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
 2.  Essential elements of ICN path discovery and path steering
@@ -221,9 +221,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 4]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 4]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
 2.2.  Path Steering
@@ -231,55 +231,55 @@ Internet-Draft              ICN Path Steering                 April 2020
    Due to the symmetry of forward and reverse paths in CCNx, a consumer
    application can reuse a discovered path label to fetch the same or
    similar (e.g. next chunk, or next Application Data Unit, or next
-   pointer in a Manifest [I-D.icnrg-flic]) Content (Data) message over
-   the discovered network path.  This _Path Steering_ is achieved by
-   processing the Interest message's path label at each transit ICN
+   pointer in a Manifest [I-D.irtf-icnrg-flic]) Content (Data) message
+   over the discovered network path.  This _Path Steering_ is achieved
+   by processing the Interest message's path label at each transit ICN
    forwarder and forwarding the Interest through the specified nexthop
    among those identified as feasible by LNPM FIB lookup (Figure 2).
 
-   ------------------------------------------------------------------------
-                                 FORWARD PATH
-   ------------------------------------------------------------------------
+------------------------------------------------------------------------
+                              FORWARD PATH
+------------------------------------------------------------------------
 
-   Interest +---------+  +-----+ (path label) +--------+ (match) Interest
-   -------->| Content |->| PIT | ------------>| Label  |---------------->
-            |  Store  |  +-----+              | Lookup |
-            +---------+   | \ (no path label) +--------+
-             |            |  \                    |\ (path label mismatch)
-   Data      |            |   \                   | \
-   <---------+            v    \                  |  \
-                     aggregate  \                 |   \
-                                 \                |    \
-                                  \               |     +-----+  Interest
-                                   +--------------|---->| FIB | --------->
-                                                  |     +-----+
-   Interest-Return (NACK)                         v        | (no route)
-   <----------------------------------------------+<-------+
-
-
-   ------------------------------------------------------------------------
-                                 REVERSE PATH
-   ------------------------------------------------------------------------
-
-   Interest-return(NACK) +-----+ (update path label) Interest-Return(NACK)
-   <---------------------|     |<-----------------------------------------
-                         |     |
-   Data   +---------+    | PIT |  (update path label)                Data
-   <------| Content |<---|     |<-----------------------------------------
-          |  Store  |    |     |
-          +---------+    +-----+
-                            |
-                            | (no match)
-                            v
-
-           Figure 2: Figure 2: Path Steering CCN / NDN data plane
+Interest +---------+  +-----+ (path label) +--------+ (match) Interest
+-------->| Content |->| PIT | ------------>| Label  |---------------->
+         |  Store  |  +-----+              | Lookup |
+         +---------+   | \ (no path label) +--------+
+          |            |  \                    |\ (path label mismatch)
+Data      |            |   \                   | \
+<---------+            v    \                  |  \
+                  aggregate  \                 |   \
+                              \                |    \
+                               \               |     +-----+  Interest
+                                +--------------|---->| FIB | --------->
+                                               |     +-----+
+Interest-Return (NACK)                         v        | (no route)
+<----------------------------------------------+<-------+
 
 
+------------------------------------------------------------------------
+                              REVERSE PATH
+------------------------------------------------------------------------
+
+Interest-return(NACK) +-----+ (update path label) Interest-Return(NACK)
+<---------------------|     |<-----------------------------------------
+                      |     |
+Data   +---------+    | PIT |  (update path label)                Data
+<------| Content |<---|     |<-----------------------------------------
+       |  Store  |    |     |
+       +---------+    +-----+
+                         |
+                         | (no match)
+                         v
+
+        Figure 2: Figure 2: Path Steering CCN / NDN data plane
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 5]
+
+
+Moiseenko & Oran           Expires 6 May 2021                   [Page 5]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
 2.3.  Handling Path Steering errors
@@ -333,9 +333,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 6]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 6]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    +------------------------------------------------------------------+
@@ -372,7 +372,7 @@ Internet-Draft              ICN Path Steering                 April 2020
    A Path label TLV is the tuple: {[Flags], [Path Label Hop Count],
    [Nexthop Label], [Path label bitmap]}.
 
-                     +----------------+-------------+
+                     +================+=============+
                      |      Flag      | Value (hex) |
                      +================+=============+
                      | DISCOVERY MODE |     0x00    |
@@ -389,9 +389,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 7]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 7]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    The Path Label Hop Count (PLHC) MUST be incremented by NDN and CCNx
@@ -445,9 +445,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 8]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 8]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    CCNx forwarders MUST respond with an Interest Return packet
@@ -501,9 +501,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020                [Page 9]
+Moiseenko & Oran           Expires 6 May 2021                   [Page 9]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
            PathLabel = PATH-LABEL-TYPE TLV-LENGTH
@@ -528,7 +528,7 @@ Internet-Draft              ICN Path Steering                 April 2020
 
                  Figure 5: Figure 5: Path label TLV for NDN
 
-              +-------------------------------+-------------+
+              +===============================+=============+
               |              Flag             | Value (hex) |
               +===============================+=============+
               |        PATH-LABEL-TYPE        |     0x09    |
@@ -557,9 +557,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020               [Page 10]
+Moiseenko & Oran           Expires 6 May 2021                  [Page 10]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    3.  Please assign the value 0xA for the T_RETURN_INVALID_PATH_LABEL
@@ -613,9 +613,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020               [Page 11]
+Moiseenko & Oran           Expires 6 May 2021                  [Page 11]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
    ICN protocols can be susceptible to a variety of cache poisoning
@@ -669,9 +669,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020               [Page 12]
+Moiseenko & Oran           Expires 6 May 2021                  [Page 12]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
                                Producer
@@ -725,9 +725,9 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020               [Page 13]
+Moiseenko & Oran           Expires 6 May 2021                  [Page 13]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
                                Consumer
@@ -764,35 +764,34 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 6.2.  Informative References
 
-   [I-D.icnrg-flic]
-              Tschudin, C. and C. Wood, "File-Like ICN Collection
-              (FLIC)", Work in Progress, Internet-Draft, draft-icnrg-
-              flic-00, 25 June 2017,
-              <https://tools.ietf.org/html/draft-icnrg-flic-00>.
+   [I-D.irtf-icnrg-flic]
+              Tschudin, C., Wood, C., Mosko, M., and D. Oran, "File-Like
+              ICN Collections (FLIC)", Work in Progress, Internet-Draft,
+              draft-irtf-icnrg-flic-02, 4 November 2019,
+              <https://tools.ietf.org/html/draft-irtf-icnrg-flic-02>.
 
-   [I-D.mastorakis-icnrg-icnping]
+   [I-D.irtf-icnrg-icnping]
               Mastorakis, S., Gibson, J., Moiseenko, I., Droms, R., and
               D. Oran, "ICN Ping Protocol Specification", Work in
-              Progress, Internet-Draft, draft-mastorakis-icnrg-icnping-
-              06, 13 February 2020, <https://tools.ietf.org/html/draft-
-              mastorakis-icnrg-icnping-06>.
+              Progress, Internet-Draft, draft-irtf-icnrg-icnping-01, 8
+              October 2020,
+              <https://tools.ietf.org/html/draft-irtf-icnrg-icnping-01>.
 
 
 
 
 
-Moiseenko & Oran         Expires 25 October 2020               [Page 14]
+Moiseenko & Oran           Expires 6 May 2021                  [Page 14]
 
-Internet-Draft              ICN Path Steering                 April 2020
+Internet-Draft              ICN Path Steering              November 2020
 
 
-   [I-D.mastorakis-icnrg-icntraceroute]
+   [I-D.irtf-icnrg-icntraceroute]
               Mastorakis, S., Gibson, J., Moiseenko, I., Droms, R., and
               D. Oran, "ICN Traceroute Protocol Specification", Work in
-              Progress, Internet-Draft, draft-mastorakis-icnrg-
-              icntraceroute-06, 13 February 2020,
-              <https://tools.ietf.org/html/draft-mastorakis-icnrg-
-              icntraceroute-06>.
+              Progress, Internet-Draft, draft-irtf-icnrg-icntraceroute-
+              01, 10 October 2020, <https://tools.ietf.org/html/draft-
+              irtf-icnrg-icntraceroute-01>.
 
    [Mahdian2016]
               Mahdian, M., Arianfar, S., Gibson, J., and D. Oran,
@@ -829,24 +828,19 @@ Authors' Addresses
    Email: iliamo@ucla.edu
 
 
-
-
-
-
-
-
-
-
-Moiseenko & Oran         Expires 25 October 2020               [Page 15]
-
-Internet-Draft              ICN Path Steering                 April 2020
-
-
    Dave Oran
    Network Systems Research and Design
    4 Shady Hill Square
    Cambridge, MA 02138
    United States of America
+
+
+
+
+Moiseenko & Oran           Expires 6 May 2021                  [Page 15]
+
+Internet-Draft              ICN Path Steering              November 2020
+
 
    Email: daveoran@orandom.net
 
@@ -893,4 +887,10 @@ Internet-Draft              ICN Path Steering                 April 2020
 
 
 
-Moiseenko & Oran         Expires 25 October 2020               [Page 16]
+
+
+
+
+
+
+Moiseenko & Oran           Expires 6 May 2021                  [Page 16]

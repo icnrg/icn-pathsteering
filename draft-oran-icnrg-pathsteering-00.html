@@ -12,7 +12,7 @@
       " name="description">
 <meta content="xml2rfc 3.3.0" name="generator">
 <meta content="template" name="keyword">
-<meta content="draft-oran-icnrg-pathsteering-02" name="ietf.draft">
+<meta content="draft-oran-icnrg-pathsteering-00" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.3.0
     Python 3.8.1
@@ -33,7 +33,7 @@
     six 1.14.0
     WeasyPrint 51
 -->
-<link href="draft-oran-icnrg-pathsteering.xml" rel="alternate" type="application/rfc+xml">
+<link href="draft-oran-icnrg-pathsteering-00.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -1171,11 +1171,11 @@ dt+dd:empty::before{
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">ICN Path Steering</td>
-<td class="right">November 2020</td>
+<td class="right">October 2019</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Moiseenko &amp; Oran</td>
-<td class="center">Expires 6 May 2021</td>
+<td class="center">Expires 3 May 2020</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1185,15 +1185,15 @@ dt+dd:empty::before{
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">ICNRG</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-oran-icnrg-pathsteering-02</dd>
+<dd class="internet-draft">draft-oran-icnrg-pathsteering-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2020-11-02" class="published">2 November 2020</time>
+<time datetime="2019-10" class="published">October 2019</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-05-06">6 May 2021</time></dd>
+<dd class="expires"><time datetime="2020-05-03">3 May 2020</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1231,7 +1231,7 @@ dt+dd:empty::before{
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 May 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 April 2020.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1240,7 +1240,7 @@ dt+dd:empty::before{
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2020 IETF Trust and the persons identified as the
+            Copyright (c) 2019 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1248,7 +1248,10 @@ dt+dd:empty::before{
             (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
-            respect to this document.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+            respect to this document. Code Components extracted from this
+            document must include Simplified BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="toc">
@@ -1256,69 +1259,69 @@ dt+dd:empty::before{
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="compact ulEmpty toc">
-<li class="compact ulEmpty toc" id="section-toc.1-1.1">
+<nav class="toc"><ul class="ulEmpty compact toc">
+<li class="ulEmpty compact toc" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty compact">
-<li class="toc ulEmpty compact" id="section-toc.1-1.1.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-requirements-language" class="xref">Requirements Language</a><a href="#section-toc.1-1.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact ulEmpty toc" id="section-toc.1-1.2">
+          <li class="ulEmpty compact toc" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-essential-elements-of-icn-p" class="xref">Essential elements of ICN path discovery and path steering</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty compact">
-<li class="toc ulEmpty compact" id="section-toc.1-1.2.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.2.2.1">
                 <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-path-discovery" class="xref">Path Discovery</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.2">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.2.2.2">
                 <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-path-steering" class="xref">Path Steering</a><a href="#section-toc.1-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.3">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.2.2.3">
                 <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-handling-path-steering-erro" class="xref">Handling Path Steering errors</a><a href="#section-toc.1-1.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc ulEmpty compact" id="section-toc.1-1.2.2.4">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.2.2.4">
                 <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-how-to-represent-the-path-l" class="xref">How to represent the Path Label</a><a href="#section-toc.1-1.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact ulEmpty toc" id="section-toc.1-1.3">
+          <li class="ulEmpty compact toc" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-mapping-to-ccnx-and-ndn-pac" class="xref">Mapping to CCNx and NDN packet encodings</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty compact">
-<li class="toc ulEmpty compact" id="section-toc.1-1.3.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-path-label-tlv" class="xref">Path label TLV</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc ulEmpty compact" id="section-toc.1-1.3.2.2">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-path-label-encoding-for-ccn" class="xref">Path label encoding for CCNx</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc ulEmpty compact" id="section-toc.1-1.3.2.3">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-path-label-encoding-for-ndn" class="xref">Path label encoding for NDN</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact ulEmpty toc" id="section-toc.1-1.4">
+          <li class="ulEmpty compact toc" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="compact ulEmpty toc" id="section-toc.1-1.5">
+          <li class="ulEmpty compact toc" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty compact">
-<li class="toc ulEmpty compact" id="section-toc.1-1.5.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-cryptographic-protection-of" class="xref">Cryptographic protection of a path label</a><a href="#section-toc.1-1.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact ulEmpty toc" id="section-toc.1-1.6">
+          <li class="ulEmpty compact toc" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-references" class="xref">References</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
-<ul class="toc ulEmpty compact">
-<li class="toc ulEmpty compact" id="section-toc.1-1.6.2.1">
+<ul class="compact ulEmpty toc">
+<li class="compact ulEmpty toc" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.6.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="toc ulEmpty compact" id="section-toc.1-1.6.2.2">
+              <li class="compact ulEmpty toc" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a><a href="#section-toc.1-1.6.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact ulEmpty toc" id="section-toc.1-1.7">
+          <li class="ulEmpty compact toc" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -1333,7 +1336,7 @@ dt+dd:empty::before{
 <p id="section-1-1">Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <span>[<a href="#Moiseenko2017" class="xref">Moiseenko2017</a>]</span> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. That publication should be considered a normative reference as it is not likely a reader will be able to understand all elements of this design without first having read the reference. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">There are a number of important use cases to justify extending ICN architectures such as <span><a href="#RFC8569" class="xref">CCNx</a> [<a href="#RFC8569" class="xref">RFC8569</a>]</span> or <span>[<a href="#NDN" class="xref">NDN</a>]</span> to provide these capabilities. These are summarized as follows:<a href="#section-1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1-3.1">Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <span><a href="#RFC8029" class="xref">tree trace</a> [<a href="#RFC8029" class="xref">RFC8029</a>]</span> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <span><a href="#I-D.irtf-icnrg-icnping" class="xref">ICN Ping</a> [<a href="#I-D.irtf-icnrg-icnping" class="xref">I-D.irtf-icnrg-icnping</a>]</span> and <span><a href="#I-D.irtf-icnrg-icntraceroute" class="xref">ICN Traceroute</a> [<a href="#I-D.irtf-icnrg-icntraceroute" class="xref">I-D.irtf-icnrg-icntraceroute</a>]</span> specifications, both of which are capable of exploiting path steering if available.<a href="#section-1-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1-3.1">Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <span><a href="#RFC8029" class="xref">tree trace</a> [<a href="#RFC8029" class="xref">RFC8029</a>]</span> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <span><a href="#I-D.mastorakis-icnrg-icnping" class="xref">ICN Ping</a> [<a href="#I-D.mastorakis-icnrg-icnping" class="xref">I-D.mastorakis-icnrg-icnping</a>]</span> and <span><a href="#I-D.mastorakis-icnrg-icntraceroute" class="xref">ICN Traceroute</a> [<a href="#I-D.mastorakis-icnrg-icntraceroute" class="xref">I-D.mastorakis-icnrg-icntraceroute</a>]</span> specifications, both of which are capable of exploiting path steering if available.<a href="#section-1-3.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-1-3.2">Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.<a href="#section-1-3.2" class="pilcrow">¶</a>
 </li>
@@ -1370,32 +1373,32 @@ dt+dd:empty::before{
           <div class="artwork art-text alignLeft" id="section-2.1-2.1">
 <pre>
 
-               Consumer                  Interest 1  ___  Interest 2
-                  |                          |        ^       |
-                  |                          |        |       |
-                  |                          |        |       |
-             Forwarder 1                     v        |       V
-                  | (nexthop 1)          (nexthop 1)  ^   (nexthop 1)
-                  |                          |        |       |
-                  |                          |        |       |
-             Forwarder 2                     v        |       v
-     (nexthop 3) / \ (nexthop 2)         (nexthop 2)  ^   (nexthop 2)
-                /   \                        |        |       |
-               /     \                       |        |       |
-              /       \                      |        |       |
-             /         \                     |        |       |
-            /           \                    |        |       |
-      Forwarder 4    Forwarder 3             v        |       v
-(nexthop 5)\             / (nexthop 4)   (nexthop 4)  ^   (nexthop 4)
-            \           /                    |        |       |
-             \         /                     |        |       |
-              \       /                      |        |       |
-               \     /                       |        |       |
-                \   /                        |        |       |
-                 \ /                         v        |       v
-               Producer                     ___     Data 1   ___
-                 or
-            Content Store
+                Consumer                   Interest 1  ___  Interest 2
+                   |                           |        ^       |
+                   |                           |        |       |
+                   |                           |        |       |
+              Forwarder 1                      v        |       V
+                   | (nexthop 1)           (nexthop 1)  ^   (nexthop 1)
+                   |                           |        |       |
+                   |                           |        |       |
+              Forwarder 2                      v        |       v
+      (nexthop 3) / \ (nexthop 2)          (nexthop 2)  ^   (nexthop 2)
+                 /   \                         |        |       |
+                /     \                        |        |       |
+               /       \                       |        |       |
+              /         \                      |        |       |
+             /           \                     |        |       |
+       Forwarder 4    Forwarder 3              v        |       v
+(nexthop 5) \             / (nexthop 4)    (nexthop 4)  ^   (nexthop 4)
+             \           /                     |        |       |
+              \         /                      |        |       |
+               \       /                       |        |       |
+                \     /                        |        |       |
+                 \   /                         |        |       |
+                  \ /                          v        |       v
+                Producer                      ___     Data 1   ___
+                  or
+             Content Store
 </pre>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
@@ -1408,7 +1411,7 @@ dt+dd:empty::before{
         <h3 id="name-path-steering">
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-path-steering" class="section-name selfRef">Path Steering</a>
         </h3>
-<p id="section-2.2-1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <span><a href="#I-D.irtf-icnrg-flic" class="xref">Manifest</a> [<a href="#I-D.irtf-icnrg-flic" class="xref">I-D.irtf-icnrg-flic</a>]</span>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <span><a href="#I-D.icnrg-flic" class="xref">Manifest</a> [<a href="#I-D.icnrg-flic" class="xref">I-D.icnrg-flic</a>]</span>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <span id="name-figure-2-path-steering-ccn-"></span><figure id="figure-2">
           <div class="artwork art-text alignLeft" id="section-2.2-2.1">
 <pre>
@@ -1541,7 +1544,7 @@ Data   +---------+    | PIT |  (update path label)                Data
     A consumer node MUST reuse Path Label Hop Count (PLHC) together with the Path label bitmap (PLB) in order to correctly forward the Interest(s) along the corresponding network path.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">If an NDN or CCNx forwarder supports path labeling, the Nexthop label MUST be used  to determine the correct egress interface for an Interest packet carrying either the FALLBACK MODE or STRICT MODE flag. If any particular NDN or CCNx forwarder is configured to decrypt path labels of Interest packets (Section <span><a href="#security" class="xref">"Security considerations"</a> (<a href="#security" class="xref">Section 5</a>)</span>), then the forwarder MUST<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3.1-5">
-          <li id="section-3.1-5.1">decrypt the path label with its own symmetric key,<a href="#section-3.1-5.1" class="pilcrow">¶</a>
+<li id="section-3.1-5.1">decrypt the path label with its own symmetric key,<a href="#section-3.1-5.1" class="pilcrow">¶</a>
 </li>
           <li id="section-3.1-5.2">update the nexthop label with outermost label in the path label,<a href="#section-3.1-5.2" class="pilcrow">¶</a>
 </li>
@@ -1665,7 +1668,7 @@ Data   +---------+    | PIT |  (update path label)                Data
       </h2>
 <p id="section-4-1">IANA is requested to make the following assignments:<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-2">
-        <li id="section-4-2.1"> Please assign the value 0x0004 for T_PATH_LABEL in the <strong>CCNx Hop-by-Hop Types</strong> registry.<a href="#section-4-2.1" class="pilcrow">¶</a>
+<li id="section-4-2.1"> Please assign the value 0x0004 for T_PATH_LABEL in the <strong>CCNx Hop-by-Hop Types</strong> registry.<a href="#section-4-2.1" class="pilcrow">¶</a>
 </li>
         <li id="section-4-2.2">Please assign the TLV types in <a href="#pathlabelTLVs" class="xref">Table 2</a> in the <strong>CCNx Hop-by-Hop type registry</strong>.<a href="#section-4-2.2" class="pilcrow">¶</a>
 </li>
@@ -1704,55 +1707,56 @@ Data   +---------+    | PIT |  (update path label)                Data
 <span id="name-figure-6-path-label-protect"></span><figure id="figure-6">
           <div class="artwork art-text alignLeft" id="section-5.1-3.1">
 <pre>
-                            Producer
-                            |      ^
-                            |      |
-     Path Label TLV         |      |           Path Label TLV
-+-----------------------+   |      |     +-----------------------+
-|nexthop label=456      |   v      |     |nexthop label=456      |
-|encrypted path label={}|  Forwarder 3   |encrypted path label={}|
-+-----------------------+   |      ^     +-----------------------+
-                            |      |
-path label is encrypted     |      |     path label is decrypted
-with Forwarder 3            |      |     with Forwarder 3
-symmetric key               |      |     symmetric key
-                            |      |
-                            |      |
-                            |      |
-                            |      |
-                            |      |
-     Path Label TLV         |      |           Path Label TLV
-+-----------------------+   |      |     +-----------------------+
-|nexthop label=634      |   v      |     |nexthop label=634      |
-|encrypted path label=  |  Forwarder 2   |encrypted path label=  |
-| {456}                 |   |      ^     | {456}                 |
-+-----------------------+   |      |     +-----------------------+
-                            |      |
-path label is encrypted     |      |     path label is decrypted
-with Forwarder 2            |      |     with Forwarder 2
-symmetric key               |      |     symmetric key
-                            |      |
-                            |      |
-                            |      |
-                            |      |
-                            |      |
-     Path Label TLV         |      |           Path Label TLV
-+-----------------------+   |      |     +-----------------------+
-|nexthop label=912      |   v      |     |nexthop label=912      |
-|encrypted path label=  |  Forwarder 1   |encrypted path label=  |
-| {634, encrypted path  |   |      ^     | {634, encrypted path  |
-| label {456}}          |   |      |     | label {456}}          |
-+-----------------------+   |      |     +-----------------------+
-                            |      |
-path label is encrypted     |      |     path label is decrypted
-with Forwarder 1            |      |     with Forwarder 1
-symmetric key               |      |     symmetric key
-                            |      |
-                            |      |
-                            |      |
-                            |      |
-                            v      |
-                            Consumer
+
+                                  Producer
+                                  |      ^
+                                  |      |
+           Path Label TLV         |      |           Path Label TLV
+      +-----------------------+   |      |     +-----------------------+
+      |nexthop label=456      |   v      |     |nexthop label=456      |
+      |encrypted path label={}|  Forwarder 3   |encrypted path label={}|
+      +-----------------------+   |      ^     +-----------------------+
+                                  |      |
+      path label is encrypted     |      |     path label is decrypted
+      with Forwarder 3            |      |     with Forwarder 3
+      symmetric key               |      |     symmetric key
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+           Path Label TLV         |      |           Path Label TLV
+      +-----------------------+   |      |     +-----------------------+
+      |nexthop label=634      |   v      |     |nexthop label=634      |
+      |encrypted path label=  |  Forwarder 2   |encrypted path label=  |
+      | {456}                 |   |      ^     | {456}                 |
+      +-----------------------+   |      |     +-----------------------+
+                                  |      |
+      path label is encrypted     |      |     path label is decrypted
+      with Forwarder 2            |      |     with Forwarder 2
+      symmetric key               |      |     symmetric key
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+           Path Label TLV         |      |           Path Label TLV
+      +-----------------------+   |      |     +-----------------------+
+      |nexthop label=912      |   v      |     |nexthop label=912      |
+      |encrypted path label=  |  Forwarder 1   |encrypted path label=  |
+      | {634, encrypted path  |   |      ^     | {634, encrypted path  |
+      | label {456}}          |   |      |     | label {456}}          |
+      +-----------------------+   |      |     +-----------------------+
+                                  |      |
+      path label is encrypted     |      |     path label is decrypted
+      with Forwarder 1            |      |     with Forwarder 1
+      symmetric key               |      |     symmetric key
+                                  |      |
+                                  |      |
+                                  |      |
+                                  |      |
+                                  v      |
+                                  Consumer
 </pre>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
@@ -1794,17 +1798,17 @@ symmetric key               |      |     symmetric key
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.irtf-icnrg-flic">[I-D.irtf-icnrg-flic]</dt>
+<dt id="I-D.icnrg-flic">[I-D.icnrg-flic]</dt>
         <dd>
-<span class="refAuthor">Tschudin, C.</span><span class="refAuthor">, Wood, C.</span><span class="refAuthor">, Mosko, M.</span><span class="refAuthor">, and D. Oran</span>, <span class="refTitle">"File-Like ICN Collections (FLIC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-icnrg-flic-02</span>, <time datetime="2019-11-04" class="refDate">4 November 2019</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-irtf-icnrg-flic-02">https://tools.ietf.org/html/draft-irtf-icnrg-flic-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Tschudin, C.</span><span class="refAuthor"> and C. Wood</span>, <span class="refTitle">"File-Like ICN Collection (FLIC)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-icnrg-flic-00</span>, <time datetime="2017-06-25" class="refDate">25 June 2017</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-icnrg-flic-00.txt">http://www.ietf.org/internet-drafts/draft-icnrg-flic-00.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.irtf-icnrg-icnping">[I-D.irtf-icnrg-icnping]</dt>
+<dt id="I-D.mastorakis-icnrg-icnping">[I-D.mastorakis-icnrg-icnping]</dt>
         <dd>
-<span class="refAuthor">Mastorakis, S.</span><span class="refAuthor">, Gibson, J.</span><span class="refAuthor">, Moiseenko, I.</span><span class="refAuthor">, Droms, R.</span><span class="refAuthor">, and D. Oran</span>, <span class="refTitle">"ICN Ping Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-icnrg-icnping-01</span>, <time datetime="2020-10-08" class="refDate">8 October 2020</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-irtf-icnrg-icnping-01">https://tools.ietf.org/html/draft-irtf-icnrg-icnping-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Mastorakis, S.</span><span class="refAuthor">, Gibson, J.</span><span class="refAuthor">, Moiseenko, I.</span><span class="refAuthor">, Droms, R.</span><span class="refAuthor">, and D. Oran</span>, <span class="refTitle">"ICN Ping Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-mastorakis-icnrg-icnping-06</span>, <time datetime="2020-02-13" class="refDate">13 February 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-mastorakis-icnrg-icnping-06.txt">http://www.ietf.org/internet-drafts/draft-mastorakis-icnrg-icnping-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.irtf-icnrg-icntraceroute">[I-D.irtf-icnrg-icntraceroute]</dt>
+<dt id="I-D.mastorakis-icnrg-icntraceroute">[I-D.mastorakis-icnrg-icntraceroute]</dt>
         <dd>
-<span class="refAuthor">Mastorakis, S.</span><span class="refAuthor">, Gibson, J.</span><span class="refAuthor">, Moiseenko, I.</span><span class="refAuthor">, Droms, R.</span><span class="refAuthor">, and D. Oran</span>, <span class="refTitle">"ICN Traceroute Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-icnrg-icntraceroute-01</span>, <time datetime="2020-10-10" class="refDate">10 October 2020</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-irtf-icnrg-icntraceroute-01">https://tools.ietf.org/html/draft-irtf-icnrg-icntraceroute-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Mastorakis, S.</span><span class="refAuthor">, Gibson, J.</span><span class="refAuthor">, Moiseenko, I.</span><span class="refAuthor">, Droms, R.</span><span class="refAuthor">, and D. Oran</span>, <span class="refTitle">"ICN Traceroute Protocol Specification"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-mastorakis-icnrg-icntraceroute-06</span>, <time datetime="2020-02-13" class="refDate">13 February 2020</time>, <span>&lt;<a href="http://www.ietf.org/internet-drafts/draft-mastorakis-icnrg-icntraceroute-06.txt">http://www.ietf.org/internet-drafts/draft-mastorakis-icnrg-icntraceroute-06.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="Mahdian2016">[Mahdian2016]</dt>
         <dd>
