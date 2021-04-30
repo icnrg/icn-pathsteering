@@ -20,7 +20,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" 
 	category="exp" 
-	docName="draft-oran-icnrg-pathsteering-02" 
+	docName="draft-oran-icnrg-pathsteering-03" 
 	ipr="trust200902" 
 	obsoletes="" 
 	updates="" 
@@ -80,7 +80,7 @@
         <!-- uri and facsimile elements may also be added -->
         </address>
     </author>
-    <date year="2020"/>
+    <date year="2021"/>
 
 
     <!-- Meta-data Declarations -->
@@ -353,23 +353,23 @@ Data   +---------+    | PIT |  (update path label)                Data
           </thead>
           <tbody>
             <tr>
-              <td align="center">PATH-LABEL-TYPE</td>
+              <td align="left">PATH-LABEL-TYPE</td>
               <td align="center">0x09</td>
             </tr>
             <tr>
-              <td align="center">PATH-LABEL-FLAGS-TYPE</td>
+              <td align="left">PATH-LABEL-FLAGS-TYPE</td>
               <td align="center">0x0B</td>
             </tr>
             <tr>
-              <td align="center">PATH-LABEL-BITMAP-TYPE</td>
+              <td align="left">PATH-LABEL-BITMAP-TYPE</td>
               <td align="center">0x0D</td>
             </tr>
             <tr>
-              <td align="center">PATH-LABEL-NEXTHOP-LABEL-TYPE</td>
+              <td align="left">PATH-LABEL-NEXTHOP-LABEL-TYPE</td>
               <td align="center">0x0E</td>
             </tr>
             <tr>
-              <td align="center">PATH-LABEL-HOP-COUNT-TYPE</td>
+              <td align="left">PATH-LABEL-HOP-COUNT-TYPE</td>
               <td align="center">0x0F</td>
             </tr>
           </tbody>
@@ -505,9 +505,10 @@ symmetric key               |      |     symmetric key
       <references>
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8029.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icnping-01.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icntraceroute-01.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-flic-02.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icnping.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icntraceroute.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-flic.xml"/>
+        
         <reference anchor="Mahdian2016" target="http://conferences2.sigcomm.org/acm-icn/2016/proceedings/p1-mahdian.pdf">
           <front>
             <title>MIRCC: Multipath-aware ICN Rate-based Congestion Control, in Proceedings of the 3rd ACM Conference on Information-Centric Networking</title>
@@ -548,7 +549,8 @@ symmetric key               |      |     symmetric key
     <!-- Change Log
 v00 2019-07-13  DRO Initial version
 v01 2020-04-24	DRO	Respond to comments by Naveen Nathan and Klaus Schneider, convert to V3
-v02 2020-11-02	DRO Update references for IN Piing and Traceroute
+v02 2020-11-02	DRO Update references for IN Ping and Traceroute
+v03 2021-04-30	DRO Update references
 	-->
   </back>
 </rfc>
