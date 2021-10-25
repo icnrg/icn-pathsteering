@@ -20,7 +20,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" 
 	category="exp" 
-	docName="draft-oran-icnrg-pathsteering-03" 
+	docName="draft-oran-icnrg-pathsteering-04" 
 	ipr="trust200902" 
 	obsoletes="" 
 	updates="" 
@@ -45,7 +45,7 @@
     <title abbrev="ICN Path Steering">
     Path Steering in CCNx and NDN
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-oran-icnrg-pathsteering-02"/>
+    <seriesInfo name="Internet-Draft" value="draft-oran-icnrg-pathsteering-04"/>
     
 
     <author fullname="Ilya Moiseenko" surname="I. Moiseenko">
@@ -551,6 +551,7 @@ v00 2019-07-13  DRO Initial version
 v01 2020-04-24	DRO	Respond to comments by Naveen Nathan and Klaus Schneider, convert to V3
 v02 2020-11-02	DRO Update references for IN Ping and Traceroute
 v03 2021-04-30	DRO Update references
+v04 2021-10-25	DRO Keepalive
 	-->
   </back>
 </rfc>

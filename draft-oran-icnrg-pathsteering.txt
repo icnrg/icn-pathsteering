@@ -5,12 +5,12 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                                      UCLA
 Intended status: Experimental                                    D. Oran
-Expires: 1 November 2021             Network Systems Research and Design
-                                                           30 April 2021
+Expires: 28 April 2022               Network Systems Research and Design
+                                                         25 October 2021
 
 
                      Path Steering in CCNx and NDN
-                    draft-oran-icnrg-pathsteering-03
+                    draft-oran-icnrg-pathsteering-04
 
 Abstract
 
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 November 2021.
+   This Internet-Draft will expire on 28 April 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 1]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 1]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 2]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 2]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    *  Support the discovery, monitoring and troubleshooting of multi-
@@ -165,9 +165,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 3]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 3]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
 2.  Essential elements of ICN path discovery and path steering
@@ -221,9 +221,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 4]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 4]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
 2.2.  Path Steering
@@ -277,9 +277,9 @@ Data   +---------+    | PIT |  (update path label)                Data
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 5]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 5]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
 2.3.  Handling Path Steering errors
@@ -333,9 +333,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 6]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 6]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    +------------------------------------------------------------------+
@@ -389,9 +389,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 7]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 7]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    The Path Label Hop Count (PLHC) MUST be incremented by NDN and CCNx
@@ -445,9 +445,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 8]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 8]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    CCNx forwarders MUST respond with an Interest Return packet
@@ -501,9 +501,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021                [Page 9]
+Moiseenko & Oran          Expires 28 April 2022                 [Page 9]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
            PathLabel = PATH-LABEL-TYPE TLV-LENGTH
@@ -557,9 +557,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021               [Page 10]
+Moiseenko & Oran          Expires 28 April 2022                [Page 10]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    3.  Please assign the value 0xA for the T_RETURN_INVALID_PATH_LABEL
@@ -613,9 +613,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021               [Page 11]
+Moiseenko & Oran          Expires 28 April 2022                [Page 11]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    ICN protocols can be susceptible to a variety of cache poisoning
@@ -669,9 +669,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021               [Page 12]
+Moiseenko & Oran          Expires 28 April 2022                [Page 12]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
                                Producer
@@ -725,9 +725,9 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021               [Page 13]
+Moiseenko & Oran          Expires 28 April 2022                [Page 13]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
                                Consumer
@@ -768,30 +768,30 @@ Internet-Draft              ICN Path Steering                 April 2021
               Tschudin, C., Wood, C. A., Mosko, M., and D. Oran, "File-
               Like ICN Collections (FLIC)", Work in Progress, Internet-
               Draft, draft-irtf-icnrg-flic-02, 4 November 2019,
-              <https://tools.ietf.org/html/draft-irtf-icnrg-flic-02>.
+              <https://datatracker.ietf.org/doc/html/draft-irtf-icnrg-
+              flic-02>.
 
    [I-D.irtf-icnrg-icnping]
               Mastorakis, S., Gibson, J., Moiseenko, I., Droms, R., and
               D. Oran, "ICN Ping Protocol Specification", Work in
               Progress, Internet-Draft, draft-irtf-icnrg-icnping-02, 11
-              April 2021,
-              <https://tools.ietf.org/html/draft-irtf-icnrg-icnping-02>.
+              April 2021, <https://datatracker.ietf.org/doc/html/draft-
+              irtf-icnrg-icnping-02>.
 
 
 
 
-
-Moiseenko & Oran         Expires 1 November 2021               [Page 14]
+Moiseenko & Oran          Expires 28 April 2022                [Page 14]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    [I-D.irtf-icnrg-icntraceroute]
               Mastorakis, S., Gibson, J., Moiseenko, I., Droms, R., and
               D. Oran, "ICN Traceroute Protocol Specification", Work in
               Progress, Internet-Draft, draft-irtf-icnrg-icntraceroute-
-              02, 11 April 2021, <https://tools.ietf.org/html/draft-
-              irtf-icnrg-icntraceroute-02>.
+              02, 11 April 2021, <https://datatracker.ietf.org/doc/html/
+              draft-irtf-icnrg-icntraceroute-02>.
 
    [Mahdian2016]
               Mahdian, M., Arianfar, S., Gibson, J., and D. Oran,
@@ -837,9 +837,9 @@ Authors' Addresses
 
 
 
-Moiseenko & Oran         Expires 1 November 2021               [Page 15]
+Moiseenko & Oran          Expires 28 April 2022                [Page 15]
 
-Internet-Draft              ICN Path Steering                 April 2021
+Internet-Draft              ICN Path Steering               October 2021
 
 
    Email: daveoran@orandom.net
@@ -893,4 +893,4 @@ Internet-Draft              ICN Path Steering                 April 2021
 
 
 
-Moiseenko & Oran         Expires 1 November 2021               [Page 16]
+Moiseenko & Oran          Expires 28 April 2022                [Page 16]
