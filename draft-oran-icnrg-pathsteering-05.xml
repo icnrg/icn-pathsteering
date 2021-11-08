@@ -20,7 +20,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" 
 	category="exp" 
-	docName="draft-oran-icnrg-pathsteering-04" 
+	docName="draft-oran-icnrg-pathsteering-05" 
 	ipr="trust200902" 
 	obsoletes="" 
 	updates="" 
@@ -45,7 +45,7 @@
     <title abbrev="ICN Path Steering">
     Path Steering in CCNx and NDN
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-oran-icnrg-pathsteering-04"/>
+    <seriesInfo name="Internet-Draft" value="draft-oran-icnrg-pathsteering-05"/>
     
 
     <author fullname="Ilya Moiseenko" surname="I. Moiseenko">
@@ -126,11 +126,12 @@
       <t>We elucidate the design using <xref target="RFC8569" format="default">CCNx semantics</xref> and extend its <xref target="RFC8609" format="default">Packet Encoding</xref> as defined in <xref target="CCNx-encoding" format="default"/>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <xref target="NDNTLV" format="default">packet encodings</xref> (See <xref target="NDN-encoding" format="default"/>).</t>
       <section anchor="discovery" numbered="true" toc="default">
         <name>Path Discovery</name>
-        <t><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders (Figure 1). The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</t>
-        <figure>
-          <name>Figure 1: Basic example of path discovery and steering</name>
-          <artwork name="" type="" align="left" alt=""><![CDATA[
-
+        <t><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in <xref target="pathsteeringoverview"/>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</t>
+        <figure anchor="pathsteeringoverview">
+          <name>Basic example of path discovery and steering</name>
+          <artwork name="Path Discovery 1" type="" align="left" alt=""><![CDATA[
+          Discover and use first path:
+          
                Consumer                  Interest 1  ___  Interest 2
                   |                          |        ^       |
                   |                          |        |       |
@@ -552,6 +553,7 @@ v01 2020-04-24	DRO	Respond to comments by Naveen Nathan and Klaus Schneider, con
 v02 2020-11-02	DRO Update references for IN Ping and Traceroute
 v03 2021-04-30	DRO Update references
 v04 2021-10-25	DRO Keepalive
+v05
 	-->
   </back>
 </rfc>
