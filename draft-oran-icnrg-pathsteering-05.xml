@@ -102,31 +102,53 @@
   <middle>
     <section anchor="intro" numbered="true" toc="default">
       <name>Introduction</name>
-      <t>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <xref target="Moiseenko2017" format="default"/> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. That publication should be considered a normative reference as it is not likely a reader will be able to understand all elements of this design without first having read the reference. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.
-      </t>
-      <t>There are a number of important use cases to justify extending ICN architectures such as <xref target="RFC8569" format="default">CCNx</xref> or <xref target="NDN" format="default">NDN</xref> to provide these capabilities. These are summarized as follows:
-      </t>
-      <ul spacing="normal">
-        <li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <xref target="RFC8029" format="default">tree trace</xref> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <xref target="I-D.irtf-icnrg-icnping" format="default">ICN Ping</xref> and <xref target="I-D.irtf-icnrg-icntraceroute" format="default">ICN Traceroute</xref> specifications, both of which are capable of exploiting path steering if available.</li>
-        <li>Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.</li>
-        <li>Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <xref target="Mahdian2016" format="default"/> and <xref target="Song2018" format="default"/> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.</li>
-        <li>A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.</li>
-      </ul>
-      <t>
-	Path discovery and subsequent path steering in ICN networks is facilitated by the symmetry of forward and reverse paths in the CCNx and NDN architectures. Path discovery is achieved by a consumer endpoint transmitting an ordinary Interest message and receiving a Content (Data) message containing an end-to-end path label constructed on the reverse path by the forwarding plane. Path steering is achieved by a consumer endpoint including a path label in the Interest message, which is forwarded to each nexthop through the corresponding egress interfaces in conjunction with longest name prefix match (LNPM) FIB lookup.</t>
+      <t>Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <xref target="Moiseenko2017" format="default"/> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. That publication should be considered a normative reference as it is not likely a reader will be able to understand all elements of this design without first having read the reference. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.</t>
+            
+      <t>Path discovery and subsequent path steering in ICN networks is facilitated by the symmetry of forward and reverse paths in the CCNx and NDN architectures. Path discovery is achieved by a consumer endpoint transmitting an ordinary Interest message and receiving a Content (Data) message containing an end-to-end path label constructed on the reverse path by the forwarding plane. Path steering is achieved by a consumer endpoint including a path label in the Interest message, which is forwarded to each nexthop through the corresponding egress interfaces in conjunction with longest name prefix match (LNPM) FIB lookup.</t>
+      
+      <section anchor="experimenting">
+      	<name>Path Steering as an experimental extension to ICN protocol architectures</name>
+      	<t>There are a number of important use cases to justify extending ICN architectures such as <xref target="RFC8569" format="default">CCNx</xref> or <xref target="NDN" format="default">NDN</xref> to provide these capabilities. These are summarized as follows:</t>
+	      <ul spacing="normal">
+        	<li>Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <xref target="RFC8029" format="default">tree trace</xref> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <xref target="I-D.irtf-icnrg-icnping" format="default">ICN Ping</xref> and <xref target="I-D.irtf-icnrg-icntraceroute" format="default">ICN Traceroute</xref> specifications, both of which are capable of exploiting path steering if available.</li>
+        	
+        	<li>Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.</li>
+        	
+        	<li>Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <xref target="Mahdian2016" format="default"/> and <xref target="Song2018" format="default"/> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.</li>
+        	
+        	<li>A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.</li>
+      	</ul>
+
+	  </section>
+	        
       <section numbered="true" toc="default">
         <name>Requirements Language</name>
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
         document are to be interpreted as described in <xref target="RFC2119" format="default">RFC 2119</xref>.</t>
       </section>
+      
+      <section>
+      	<name>Terminology</name>
+      	<t>This document uses the general ICN terms that are defined in <xref target="RFC8793"/>. In addition we define the following terms specific to path steering:</t>
+        <dl>
+            <dt>Path Discovery:</dt><dd>The process of sending an Interest requesting discover of a path and if successful, receiving a Data containing a Path Label for the path the corresponding Interest traversed</dd>
+            
+            <dt>Path Steering:</dt><dd>The process of sending an Interest message containing the Path Label of a previously discovered path in roder that the forwarders use that path when forwarding that particular Interest message.</dd>
+            
+            <dt>Path Label:</dt><dd>An optional field in the packet indicating a particular path from a consumer to either a producer, or a forwarder cache that can respond with the requested item. In an Interest message, the Path Label gets built up hop by hop as the interest traverses a path. In a Data message, the Path Label carries the full path information back to the consumer for use in one or more subsequent Interest messages.</dd>
+            
+            <dt>Nexthop Label:</dt><dd>One entry in a Path Label representing the next hop for the corresponding forwarder to use when a path-steered Interest message arrives at that forwarder. A sequence of Nexthop Labels constitutes a full Path Label.</dd>
+        </dl>
+    </section>
+
     </section>
     <section anchor="design" numbered="true" toc="default">
       <name>Essential elements of ICN path discovery and path steering</name>
       <t>We elucidate the design using <xref target="RFC8569" format="default">CCNx semantics</xref> and extend its <xref target="RFC8609" format="default">Packet Encoding</xref> as defined in <xref target="CCNx-encoding" format="default"/>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <xref target="NDNTLV" format="default">packet encodings</xref> (See <xref target="NDN-encoding" format="default"/>).</t>
       <section anchor="discovery" numbered="true" toc="default">
         <name>Path Discovery</name>
-        <t><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in <xref target="pathsteeringoverview"/>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.</t>
+        <t><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in the first example in <xref target="pathsteeringoverview"/>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer. As shown in the second example in the figure, when multiple paths are available, subsequent interests can discover additional paths by omitting a path steering TLV and obtaining a new path label on the returning interest.</t>
         <figure anchor="pathsteeringoverview">
           <name>Basic example of path discovery and steering</name>
           <artwork name="Path Discovery 1" type="" align="left" alt=""><![CDATA[
@@ -159,6 +181,36 @@
                  or
             Content Store
       ]]></artwork>
+      <artwork name="Path Discovery 2" type="" align="left" alt=""><![CDATA[
+          Discover and use second path:
+          
+               Consumer                  Interest 3  ___  Interest 4
+                  |                          |        ^       |
+                  |                          |        |       |
+                  |                          |        |       |
+             Forwarder 1                     v        |       V
+                  | (nexthop 1)          (nexthop 1)  ^   (nexthop 1)
+                  |                          |        |       |
+                  |                          |        |       |
+             Forwarder 2                     v        |       v
+     (nexthop 3) / \ (nexthop 2)         (nexthop 3)  ^   (nexthop 3)
+                /   \                        |        |       |
+               /     \                       |        |       |
+              /       \                      |        |       |
+             /         \                     |        |       |
+            /           \                    |        |       |
+      Forwarder 4    Forwarder 3             v        |       v
+(nexthop 5)\             / (nexthop 4)   (nexthop 5)  ^   (nexthop 5)
+            \           /                    |        |       |
+             \         /                     |        |       |
+              \       /                      |        |       |
+               \     /                       |        |       |
+                \   /                        |        |       |
+                 \ /                         v        |       v
+               Producer                     ___     Data 2   ___
+                 or
+            Content Store
+      ]]></artwork>
         </figure>
         <!-->
 		<t><spanx style="strong">Issue:</spanx> <spanx>how to indicate in an Interest message that the consumer wants to do path discovery? Flag in the fixed header? Empty Path Label TLV (with index set to zero?). If we do the former, would need some way to indicate how big the producer should make it since it doesn't know how many hops there are on the reverse path. That's not a problem if we do the latter, but that makes the Interest message bigger even though it doesn't have a path yet. Making the path Label TLV the maximum size (i.e. based on what hop limit is set to) wastes a lot of space since most paths are likely to be way shorter than what the hop limit is set to by the consumer. Doing so does make transforming the Interest message into a Content Object message a bit easier though, since the hop-by-hop headers are likely already sized right. Another option is to define a new TLV to carry the unmodified hop limit by the consumer. Then the producer then just does a subtraction to get the traversed path length.</spanx></t>
@@ -172,9 +224,9 @@
 	</section>
       <section anchor="steering" numbered="true" toc="default">
         <name>Path Steering</name>
-        <t>Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <xref target="I-D.irtf-icnrg-flic" format="default">Manifest</xref>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).</t>
-        <figure>
-          <name>Figure 2: Path Steering CCN / NDN data plane</name>
+        <t>Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <xref target="I-D.irtf-icnrg-flic" format="default">Manifest</xref>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (<xref target="pathsteeringdataplane"/>).</t>
+        <figure anchor="pathsteeringdataplane">
+          <name>Path Steering CCN / NDN data plane</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 
 ------------------------------------------------------------------------
@@ -230,7 +282,7 @@ Data   +---------+    | PIT |  (update path label)                Data
         <t>The polynomial encoding utilizes a fixed-size bit array. Each transit ICN forwarder is allocated a fixed sized portion of the bit array. This design allocates 12 bits (i.e. 4095 as a <em>generator polynomial</em>) to each intermediate ICN forwarder. This should match the scalability of today's commercial routers that support up to 4096 physical and logical interfaces and usually do not have more than a few hundred active ones.</t>
 
         <figure>
-          <name>Figure 3: Fixed size path label</name>
+          <name>Fixed size path label</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 +------------------------------------------------------------------+
 |                      Path Label bitmap                           |
@@ -301,7 +353,7 @@ Data   +---------+    | PIT |  (update path label)                Data
         <name>Path label encoding for CCNx</name>
         <t>Path Label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.</t>
         <figure>
-          <name>Figure 4: Path label Hop-by-Hop header TLV for CCNx</name>
+          <name>Path label Hop-by-Hop header TLV for CCNx</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+---------------+---------------+
@@ -321,7 +373,7 @@ Data   +---------+    | PIT |  (update path label)                Data
         <name>Path label encoding for NDN</name>
         <t>Path Label is an optional TLV in NDN Interest, Data and NACK packets. The Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.</t>
         <figure>
-          <name>Figure 5: Path label TLV for NDN</name>
+          <name>Path label TLV for NDN</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
         PathLabel = PATH-LABEL-TYPE TLV-LENGTH
                     PathLabelFlags
@@ -408,10 +460,10 @@ Data   +---------+    | PIT |  (update path label)                Data
 	Relatively short periodic update of nexthop labels and anti- <em>label scan</em> heuristics implemented in the ICN forwarder may successfully mitigate this type of attack.</t>
       <section anchor="encryptpathlabel" numbered="true" toc="default">
         <name>Cryptographic protection of a path label</name>
-        <t>If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (Figure 6). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.</t>
+        <t>If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (<xref target="pathlabelcryptoprocess"/>). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.</t>
         <t>Cryptographic protection of a path label does not require any key negotiation among ICN forwarders, and is no more expensive than MACsec or IPsec. It is also quite possible that strict hop-by-hop path label encryption is not necessary and path label encryption only on the border routers of the trusted administrative or routing domains may suffice.</t>
-        <figure>
-          <name>Figure 6: Path label protection with hop-by-hop symmetric cryptography</name>
+        <figure anchor="pathlabelcryptoprocess">
+          <name>Path label protection with hop-by-hop symmetric cryptography</name>
           <artwork name="" type="" align="left" alt=""><![CDATA[
                             Producer
                             |      ^
@@ -506,6 +558,7 @@ symmetric key               |      |     symmetric key
       <references>
         <name>Informative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8029.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8793.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icnping.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-icntraceroute.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-irtf-icnrg-flic.xml"/>
@@ -553,7 +606,7 @@ v01 2020-04-24	DRO	Respond to comments by Naveen Nathan and Klaus Schneider, con
 v02 2020-11-02	DRO Update references for IN Ping and Traceroute
 v03 2021-04-30	DRO Update references
 v04 2021-10-25	DRO Keepalive
-v05
+v05	2021-11-08	DRO	Changes based on Rute Sophia's comments on version -03
 	-->
   </back>
 </rfc>

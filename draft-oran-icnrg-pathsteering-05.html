@@ -1180,7 +1180,6 @@ li > p:last-of-type {
   margin-bottom: 0;
 }
 </style>
-<link href="rfc-local.css" rel="stylesheet" type="text/css">
 <script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
 </head>
 <body>
@@ -1232,8 +1231,8 @@ li > p:last-of-type {
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
-        <h2 id="name-status-of-this-memo">
-<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        <h2 id="name-status-of-this-memo-2">
+<a href="#name-status-of-this-memo-2" class="section-name selfRef">Status of This Memo</a>
         </h2>
 <p id="section-boilerplate.1-1">
         This Internet-Draft is submitted in full conformance with the
@@ -1254,8 +1253,8 @@ li > p:last-of-type {
 </div>
 <div id="copyright">
 <section id="section-boilerplate.2">
-        <h2 id="name-copyright-notice">
-<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        <h2 id="name-copyright-notice-2">
+<a href="#name-copyright-notice-2" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
             Copyright (c) 2021 IETF Trust and the persons identified as the
@@ -1271,73 +1270,79 @@ li > p:last-of-type {
 </div>
 <div id="toc">
 <section id="section-toc.1">
-        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
-<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents-2">
+<a href="#name-table-of-contents-2" class="section-name selfRef">Table of Contents</a>
         </h2>
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+            <p id="section-toc.1-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction-2" class="xref">Introduction</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-requirements-language" class="xref">Requirements Language</a></p>
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-path-steering-as-an-experime" class="xref">Path Steering as an experimental extension to ICN protocol architectures</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-requirements-language-2" class="xref">Requirements Language</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
+                <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="xref">1.3</a>.  <a href="#name-terminology-2" class="xref">Terminology</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-essential-elements-of-icn-p" class="xref">Essential elements of ICN path discovery and path steering</a></p>
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-essential-elements-of-icn-pa" class="xref">Essential elements of ICN path discovery and path steering</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-path-discovery" class="xref">Path Discovery</a></p>
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-path-discovery-2" class="xref">Path Discovery</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
-                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-path-steering" class="xref">Path Steering</a></p>
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="xref">2.2</a>.  <a href="#name-path-steering-2" class="xref">Path Steering</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
-                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-handling-path-steering-erro" class="xref">Handling Path Steering errors</a></p>
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="xref">2.3</a>.  <a href="#name-handling-path-steering-error" class="xref">Handling Path Steering errors</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
-                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-how-to-represent-the-path-l" class="xref">How to represent the Path Label</a></p>
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="xref">2.4</a>.  <a href="#name-how-to-represent-the-path-la" class="xref">How to represent the Path Label</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-mapping-to-ccnx-and-ndn-pac" class="xref">Mapping to CCNx and NDN packet encodings</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-mapping-to-ccnx-and-ndn-pack" class="xref">Mapping to CCNx and NDN packet encodings</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-path-label-tlv" class="xref">Path label TLV</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-path-label-tlv-2" class="xref">Path label TLV</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-path-label-encoding-for-ccn" class="xref">Path label encoding for CCNx</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-path-label-encoding-for-ccnx" class="xref">Path label encoding for CCNx</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-path-label-encoding-for-ndn" class="xref">Path label encoding for NDN</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-path-label-encoding-for-ndn-2" class="xref">Path label encoding for NDN</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-iana-considerations-2" class="xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-security-considerations-2" class="xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-cryptographic-protection-of" class="xref">Cryptographic protection of a path label</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-cryptographic-protection-of-" class="xref">Cryptographic protection of a path label</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-references" class="xref">References</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-references-2" class="xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-normative-references-2" class="xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-informative-references-2" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-addresses-2" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1345,46 +1350,76 @@ li > p:last-of-type {
 </div>
 <div id="intro">
 <section id="section-1">
-      <h2 id="name-introduction">
-<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      <h2 id="name-introduction-2">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction-2" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">Path Steering is a mechanism to discover paths to the producers of ICN content objects and steer subsequent Interest messages along a previously discovered path. It has various uses, including the operation of state-of-the-art multipath congestion control algorithms and for network measurement and management. This specification derives directly from the design published in <span>[<a href="#Moiseenko2017" class="xref">Moiseenko2017</a>]</span> and therefore does not recapitulate the design motivations, implementation details, or evaluation of the scheme. That publication should be considered a normative reference as it is not likely a reader will be able to understand all elements of this design without first having read the reference. Some technical details are different however, and where there are differences, the design documented here is to be considered definitive.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">There are a number of important use cases to justify extending ICN architectures such as <span><a href="#RFC8569" class="xref">CCNx</a> [<a href="#RFC8569" class="xref">RFC8569</a>]</span> or <span><a href="#NDN" class="xref">NDN</a> [<a href="#NDN" class="xref">NDN</a>]</span> to provide these capabilities. These are summarized as follows:<a href="#section-1-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1-3.1">Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <span><a href="#RFC8029" class="xref">tree trace</a> [<a href="#RFC8029" class="xref">RFC8029</a>]</span> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <span><a href="#I-D.irtf-icnrg-icnping" class="xref">ICN Ping</a> [<a href="#I-D.irtf-icnrg-icnping" class="xref">I-D.irtf-icnrg-icnping</a>]</span> and <span><a href="#I-D.irtf-icnrg-icntraceroute" class="xref">ICN Traceroute</a> [<a href="#I-D.irtf-icnrg-icntraceroute" class="xref">I-D.irtf-icnrg-icntraceroute</a>]</span> specifications, both of which are capable of exploiting path steering if available.<a href="#section-1-3.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-1-3.2">Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.<a href="#section-1-3.2" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-1-3.3">Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <span>[<a href="#Mahdian2016" class="xref">Mahdian2016</a>]</span> and <span>[<a href="#Song2018" class="xref">Song2018</a>]</span> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.<a href="#section-1-3.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-1-3.4">A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.<a href="#section-1-3.4" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-1-4">
- Path discovery and subsequent path steering in ICN networks is facilitated by the symmetry of forward and reverse paths in the CCNx and NDN architectures. Path discovery is achieved by a consumer endpoint transmitting an ordinary Interest message and receiving a Content (Data) message containing an end-to-end path label constructed on the reverse path by the forwarding plane. Path steering is achieved by a consumer endpoint including a path label in the Interest message, which is forwarded to each nexthop through the corresponding egress interfaces in conjunction with longest name prefix match (LNPM) FIB lookup.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-2">Path discovery and subsequent path steering in ICN networks is facilitated by the symmetry of forward and reverse paths in the CCNx and NDN architectures. Path discovery is achieved by a consumer endpoint transmitting an ordinary Interest message and receiving a Content (Data) message containing an end-to-end path label constructed on the reverse path by the forwarding plane. Path steering is achieved by a consumer endpoint including a path label in the Interest message, which is forwarded to each nexthop through the corresponding egress interfaces in conjunction with longest name prefix match (LNPM) FIB lookup.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<div id="experimenting">
 <section id="section-1.1">
-        <h3 id="name-requirements-language">
-<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+        <h3 id="name-path-steering-as-an-experime">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-path-steering-as-an-experime" class="section-name selfRef">Path Steering as an experimental extension to ICN protocol architectures</a>
         </h3>
-<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+<p id="section-1.1-1">There are a number of important use cases to justify extending ICN architectures such as <span><a href="#RFC8569" class="xref">CCNx</a> [<a href="#RFC8569" class="xref">RFC8569</a>]</span> or <span><a href="#NDN" class="xref">NDN</a> [<a href="#NDN" class="xref">NDN</a>]</span> to provide these capabilities. These are summarized as follows:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-2.1">Support the discovery, monitoring and troubleshooting of multi-path network connectivity based on names and name prefixes. Analogous functions have been shown to be a crucial operational capability in multicast and multi-path topologies for IP. The canonical tools are the well-known <em>traceroute</em> and <em>ping</em>. For point-to-multipoint MPLS the more recent <span><a href="#RFC8029" class="xref">tree trace</a> [<a href="#RFC8029" class="xref">RFC8029</a>]</span> protocol is used. Equivalent diagnostic functions have been defined for CCNx through the <span><a href="#I-D.irtf-icnrg-icnping" class="xref">ICN Ping</a> [<a href="#I-D.irtf-icnrg-icnping" class="xref">I-D.irtf-icnrg-icnping</a>]</span> and <span><a href="#I-D.irtf-icnrg-icntraceroute" class="xref">ICN Traceroute</a> [<a href="#I-D.irtf-icnrg-icntraceroute" class="xref">I-D.irtf-icnrg-icntraceroute</a>]</span> specifications, both of which are capable of exploiting path steering if available.<a href="#section-1.1-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-2.2">Perform accurate online measurement of network performance, which generally requires multiple consecutive packets follow the same path under control of an application.<a href="#section-1.1-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-2.3">Improve the performance and flexibility of multi-path congestion control algorithms. Congestion control schemes such as <span>[<a href="#Mahdian2016" class="xref">Mahdian2016</a>]</span> and <span>[<a href="#Song2018" class="xref">Song2018</a>]</span> depend on the ability of a consumer to explicitly steer packets onto individual paths in a multi-path and/or multi-destination topology.<a href="#section-1.1-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-1.1-2.4">A consumer endpoint can mitigate content poisoning attacks by directing its Interests onto the network paths that bypass poisoned caches.<a href="#section-1.1-2.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<section id="section-1.2">
+        <h3 id="name-requirements-language-2">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-requirements-language-2" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-1.2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <span><a href="#RFC2119" class="xref">RFC 2119</a> [<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+        document are to be interpreted as described in <span><a href="#RFC2119" class="xref">RFC 2119</a> [<a href="#RFC2119" class="xref">RFC2119</a>]</span>.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+</section>
+<section id="section-1.3">
+        <h3 id="name-terminology-2">
+<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-terminology-2" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.3-1">This document uses the general ICN terms that are defined in <span>[<a href="#RFC8793" class="xref">RFC8793</a>]</span>. In addition we define the following terms specific to path steering:<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-1.3-2">
+          <dt id="section-1.3-2.1">Path Discovery:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.3-2.2">The process of sending an Interest requesting discover of a path and if successful, receiving a Data containing a Path Label for the path the corresponding Interest traversed<a href="#section-1.3-2.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.3-2.3">Path Steering:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.3-2.4">The process of sending an Interest message containing the Path Label of a previously discovered path in roder that the forwarders use that path when forwarding that particular Interest message.<a href="#section-1.3-2.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.3-2.5">Path Label:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.3-2.6">An optional field in the packet indicating a particular path from a consumer to either a producer, or a forwarder cache that can respond with the requested item. In an Interest message, the Path Label gets built up hop by hop as the interest traverses a path. In a Data message, the Path Label carries the full path information back to the consumer for use in one or more subsequent Interest messages.<a href="#section-1.3-2.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.3-2.7">Nexthop Label:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.3-2.8">One entry in a Path Label representing the next hop for the corresponding forwarder to use when a path-steered Interest message arrives at that forwarder. A sequence of Nexthop Labels constitutes a full Path Label.<a href="#section-1.3-2.8" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
 </section>
 </section>
 </div>
 <div id="design">
 <section id="section-2">
-      <h2 id="name-essential-elements-of-icn-p">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-essential-elements-of-icn-p" class="section-name selfRef">Essential elements of ICN path discovery and path steering</a>
+      <h2 id="name-essential-elements-of-icn-pa">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-essential-elements-of-icn-pa" class="section-name selfRef">Essential elements of ICN path discovery and path steering</a>
       </h2>
 <p id="section-2-1">We elucidate the design using <span><a href="#RFC8569" class="xref">CCNx semantics</a> [<a href="#RFC8569" class="xref">RFC8569</a>]</span> and extend its <span><a href="#RFC8609" class="xref">Packet Encoding</a> [<a href="#RFC8609" class="xref">RFC8609</a>]</span> as defined in <a href="#CCNx-encoding" class="xref">Section 3.2</a>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <span><a href="#NDNTLV" class="xref">packet encodings</a> [<a href="#NDNTLV" class="xref">NDNTLV</a>]</span> (See <a href="#NDN-encoding" class="xref">Section 3.3</a>).<a href="#section-2-1" class="pilcrow">¶</a></p>
 <div id="discovery">
 <section id="section-2.1">
-        <h3 id="name-path-discovery">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-path-discovery" class="section-name selfRef">Path Discovery</a>
+        <h3 id="name-path-discovery-2">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-path-discovery-2" class="section-name selfRef">Path Discovery</a>
         </h3>
-<p id="section-2.1-1"><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in <a href="#pathsteeringoverview" class="xref">Figure 1</a>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<span id="name-basic-example-of-path-disco"></span><div id="pathsteeringoverview">
+<p id="section-2.1-1"><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in the first example in <a href="#pathsteeringoverview" class="xref">Figure 1</a>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer. As shown in the second example in the figure, when multiple paths are available, subsequent interests can discover additional paths by omitting a path steering TLV and obtaining a new path label on the returning interest.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<span id="name-basic-example-of-path-discov"></span><div id="pathsteeringoverview">
 <figure id="figure-1">
           <div class="alignLeft art-text artwork" id="section-2.1-2.1">
 <pre>
@@ -1418,19 +1453,52 @@ li > p:last-of-type {
             Content Store
 </pre>
 </div>
+<div class="alignLeft art-text artwork" id="section-2.1-2.2">
+<pre>
+          Discover and use second path:
+
+               Consumer                  Interest 3  ___  Interest 4
+                  |                          |        ^       |
+                  |                          |        |       |
+                  |                          |        |       |
+             Forwarder 1                     v        |       V
+                  | (nexthop 1)          (nexthop 1)  ^   (nexthop 1)
+                  |                          |        |       |
+                  |                          |        |       |
+             Forwarder 2                     v        |       v
+     (nexthop 3) / \ (nexthop 2)         (nexthop 3)  ^   (nexthop 3)
+                /   \                        |        |       |
+               /     \                       |        |       |
+              /       \                      |        |       |
+             /         \                     |        |       |
+            /           \                    |        |       |
+      Forwarder 4    Forwarder 3             v        |       v
+(nexthop 5)\             / (nexthop 4)   (nexthop 5)  ^   (nexthop 5)
+            \           /                    |        |       |
+             \         /                     |        |       |
+              \       /                      |        |       |
+               \     /                       |        |       |
+                \   /                        |        |       |
+                 \ /                         v        |       v
+               Producer                     ___     Data 2   ___
+                 or
+            Content Store
+</pre>
+</div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-basic-example-of-path-disco" class="selfRef">Basic example of path discovery and steering</a>
+<a href="#name-basic-example-of-path-discov" class="selfRef">Basic example of path discovery and steering</a>
           </figcaption></figure>
 </div>
 </section>
 </div>
 <div id="steering">
 <section id="section-2.2">
-        <h3 id="name-path-steering">
-<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-path-steering" class="section-name selfRef">Path Steering</a>
+        <h3 id="name-path-steering-2">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-path-steering-2" class="section-name selfRef">Path Steering</a>
         </h3>
-<p id="section-2.2-1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <span><a href="#I-D.irtf-icnrg-flic" class="xref">Manifest</a> [<a href="#I-D.irtf-icnrg-flic" class="xref">I-D.irtf-icnrg-flic</a>]</span>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (Figure 2).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<span id="name-figure-2-path-steering-ccn-"></span><figure id="figure-2">
+<p id="section-2.2-1">Due to the symmetry of forward and reverse paths in CCNx, a consumer application can reuse a discovered path label to fetch the same or similar (e.g. next chunk, or next Application Data Unit, or next pointer in a <span><a href="#I-D.irtf-icnrg-flic" class="xref">Manifest</a> [<a href="#I-D.irtf-icnrg-flic" class="xref">I-D.irtf-icnrg-flic</a>]</span>) Content (Data) message over the discovered network path. This <em>Path Steering</em> is achieved by processing the Interest message's path label at each transit ICN forwarder and forwarding the Interest through the specified nexthop among those identified as feasible by LNPM FIB lookup (<a href="#pathsteeringdataplane" class="xref">Figure 2</a>).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<span id="name-path-steering-ccn-ndn-data-p"></span><div id="pathsteeringdataplane">
+<figure id="figure-2">
           <div class="alignLeft art-text artwork" id="section-2.2-2.1">
 <pre>
 
@@ -1471,14 +1539,15 @@ Data   +---------+    | PIT |  (update path label)                Data
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-figure-2-path-steering-ccn-" class="selfRef">Figure 2: Path Steering CCN / NDN data plane</a>
+<a href="#name-path-steering-ccn-ndn-data-p" class="selfRef">Path Steering CCN / NDN data plane</a>
           </figcaption></figure>
+</div>
 </section>
 </div>
 <div id="error-processing">
 <section id="section-2.3">
-        <h3 id="name-handling-path-steering-erro">
-<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-handling-path-steering-erro" class="section-name selfRef">Handling Path Steering errors</a>
+        <h3 id="name-handling-path-steering-error">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-handling-path-steering-error" class="section-name selfRef">Handling Path Steering errors</a>
         </h3>
 <p id="section-2.3-1">Over time, the state of interfaces and the FIB on forwarders may change such that, at any particular forwarder, a given nexthop is no longer valid for a given prefix. In this case, the path label will point to a now-invalid nexthop. This is detected by failure to find a match between the decoded nexthop ID and the nexthops of the FIB entry after LNPM FIB lookup.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.3-2">On detecting an invalid path label, the forwarder SHOULD respond to the Interest with an Interest-Return. We therefore define a new <em>Invalid path label</em> response code for the Interest Return message and include the current path label as a hop-by-hop header. Each transit forwarder processing the Interest-Return message updates the path label in the same manner as Content (Data) messages, so that the consumer receiving the Interest-Return (NACK) can easily identify which path label is no longer valid.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
@@ -1487,12 +1556,12 @@ Data   +---------+    | PIT |  (update path label)                Data
 </div>
 <div id="label-encoding">
 <section id="section-2.4">
-        <h3 id="name-how-to-represent-the-path-l">
-<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-how-to-represent-the-path-l" class="section-name selfRef">How to represent the Path Label</a>
+        <h3 id="name-how-to-represent-the-path-la">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-how-to-represent-the-path-la" class="section-name selfRef">How to represent the Path Label</a>
         </h3>
 <p id="section-2.4-1"><span>[<a href="#Moiseenko2017" class="xref">Moiseenko2017</a>]</span> presents various options for how to represent a path label, with different tradeoffs in flexibility, performance and space efficiency. For this specification, we choose the <em>Polynomial encoding</em> which achieves reasonable space efficiency at the cost of establishing a hard limit on the length of paths that can be represented.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.4-2">The polynomial encoding utilizes a fixed-size bit array. Each transit ICN forwarder is allocated a fixed sized portion of the bit array. This design allocates 12 bits (i.e. 4095 as a <em>generator polynomial</em>) to each intermediate ICN forwarder. This should match the scalability of today's commercial routers that support up to 4096 physical and logical interfaces and usually do not have more than a few hundred active ones.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
-<span id="name-figure-3-fixed-size-path-la"></span><figure id="figure-3">
+<span id="name-fixed-size-path-label-2"></span><figure id="figure-3">
           <div class="alignLeft art-text artwork" id="section-2.4-3.1">
 <pre>
 +------------------------------------------------------------------+
@@ -1504,7 +1573,7 @@ Data   +---------+    | PIT |  (update path label)                Data
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-figure-3-fixed-size-path-la" class="selfRef">Figure 3: Fixed size path label</a>
+<a href="#name-fixed-size-path-label-2" class="selfRef">Fixed size path label</a>
           </figcaption></figure>
 <p id="section-2.4-4">A forwarder that receives a Content (Data) message encodes the nexthop label in the next available slot and increments label index. Conversely, a forwarder that receives an Interest message reads the current nexthop label and decrements label index. Therefore, the extra computation required at each hop to forward either an interest or Content Object message with a path label is minimized and constitutes a fairly trivial additional overhead compared to FIB lookup and other required operations.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
 <p id="section-2.4-5">This approach results in individual path label TLV instances being of fixed pre-computed size. While this places a hard upper bound on the maximum number of network hops that can be represented, this is not a significant a practical problem in NDN and CCNx,
@@ -1516,21 +1585,21 @@ Data   +---------+    | PIT |  (update path label)                Data
 </div>
 <div id="encoding">
 <section id="section-3">
-      <h2 id="name-mapping-to-ccnx-and-ndn-pac">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-mapping-to-ccnx-and-ndn-pac" class="section-name selfRef">Mapping to CCNx and NDN packet encodings</a>
+      <h2 id="name-mapping-to-ccnx-and-ndn-pack">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-mapping-to-ccnx-and-ndn-pack" class="section-name selfRef">Mapping to CCNx and NDN packet encodings</a>
       </h2>
 <div id="Path-label-types">
 <section id="section-3.1">
-        <h3 id="name-path-label-tlv">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-path-label-tlv" class="section-name selfRef">Path label TLV</a>
+        <h3 id="name-path-label-tlv-2">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-path-label-tlv-2" class="section-name selfRef">Path label TLV</a>
         </h3>
 <p id="section-3.1-1"> A Path label TLV is the tuple: {[Flags], [Path Label Hop Count], [Nexthop Label], 
     [Path label bitmap]}.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<span id="name-path-label-flags"></span><div id="pathlabelflags">
+<span id="name-path-label-flags-2"></span><div id="pathlabelflags">
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-path-label-flags" class="selfRef">Path label flags</a>
+<a href="#name-path-label-flags-2" class="selfRef">Path label flags</a>
           </caption>
 <thead>
             <tr>
@@ -1581,11 +1650,11 @@ Data   +---------+    | PIT |  (update path label)                Data
 </div>
 <div id="CCNx-encoding">
 <section id="section-3.2">
-        <h3 id="name-path-label-encoding-for-ccn">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-path-label-encoding-for-ccn" class="section-name selfRef">Path label encoding for CCNx</a>
+        <h3 id="name-path-label-encoding-for-ccnx">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-path-label-encoding-for-ccnx" class="section-name selfRef">Path label encoding for CCNx</a>
         </h3>
 <p id="section-3.2-1">Path Label is an optional Hop-by-Hop header TLV that can be present in CCNx Interest, InterestReturn and Content Object packets.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<span id="name-figure-4-path-label-hop-by-"></span><figure id="figure-4">
+<span id="name-path-label-hop-by-hop-header"></span><figure id="figure-4">
           <div class="alignLeft art-text artwork" id="section-3.2-2.1">
 <pre>
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1602,17 +1671,17 @@ Data   +---------+    | PIT |  (update path label)                Data
 </pre>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-figure-4-path-label-hop-by-" class="selfRef">Figure 4: Path label Hop-by-Hop header TLV for CCNx</a>
+<a href="#name-path-label-hop-by-hop-header" class="selfRef">Path label Hop-by-Hop header TLV for CCNx</a>
           </figcaption></figure>
 </section>
 </div>
 <div id="NDN-encoding">
 <section id="section-3.3">
-        <h3 id="name-path-label-encoding-for-ndn">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-path-label-encoding-for-ndn" class="section-name selfRef">Path label encoding for NDN</a>
+        <h3 id="name-path-label-encoding-for-ndn-2">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-path-label-encoding-for-ndn-2" class="section-name selfRef">Path label encoding for NDN</a>
         </h3>
 <p id="section-3.3-1">Path Label is an optional TLV in NDN Interest, Data and NACK packets. The Path Label TLV SHOULD NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<span id="name-figure-5-path-label-tlv-for"></span><figure id="figure-5">
+<span id="name-path-label-tlv-for-ndn-2"></span><figure id="figure-5">
           <div class="alignLeft art-text artwork" id="section-3.3-2.1">
 <pre>
         PathLabel = PATH-LABEL-TYPE TLV-LENGTH
@@ -1637,13 +1706,13 @@ Data   +---------+    | PIT |  (update path label)                Data
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-figure-5-path-label-tlv-for" class="selfRef">Figure 5: Path label TLV for NDN</a>
+<a href="#name-path-label-tlv-for-ndn-2" class="selfRef">Path label TLV for NDN</a>
           </figcaption></figure>
-<span id="name-tlv-type-number-assignments"></span><div id="pathlabelTLVs">
+<span id="name-tlv-type-number-assignments-2"></span><div id="pathlabelTLVs">
 <table class="center" id="table-2">
           <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-tlv-type-number-assignments" class="selfRef">TLV-TYPE number assignments</a>
+<a href="#name-tlv-type-number-assignments-2" class="selfRef">TLV-TYPE number assignments</a>
           </caption>
 <thead>
             <tr>
@@ -1681,8 +1750,8 @@ Data   +---------+    | PIT |  (update path label)                Data
 </div>
 <div id="IANA">
 <section id="section-4">
-      <h2 id="name-iana-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      <h2 id="name-iana-considerations-2">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations-2" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <p id="section-4-1">IANA is requested to make the following assignments:<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-2">
@@ -1699,8 +1768,8 @@ Data   +---------+    | PIT |  (update path label)                Data
 </div>
 <div id="security">
 <section id="section-5">
-      <h2 id="name-security-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-security-considerations-2">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations-2" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-5-1">A path is invalidated by renumbering nexthop label(s). A malicious consumer can attempt to mount an attack by transmitting Interests with path labels which differ only in a single now-invalid nexthop label in order to <em>brute force</em> a valid nexthop label. If such an attack succeeds, a malicious consumer would be capable of steering Interests over a network path that may not match the paths computed by the routing algorithm or learned adaptively by the forwarders.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">When a label lookup fails, by default an <em>Invalid path label</em> Interest-Return (NACK) message is returned to the consumer. This contains a path label identical to the one included in the corresponding Interest message. A malicious consumer can therefore analyze the message's Hop Count field to infer which specific nexthop label had failed and direct an attack to influence path steering at that hop. This threat can be mitigated by the following countermeasures:<a href="#section-5-2" class="pilcrow">¶</a></p>
@@ -1717,12 +1786,13 @@ Data   +---------+    | PIT |  (update path label)                Data
  Relatively short periodic update of nexthop labels and anti- <em>label scan</em> heuristics implemented in the ICN forwarder may successfully mitigate this type of attack.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <div id="encryptpathlabel">
 <section id="section-5.1">
-        <h3 id="name-cryptographic-protection-of">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-cryptographic-protection-of" class="section-name selfRef">Cryptographic protection of a path label</a>
+        <h3 id="name-cryptographic-protection-of-">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-cryptographic-protection-of-" class="section-name selfRef">Cryptographic protection of a path label</a>
         </h3>
-<p id="section-5.1-1">If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (Figure 6). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">If the countermeasures listed above do not provide sufficient protection against malicious mis-steering of Interests, the path label can be made opaque to the consumer endpoint via hop-by-hop symmetric cryptography applied to the path labels (<a href="#pathlabelcryptoprocess" class="xref">Figure 6</a>). This method is viable due to the symmetry of forward and reverse paths in CCNx and NDN architectures combined with ICN path steering requiring only reads/writes of the topmost nexthop label (i.e. active nexthop label) in the path label. This way a path steering capable ICN forwarder receiving a Data (Content) message encrypts the current path label with its own non-shared symmetric key prior to adding a new nexthop label to the path label. The Data (Content) message is forwarded downstream with unencrypted topmost (i.e active) nexthop label and encrypted remaining content of the path label. As a result, a consumer endpoint receives a Data (Content) message with a unique path label exposing only the topmost nexthop label as cleartext. A path steering  forwarder receiving an Interest message performs label lookup using the topmost nexthop label, decrypts the path label with its own non-shared symmetric key, and forwards the message upstream.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">Cryptographic protection of a path label does not require any key negotiation among ICN forwarders, and is no more expensive than MACsec or IPsec. It is also quite possible that strict hop-by-hop path label encryption is not necessary and path label encryption only on the border routers of the trusted administrative or routing domains may suffice.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<span id="name-figure-6-path-label-protect"></span><figure id="figure-6">
+<span id="name-path-label-protection-with-h"></span><div id="pathlabelcryptoprocess">
+<figure id="figure-6">
           <div class="alignLeft art-text artwork" id="section-5.1-3.1">
 <pre>
                             Producer
@@ -1777,19 +1847,20 @@ symmetric key               |      |     symmetric key
 </pre>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
-<a href="#name-figure-6-path-label-protect" class="selfRef">Figure 6: Path label protection with hop-by-hop symmetric cryptography</a>
+<a href="#name-path-label-protection-with-h" class="selfRef">Path label protection with hop-by-hop symmetric cryptography</a>
           </figcaption></figure>
+</div>
 </section>
 </div>
 </section>
 </div>
 <section id="section-6">
-      <h2 id="name-references">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
+      <h2 id="name-references-2">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references-2" class="section-name selfRef">References</a>
       </h2>
 <section id="section-6.1">
-        <h3 id="name-normative-references">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        <h3 id="name-normative-references-2">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references-2" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="Moiseenko2017">[Moiseenko2017]</dt>
@@ -1811,8 +1882,8 @@ symmetric key               |      |     symmetric key
 </dl>
 </section>
 <section id="section-6.2">
-        <h3 id="name-informative-references">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        <h3 id="name-informative-references-2">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references-2" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.irtf-icnrg-flic">[I-D.irtf-icnrg-flic]</dt>
@@ -1843,6 +1914,10 @@ symmetric key               |      |     symmetric key
         <dd>
 <span class="refAuthor">Kompella, K.</span>, <span class="refAuthor">Swallow, G.</span>, <span class="refAuthor">Pignataro, C., Ed.</span>, <span class="refAuthor">Kumar, N.</span>, <span class="refAuthor">Aldrin, S.</span>, and <span class="refAuthor">M. Chen</span>, <span class="refTitle">"Detecting Multiprotocol Label Switched (MPLS) Data-Plane Failures"</span>, <span class="seriesInfo">RFC 8029</span>, <span class="seriesInfo">DOI 10.17487/RFC8029</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8029">https://www.rfc-editor.org/info/rfc8029</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8793">[RFC8793]</dt>
+        <dd>
+<span class="refAuthor">Wissingh, B.</span>, <span class="refAuthor">Wood, C.</span>, <span class="refAuthor">Afanasyev, A.</span>, <span class="refAuthor">Zhang, L.</span>, <span class="refAuthor">Oran, D.</span>, and <span class="refAuthor">C. Tschudin</span>, <span class="refTitle">"Information-Centric Networking (ICN): Content-Centric Networking (CCNx) and Named Data Networking (NDN) Terminology"</span>, <span class="seriesInfo">RFC 8793</span>, <span class="seriesInfo">DOI 10.17487/RFC8793</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8793">https://www.rfc-editor.org/info/rfc8793</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="Song2018">[Song2018]</dt>
       <dd>
 <span class="refAuthor">Song, J.</span>, <span class="refAuthor">Lee, M.</span>, and <span class="refAuthor">T. Kwon</span>, <span class="refTitle">"SMIC: Subflow-level Multi-path Interest Control for Information Centric Networking, in 5th ACM Conference on Information-Centric Networking"</span>, <span class="seriesInfo">DOI 10.1145/3267955.3267971</span>, <time datetime="2018" class="refDate">2018</time>, <span>&lt;<a href="https://conferences.sigcomm.org/acm-icn/2018/proceedings/icn18-final62.pdf">https://conferences.sigcomm.org/acm-icn/2018/proceedings/icn18-final62.pdf</a>&gt;</span>. </dd>
@@ -1852,8 +1927,8 @@ symmetric key               |      |     symmetric key
 </section>
 <div id="authors-addresses">
 <section id="appendix-A">
-      <h2 id="name-authors-addresses">
-<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      <h2 id="name-authors-addresses-2">
+<a href="#name-authors-addresses-2" class="section-name selfRef">Authors' Addresses</a>
       </h2>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Ilya Moiseenko</span></div>
