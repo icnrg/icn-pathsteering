@@ -5,8 +5,8 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                                      UCLA
 Intended status: Experimental                                    D. Oran
-Expires: 20 February 2023            Network Systems Research and Design
-                                                          19 August 2022
+Expires: 2 March 2023                Network Systems Research and Design
+                                                          29 August 2022
 
 
                      Path Steering in CCNx and NDN
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 February 2023.
+   This Internet-Draft will expire on 2 March 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 1]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 1]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 2]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 2]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -165,7 +165,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 3]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 3]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -221,7 +221,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 4]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 4]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -277,7 +277,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 5]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 5]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -333,7 +333,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 6]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 6]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -389,7 +389,7 @@ Data   +---------+    | PIT |  (update path label)                Data
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 7]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 7]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -445,7 +445,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 8]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 8]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -501,7 +501,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023                [Page 9]
+Moiseenko & Oran          Expires 2 March 2023                  [Page 9]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -557,7 +557,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023               [Page 10]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 10]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -578,15 +578,16 @@ Internet-Draft              ICN Path Steering                August 2022
 
 3.3.  Path label encoding for NDN
 
-   Path Label is an optional TLV in NDN Interest and Data packets.  The
-   Path Label TLV MUST NOT take part in Interest, Data or NACK signature
-   calculation as it is potentially modified at every network hop.
-   Therefore the Path Label TLV defined below:
-
-   *  in an Interest packet SHOULD appear after any Forwarding Hint TLV,
-      and MUST precede the Application Parameters TLV
-
-   *  in a Data packet MUST precede the Content TLV
+   Path Label is an optional TLV for NDN Interest and Data packets which
+   is carried in the NDN Link Adaptation Protocol [NDNLPv2] used to wrap
+   NDN packets for carriage over various link layer protocols.  NDNLPv2
+   was chosen over the NDN packet itself since it can carry hop-by-hop
+   information that potentially mutates at each hop and therefore cannot
+   be included in the secured hash computation or the signature of NDN
+   packets.  Further, it can be used instead of the existing
+   NextHopFaceId TLV since it not only can specify the single outgoing
+   face for a consumer, but manages the selection and forwarding over an
+   entire path.  The Path Label TLV in NDNLPv2 is defined below:
 
            PathLabel = PATH-LABEL-TYPE TLV-LENGTH
                        PathLabelFlags
@@ -612,8 +613,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-
-Moiseenko & Oran        Expires 20 February 2023               [Page 11]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 11]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -669,7 +669,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023               [Page 12]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 12]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -725,7 +725,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023               [Page 13]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 13]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -781,7 +781,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023               [Page 14]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 14]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -837,7 +837,7 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023               [Page 15]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 15]
 
 Internet-Draft              ICN Path Steering                August 2022
 
@@ -893,10 +893,14 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran        Expires 20 February 2023               [Page 16]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 16]
 
 Internet-Draft              ICN Path Steering                August 2022
 
+
+   [NDNLPv2]  "Named Data Networking Link Adaptation Protocol v2",
+              various, <https://redmine.named-
+              data.net/projects/nfd/wiki/NDNLPv2>.
 
    [NDNTLV]   "NDN Packet Format Specification 0.3.", 2022,
               <https://named-data.net/doc/NDN-packet-spec/current/
@@ -945,8 +949,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-Moiseenko & Oran        Expires 20 February 2023               [Page 17]
+Moiseenko & Oran          Expires 2 March 2023                 [Page 17]

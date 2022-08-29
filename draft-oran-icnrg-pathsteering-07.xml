@@ -372,11 +372,8 @@ Data   +---------+    | PIT |  (update path label)                Data
 
       <section anchor="NDN-encoding" numbered="true" toc="default">
         <name>Path label encoding for NDN</name>
-        <t>Path Label is an optional TLV in NDN Interest and Data packets. The Path Label TLV MUST NOT take part in Interest, Data or NACK signature calculation as it is potentially modified at every network hop. Therefore the Path Label TLV defined below:</t>
-        <ul> 
-        	<li>in an Interest packet SHOULD appear after any Forwarding Hint TLV, and MUST precede the Application Parameters TLV</li>
-        	<li>in a Data packet MUST precede the Content TLV</li>
-        </ul>
+        <t>Path Label is an optional TLV for NDN Interest and Data packets which is carried in the <xref target="NDNLPv2">NDN Link Adaptation Protocol</xref> used to wrap NDN packets for carriage over various link layer protocols. NDNLPv2 was chosen over the NDN packet itself since it can carry hop-by-hop information that potentially mutates at each hop and therefore cannot be included in the secured hash computation or the signature of NDN packets. Further, it can be used instead of the existing <tt>NextHopFaceId</tt> TLV since it not only can specify the single outgoing face for a consumer, but manages the selection and forwarding over an entire path. The Path Label TLV in NDNLPv2 is defined below:</t>
+       
 
         <figure>
           <name>Path label TLV for NDN</name>
@@ -593,6 +590,13 @@ symmetric key               |      |     symmetric key
         <reference anchor="NDN" target="https://named-data.net/project/execsummary/">
           <front>
             <title>Named Data Networking</title>
+            <author surname="NDN team"/>
+            <date>various</date>
+          </front>
+        </reference>
+        <reference anchor="NDNLPv2" target="https://redmine.named-data.net/projects/nfd/wiki/NDNLPv2">
+          <front>
+            <title>Named Data Networking Link Adaptation Protocol v2</title>
             <author surname="NDN team"/>
             <date>various</date>
           </front>
