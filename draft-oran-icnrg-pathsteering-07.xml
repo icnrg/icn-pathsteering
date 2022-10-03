@@ -148,7 +148,7 @@
       <t>We elucidate the design using <xref target="RFC8569" format="default">CCNx semantics</xref> and extend its <xref target="RFC8609" format="default">Packet Encoding</xref> as defined in <xref target="CCNx-encoding" format="default"/>. While the terminology is slightly different, this design can be applied also to NDN, by extending its bespoke <xref target="NDNTLV" format="default">packet encodings</xref> (See <xref target="NDN-encoding" format="default"/>).</t>
       <section anchor="discovery" numbered="true" toc="default">
         <name>Path Discovery</name>
-        <t><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in the first example in <xref target="pathsteeringoverview"/>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer. As shown in the second example in the figure, when multiple paths are available, subsequent interests can discover additional paths by omitting a path steering TLV and obtaining a new path label on the returning interest.</t>
+        <t><em>End-to-end Path Discovery</em> for CCNx is achieved by creating a <em>path label</em> and placing it as a hop-by-hop TLV in a CCNx Content (Data) message. The path label is constructed hop-by-hop as the message traverses the reverse path of transit CCNx forwarders as shown in the first example in <xref target="pathsteeringoverview"/>. The path label is updated by adding to the existing path label the nexthop label of the interface at which the Content (Data) message has arrived. Eventually, when the Content(Data) message arrives at the consumer, the path label identifies the complete path the Content (Data) message took to reach the consumer. As shown in the second example in the figure, when multiple paths are available, subsequent interests may be able to  discover additional paths by omitting a path steering TLV and obtaining a new path label on the returning interest.</t>
         <figure anchor="pathsteeringoverview">
           <name>Basic example of path discovery and steering</name>
           <artwork name="Path Discovery 1" type="" align="left" alt=""><![CDATA[
@@ -220,7 +220,7 @@
     <t><spanx style="strong">Ilya:</spanx>Can it be solved from prefix registration side? Producer gets label size supported by the network from its ISP? Idk what about intermediate caches. </t>
 
 -->
-
+		
 	</section>
       <section anchor="steering" numbered="true" toc="default">
         <name>Path Steering</name>
@@ -276,6 +276,24 @@ Data   +---------+    | PIT |  (update path label)                Data
 
 		<t>A consumer may alternatively request that a forwarder detecting the inconsistency forward the Interest by means of normal LNPM FIB lookup rather than returning an error. The consumer endpoint, if it cares, can keep enough information about outstanding Interests to determine if the path label sent with the Interest fails to match the path label in the corresponding returned Content (Data), and use that information to replace stale path labels. It does so by setting the FALLBACK MODE flag of the path label TLV in its Interest message.</t>
       </section>
+      
+      <section anchor="Interest-Aggregation">
+      	<name>Interactions with Interest Aggregation</name>
+      	<t>If two or more Interests matching the same PIT entry arrive at a forwarder, under current behavior they will be aggregated whether or not they carry identical Path Labels TLVs. This may or may not be appropriate. For example,
+      	multiple Interests with different MODES (e.g. one with DISCOVERY MODE and one without) will get aggregated, and the behavior of the forwarder might therefore be dependent on the arrival order of those Interests. In particular,</t> 
+      	<ul>
+      		<li>If the DISCOVERY MODE Interest arrives first, it will be forwarded and potentially discover a new path, while the other Interest would be aggregated. If that Interest carried no Path Label, its behavior is essentially unchanged, but if it carried a non DISCOVERY MODE Path Label, the consumer's intent for the Interest to traverse the specified path will be ignored and it is indeterminate if the chosen path will actually be used.</li>
+      		<li>If the two Interests arrive in the reverse order, the DISCOVERY MODE Interest will be aggregated and the consumer issuing it does not achieve its desire to discover a new path.</li>
+      	</ul>
+      	<t>Multiple Interests intended to discover paths (i.e. by carrying the DISCOVERY MODE flag defined in <xref target="label-encoding"/>) might also be aggregated by a forwarder. This limits the ability to discover multiple paths in parallel and instead must be discovered incrementally in subsequent exchanges. In other words, aggregated Interests will all discover only one single path carried by one single Data packet. This has implications for management applications like <xref target="I-D.irtf-icnrg-icntraceroute">Traceroute</xref> which would likely perform much better if they  discover paths in parallel. Hence, it is RECOMMENDED when employing Path Steering that such applications craft their Interests with unique name suffixes in order to avoid being aggregated.</t>
+
+		<aside><t>While path steering still operates correctly in the if DISCOVERY MODE interests are aggregated, after further experimentation is may be appropriate to advise that:</t>
+		<ul>
+			<li>a forwarder SHOULD NOT aggregate Interests carrying different Path Labels, and</li>
+			<li>SHOULD apply a rate limit to DISCOVERY MODE Interests in order to limit redundant traffic.</li>
+		</ul></aside>
+	  </section>
+
       <section anchor="label-encoding" numbered="true" toc="default">
         <name>How to represent the Path Label</name>
         <t><xref target="Moiseenko2017" format="default"/> presents various options for how to represent a path label, with different tradeoffs in flexibility, performance and space efficiency. For this specification, we choose the <em>Polynomial encoding</em> which achieves reasonable space efficiency at the cost of establishing a hard limit on the length of paths that can be represented.</t>
@@ -560,8 +578,8 @@ symmetric key               |      |     symmetric key
 
       <references>
         <name>Informative References</name>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.RFC.8029.xml"/>
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.RFC.8793.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8029.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8793.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.irtf-icnrg-icnping.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.irtf-icnrg-icntraceroute.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.irtf-icnrg-flic.xml"/>

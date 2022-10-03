@@ -5,8 +5,8 @@
 ICNRG                                                       I. Moiseenko
 Internet-Draft                                                      UCLA
 Intended status: Experimental                                    D. Oran
-Expires: 2 March 2023                Network Systems Research and Design
-                                                          29 August 2022
+Expires: 6 April 2023                Network Systems Research and Design
+                                                          3 October 2022
 
 
                      Path Steering in CCNx and NDN
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 March 2023.
+   This Internet-Draft will expire on 6 April 2023.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                  [Page 1]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 1]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -75,18 +75,19 @@ Table of Contents
      2.1.  Path Discovery  . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Path Steering . . . . . . . . . . . . . . . . . . . . . .   6
      2.3.  Handling Path Steering errors . . . . . . . . . . . . . .   7
-     2.4.  How to represent the Path Label . . . . . . . . . . . . .   8
-   3.  Mapping to CCNx and NDN packet encodings  . . . . . . . . . .   9
-     3.1.  Path label TLV  . . . . . . . . . . . . . . . . . . . . .   9
-     3.2.  Path label encoding for CCNx  . . . . . . . . . . . . . .  10
-     3.3.  Path label encoding for NDN . . . . . . . . . . . . . . .  11
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
-     5.1.  Cryptographic protection of a path label  . . . . . . . .  14
-   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
-     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  15
-     6.2.  Informative References  . . . . . . . . . . . . . . . . .  16
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  17
+     2.4.  Interactions with Interest Aggregation  . . . . . . . . .   8
+     2.5.  How to represent the Path Label . . . . . . . . . . . . .   9
+   3.  Mapping to CCNx and NDN packet encodings  . . . . . . . . . .  10
+     3.1.  Path label TLV  . . . . . . . . . . . . . . . . . . . . .  10
+     3.2.  Path label encoding for CCNx  . . . . . . . . . . . . . .  11
+     3.3.  Path label encoding for NDN . . . . . . . . . . . . . . .  12
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+     5.1.  Cryptographic protection of a path label  . . . . . . . .  15
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  16
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .  17
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
 
 1.  Introduction
 
@@ -108,10 +109,9 @@ Table of Contents
 
 
 
-
-Moiseenko & Oran          Expires 2 March 2023                  [Page 2]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 2]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    Path discovery and subsequent path steering in ICN networks is
@@ -165,9 +165,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                  [Page 3]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 3]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
 1.3.  Terminology
@@ -221,14 +221,14 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                  [Page 4]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 4]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
-   multiple paths are available, subsequent interests can discover
-   additional paths by omitting a path steering TLV and obtaining a new
-   path label on the returning interest.
+   multiple paths are available, subsequent interests may be able to
+   discover additional paths by omitting a path steering TLV and
+   obtaining a new path label on the returning interest.
 
              Discover and use first path:
 
@@ -277,9 +277,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                  [Page 5]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 5]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
              Discover and use second path:
@@ -333,9 +333,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                  [Page 6]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 6]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
 ------------------------------------------------------------------------
@@ -389,9 +389,9 @@ Data   +---------+    | PIT |  (update path label)                Data
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                  [Page 7]
+Moiseenko & Oran          Expires 6 April 2023                  [Page 7]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    On detecting an invalid path label, the forwarder SHOULD respond to
@@ -412,7 +412,59 @@ Internet-Draft              ICN Path Steering                August 2022
    information to replace stale path labels.  It does so by setting the
    FALLBACK MODE flag of the path label TLV in its Interest message.
 
-2.4.  How to represent the Path Label
+2.4.  Interactions with Interest Aggregation
+
+   If two or more Interests matching the same PIT entry arrive at a
+   forwarder, under current behavior they will be aggregated whether or
+   not they carry identical Path Labels TLVs.  This may or may not be
+   appropriate.  For example, multiple Interests with different MODES
+   (e.g. one with DISCOVERY MODE and one without) will get aggregated,
+   and the behavior of the forwarder might therefore be dependent on the
+   arrival order of those Interests.  In particular,
+
+   *  If the DISCOVERY MODE Interest arrives first, it will be forwarded
+      and potentially discover a new path, while the other Interest
+      would be aggregated.  If that Interest carried no Path Label, its
+      behavior is essentially unchanged, but if it carried a non
+      DISCOVERY MODE Path Label, the consumer's intent for the Interest
+      to traverse the specified path will be ignored and it is
+      indeterminate if the chosen path will actually be used.
+
+   *  If the two Interests arrive in the reverse order, the DISCOVERY
+      MODE Interest will be aggregated and the consumer issuing it does
+      not achieve its desire to discover a new path.
+
+   Multiple Interests intended to discover paths (i.e. by carrying the
+   DISCOVERY MODE flag defined in Section 2.5) might also be aggregated
+   by a forwarder.  This limits the ability to discover multiple paths
+   in parallel and instead must be discovered incrementally in
+   subsequent exchanges.  In other words, aggregated Interests will all
+   discover only one single path carried by one single Data packet.
+   This has implications for management applications like Traceroute
+   [I-D.irtf-icnrg-icntraceroute] which would likely perform much better
+
+
+
+Moiseenko & Oran          Expires 6 April 2023                  [Page 8]
+
+Internet-Draft              ICN Path Steering               October 2022
+
+
+   if they discover paths in parallel.  Hence, it is RECOMMENDED when
+   employing Path Steering that such applications craft their Interests
+   with unique name suffixes in order to avoid being aggregated.
+
+      |  While path steering still operates correctly in the if
+      |  DISCOVERY MODE interests are aggregated, after further
+      |  experimentation is may be appropriate to advise that:
+      |  
+      |     *  a forwarder SHOULD NOT aggregate Interests carrying
+      |        different Path Labels, and
+      |  
+      |     *  SHOULD apply a rate limit to DISCOVERY MODE Interests in
+      |        order to limit redundant traffic.
+
+2.5.  How to represent the Path Label
 
    [Moiseenko2017] presents various options for how to represent a path
    label, with different tradeoffs in flexibility, performance and space
@@ -442,18 +494,17 @@ Internet-Draft              ICN Path Steering                August 2022
    nexthop label in the next available slot and increments label index.
    Conversely, a forwarder that receives an Interest message reads the
    current nexthop label and decrements label index.  Therefore, the
-
-
-
-Moiseenko & Oran          Expires 2 March 2023                  [Page 8]
-
-Internet-Draft              ICN Path Steering                August 2022
-
-
    extra computation required at each hop to forward either an interest
    or Content Object message with a path label is minimized and
    constitutes a fairly trivial additional overhead compared to FIB
    lookup and other required operations.
+
+
+
+Moiseenko & Oran          Expires 6 April 2023                  [Page 9]
+
+Internet-Draft              ICN Path Steering               October 2022
+
 
    This approach results in individual path label TLV instances being of
    fixed pre-computed size.  While this places a hard upper bound on the
@@ -494,18 +545,6 @@ Internet-Draft              ICN Path Steering                August 2022
    order to correctly forward the Interest(s) along the corresponding
    network path.
 
-
-
-
-
-
-
-
-Moiseenko & Oran          Expires 2 March 2023                  [Page 9]
-
-Internet-Draft              ICN Path Steering                August 2022
-
-
    If an NDN or CCNx forwarder supports path labeling, the Nexthop label
    MUST be used to determine the correct egress interface for an
    Interest packet carrying either the FALLBACK MODE or STRICT MODE
@@ -514,6 +553,14 @@ Internet-Draft              ICN Path Steering                August 2022
    considerations" (Section 5)), then the forwarder MUST
 
    1.  decrypt the path label with its own symmetric key,
+
+
+
+
+Moiseenko & Oran          Expires 6 April 2023                 [Page 10]
+
+Internet-Draft              ICN Path Steering               October 2022
+
 
    2.  update the nexthop label with outermost label in the path label,
 
@@ -557,9 +604,18 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 10]
+
+
+
+
+
+
+
+
+
+Moiseenko & Oran          Expires 6 April 2023                 [Page 11]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -613,9 +669,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 11]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 12]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
               +===============================+=============+
@@ -669,9 +725,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 12]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 13]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    When a label lookup fails, by default an _Invalid path label_
@@ -725,9 +781,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 13]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 14]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
 5.1.  Cryptographic protection of a path label
@@ -781,9 +837,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 14]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 15]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    |nexthop label=634      |   v      |     |nexthop label=634      |
@@ -837,9 +893,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 15]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 16]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -893,9 +949,9 @@ Internet-Draft              ICN Path Steering                August 2022
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 16]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 17]
 
-Internet-Draft              ICN Path Steering                August 2022
+Internet-Draft              ICN Path Steering               October 2022
 
 
    [NDNLPv2]  "Named Data Networking Link Adaptation Protocol v2",
@@ -949,4 +1005,4 @@ Authors' Addresses
 
 
 
-Moiseenko & Oran          Expires 2 March 2023                 [Page 17]
+Moiseenko & Oran          Expires 6 April 2023                 [Page 18]
