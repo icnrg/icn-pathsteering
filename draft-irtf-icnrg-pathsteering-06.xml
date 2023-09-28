@@ -3,7 +3,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude" 
 	category="exp" 
-	docName="draft-irtf-icnrg-pathsteering-05" 
+	docName="draft-irtf-icnrg-pathsteering-06" 
 	ipr="trust200902" 
 	submissionType="IRTF" 
 	xml:lang="en" 
@@ -15,7 +15,7 @@
 
 <front>
     <title abbrev="ICN Path Steering">Path Steering in CCNx and NDN</title>
-    <seriesInfo name="Internet-Draft" value="draft-irtf-icnrg-pathsteering-05"/>
+    <seriesInfo name="Internet-Draft" value="draft-irtf-icnrg-pathsteering-06"/>
     
     <author fullname="Ilya Moiseenko" surname="I. Moiseenko">
       <organization>Apple, Inc.</organization>

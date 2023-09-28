@@ -10,7 +10,7 @@ Expires: 31 March 2024               Network Systems Research and Design
 
 
                      Path Steering in CCNx and NDN
-                    draft-irtf-icnrg-pathsteering-05
+                    draft-irtf-icnrg-pathsteering-06
 
 Abstract
 
